@@ -1,9 +1,10 @@
+Note: wcdj is a repo that includes useful codes or libs at common work or study (first commit locally from my macbook)
+
 
 update: 2014-02-27
 1, add SV-MQ including block and non-block interface
 note: see /usr/include/linux/msg.h, some about Linux ipc date structure.
 use command: /sbin/sysctl -a | grep msg  to see current kernel paras.
-
 
 
 update: 2014-02-22
