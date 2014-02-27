@@ -4,12 +4,16 @@ PACKAGE_PATH=../package
 
 mkdir -p ${PACKAGE_PATH} && rm ${PACKAGE_PATH}/* -rf 
 mkdir ${PACKAGE_PATH}/src
+mkdir ${PACKAGE_PATH}/src/svr
+mkdir ${PACKAGE_PATH}/src/comm
 mkdir ${PACKAGE_PATH}/inc
 mkdir ${PACKAGE_PATH}/lib
 mkdir ${PACKAGE_PATH}/conf
 mkdir ${PACKAGE_PATH}/bin
 
-cp ../src/svr/*.cpp  ${PACKAGE_PATH}/src
+cp ../src/comm/*.cpp ${PACKAGE_PATH}/src/comm
+cp ../src/comm/*.h   ${PACKAGE_PATH}/src/comm
+cp ../src/svr/*.cpp  ${PACKAGE_PATH}/src/svr
 cp ../inc/*.h        ${PACKAGE_PATH}/inc
 #cp ../lib/*          ${PACKAGE_PATH}/lib
 #cp ../conf/*         ${PACKAGE_PATH}/conf

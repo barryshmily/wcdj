@@ -85,7 +85,7 @@ int CreatePIDFile(const char *sPIDFile)
 	if (pstFile == NULL)
 	{
 		fprintf(stderr, "Failed to open pid file:%s!\n", sPIDFile);
-		return -1;
+		return E_FAIL;
 	}
 	else
 	{  
@@ -97,7 +97,7 @@ int CreatePIDFile(const char *sPIDFile)
 }
 
 /*
- * entry
+ * prog entry
  * */
 int main(int argc, char **argv)
 {
@@ -106,19 +106,20 @@ int main(int argc, char **argv)
     if (argc < 2)
     {
         Usage(argv[0]);
-        return -1;
+        return E_FAIL;
     } 
 	
 	Daemon();
 
 	// prevent multi instance
 	string strHome    =  argv[1];
-	string strPidFile =  strHome + "/bin/test_svr.pid";
+	string strProg    =  argv[0];
+	string strPidFile =  strHome + "/bin/" + strProg + ".pid";
 
 	if (CreatePIDFile(strPidFile.c_str()) != 0)
 	{
 		cerr << "CreatePIDFile err, so quit!" << endl;
-		return -1;
+		return E_FAIL;
 	}
 
 	try 
@@ -133,12 +134,12 @@ int main(int argc, char **argv)
 	catch (runtime_error& e)
 	{
 		cerr << "catch runtime_error:" << e.what() << "\n" << endl;
-		return -1;
+		return E_FAIL;
 	}
 	catch (logic_error& e)
 	{
 		cerr << "catch logic_error:" << e.what() << "\n" << endl;
-		return -1;
+		return E_FAIL;
 	}
 
 	return 0;

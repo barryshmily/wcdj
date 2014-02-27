@@ -1,4 +1,6 @@
-ALLDIRS = svr
+ALLDIRS = comm \
+          svr 
+          
 
 include ./Inc.mk
 
@@ -35,8 +37,8 @@ install: all
 		cd ${PROJECT_HOME}/src/ >/dev/null ; \
 		echo "Done"; \
 	done	
-	echo "make package......";
-	sh ./tar.sh ;
-	echo "make package ok!"; 
+	#echo "make package......";
+	#sh ./tar.sh ;
+	#echo "make package ok!"; 
 
 

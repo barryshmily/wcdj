@@ -1,0 +1,13 @@
+
+update: 2014-02-27
+1, add SV-MQ including block and non-block interface
+note: see /usr/include/linux/msg.h, some about Linux ipc date structure.
+use command: /sbin/sysctl -a | grep msg  to see current kernel paras.
+
+
+
+update: 2014-02-22
+1, create wcdj repo
+2, svr is a daemon
+3, add terminal and file log
+

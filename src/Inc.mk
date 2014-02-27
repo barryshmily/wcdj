@@ -8,7 +8,7 @@ DATE = date "+%Y/%m/%d-%H:%M:%S"
 os_date = $(shell date "+%Y%m%d-%H%M%S")
 
 # you should change to yourself path
-PROJECT_HOME = /data/home/gerryyang/test/code_in_action/proj_test
+PROJECT_HOME = /data/home/gerryyang/test/code_in_action/WCDJ_proj
 
 # check gcc version
 gccver=$(shell gcc -v  2>&1 | grep "gcc version" | awk -F" " '{print $$3}')
@@ -28,28 +28,36 @@ export os_ver
 export os_date
 
 #==============================================================================
-#	BUILD:	编译类型
+# BUILD Mode:
+#
+# BUILD_DEBUG_CLIENT
+# BUILD_RELEASE_CLIENT
+#
+# BUILD_DEBUG_SERVER
+# BUILD_RELEASE_SERVER
 #------------------------------------------------------------------------------
-#		BUILD_DEV:		    开发版本
-#		BUILD_DEBUG:		测试版本
-#		BUILD_NORMAL:		一般开发版本
-#		BUILD_RELEASE:		发行版本
-#------------------------------------------------------------------------------
+# MACRO OPTIONS:
+#
+# [1] NOPRINT_TERMINAL: do not print info on terminal, a.k.a close fd 1 2 3.
+# [2] CLIENT_MODE/SERVER_MODE: one mode used only, to test IPC like System V IPC.
+#
+#==============================================================================
 
-BUILD = BUILD_RELEASE
+#BUILD = BUILD_DEBUG_CLIENT
+BUILD = BUILD_DEBUG_SERVER
+export BUILD
 
-ifeq ($(BUILD), BUILD_DEV)
-CFLAGS = -Wall -g -DDEBUG
+ifeq ($(BUILD), BUILD_DEBUG_CLIENT)
+CFLAGS = -Werror -g -O2 -pipe -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
-ifeq ($(BUILD), BUILD_DEBUG)
-CFLAGS = -Wall -g -DDEBUG
+ifeq ($(BUILD), BUILD_DEBUG_SERVER)
+CFLAGS = -Werror -g -O2 -pipe -DSERVER_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
-ifeq ($(BUILD), BUILD_NORMAL)
-CFLAGS = -Wall -g -O -DREENTRANT
+ifeq ($(BUILD), BUILD_RELEASE_CLIENT)
+CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
-ifeq ($(BUILD), BUILD_RELEASE)
-CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DMY_DATE=\""`$(DATE)`"\"
-#CFLAGS = -Werror -g -O2 -pipe -DMY_DATE=\""`$(DATE)`"\"
+ifeq ($(BUILD), BUILD_RELEASE_SERVER)
+CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DSERVER_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
 
 
