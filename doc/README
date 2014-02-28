@@ -3,6 +3,11 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-02-28
+1, make tools directory and add SV-MQ monitor script, compare file script
+
+
+----------------------------------------------------
 update: 2014-02-27
 1, add SV-MQ including block and non-block interface
 note: System V IPC do not belongs to POSIX standard, you can find /usr/include/linux/msg.h and see some about Linux ipc data structure.
