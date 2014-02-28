@@ -30,9 +30,11 @@ export os_date
 #==============================================================================
 # BUILD Mode:
 #
+# System V MQ Client:
 # BUILD_DEBUG_CLIENT
 # BUILD_RELEASE_CLIENT
 #
+# System V MQ Server:
 # BUILD_DEBUG_SERVER
 # BUILD_RELEASE_SERVER
 #------------------------------------------------------------------------------

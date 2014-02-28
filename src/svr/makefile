@@ -26,7 +26,7 @@ all: $(BINS)
 
 $(BIN_SVR):$(OBJS)
 	$(CXX) -o $@ $^ $(LIBPATH) $(LIBS)
-	@echo "build "$(BIN_SVR)" OK!"
+	@echo "build $(BIN_SVR) OK!"
 	@cp $(BINS) ../../bin/ -f
 
 install:
