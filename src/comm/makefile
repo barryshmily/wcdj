@@ -17,7 +17,7 @@ $(LIB_SV_QUEUE): $(OBJS_SV_QUEUE)
 	$(RANLIB) $@
 
 install:
-	@echo "nothing to do"
+	@echo "nothing to install"
 		
 clean:
 	rm -f $(OBJS) $(LIBS)

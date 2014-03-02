@@ -1,3 +1,7 @@
+#==============================================================================
+# The common configure about Makefile
+#==============================================================================
+
 CC     = gcc
 CXX    = g++
 RANLIB = ranlib
@@ -7,10 +11,10 @@ AROPT  = -scurv
 DATE = date "+%Y/%m/%d-%H:%M:%S"
 os_date = $(shell date "+%Y%m%d-%H%M%S")
 
-# you should change to yourself path
-PROJECT_HOME = /data/home/gerryyang/test/code_in_action/WCDJ_proj
+# you should set yourself path
+PROJECT_HOME = /data/home/gerryyang/test/code_in_action/wcdj-master
 
-# check gcc version
+# check os and gcc version
 gccver=$(shell gcc -v  2>&1 | grep "gcc version" | awk -F" " '{print $$3}')
 os64bitstr=$(shell uname -a | grep "_64 ")
 osbit=64
@@ -63,7 +67,7 @@ CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DSERVER_MODE -DMY_DATE=\""`$(D
 endif
 
 
-# 自动计算文件的依赖关系
+# calc relation between files automatically
 .%.d: %.cpp
 	$(CC) $(INCLUDE) -MM $< > $@
 	@$(CC) $(INCLUDE) -MM $< | sed s/"^"/"\."/  |  sed s/"^\. "/" "/  | \
