@@ -27,5 +27,8 @@ update: 2014-02-22
 3, add terminal and file log
 4, You can check ur program version using below command:
 strings ur_prog | grep "Version"
+Linux SUSE like this:
 WCDJ|VersionV1.0R010_2014/02/22-22:31:01 |gcc_4.1.2 20070115 (prerelease) (SUSE Linux)
+OS X like this:
+WCDJ|VersionV1.0R010_2014/02/22-22:31:02 |gcc_4.2.1 Compatible Apple LLVM 5.0 (clang-500.2.79)
 
