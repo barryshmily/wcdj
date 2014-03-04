@@ -6,7 +6,7 @@ LIBPATH = -L../../lib
 
 DEPS = $(patsubst %.o, .%.d, $(OBJS))
 
-LIBS = -lsvqueue
+LIBS = -lsvqueue -lcommtools
 
 OBJS = CServer.o main.o
 

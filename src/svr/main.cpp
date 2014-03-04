@@ -1,5 +1,8 @@
 #include "comm.h"
+#include "COption.h"
 #include "CServer.h"
+#include "CAppConfig.h"
+
 
 using namespace std;
 
@@ -108,11 +111,43 @@ int main(int argc, char **argv)
         Usage(argv[0]);
         return E_FAIL;
     } 
+
+	CAppConfig& appconf_instance = CAppConfig::getapp_config_instance();
+
+	COption opt;
+	opt.read_arg(argc, argv);
+
+	// if find config file, then read firstly
+	if (opt["config"] != "")
+	{
+		// TODO
+	}
+
+	// after reading config from file then read terminal para
+	
+	if (opt["projecthome"] != "")
+	{
+		appconf_instance.set_projecthome(opt["projecthome"].c_str());
+	}
+	if (opt["threadcnt"] != "")
+	{
+		appconf_instance.set_threadcnt((unsigned)atoi(opt["threadcnt"].c_str()));
+	}
+	if (opt["processcnt"] != "")
+	{
+		appconf_instance.set_processcnt((unsigned)atoi(opt["processcnt"].c_str()));
+	}
+	if (opt["requestcnt"] != "")
+	{
+		appconf_instance.set_requestcnt((unsigned)atoi(opt["requestcnt"].c_str()));
+	}
+
+	appconf_instance.check_conf();
 	
 	Daemon();
 
 	// prevent multi instance
-	string strHome    =  argv[1];
+	string strHome    =  opt["projecthome"];
 	string strProg    =  argv[0];
 	string strPidFile =  strHome + "/bin/" + strProg + ".pid";
 

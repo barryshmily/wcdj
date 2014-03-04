@@ -3,6 +3,11 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-04
+1, add comm libs, includes string-parse, option-parse[like ./prog -para1=value1 -para2=value2 ... dest], so you could transmit paras to prog.
+
+
+----------------------------------------------------
 update: 2014-02-28
 1, make tools directory and add SV-MQ monitor script, compare file script
 
@@ -30,5 +35,5 @@ strings ur_prog | grep "Version"
 Linux SUSE like this:
 WCDJ|VersionV1.0R010_2014/02/22-22:31:01 |gcc_4.1.2 20070115 (prerelease) (SUSE Linux)
 OS X like this:
-WCDJ|VersionV1.0R010_2014/02/22-22:31:02 |gcc_4.2.1 Compatible Apple LLVM 5.0 (clang-500.2.79)
+WCDJ|VersionV1.0R010_2014/02/22-22:31:01 |gcc_4.2.1 Compatible Apple LLVM 5.0 (clang-500.2.79)
 

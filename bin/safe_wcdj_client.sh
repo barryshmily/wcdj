@@ -43,7 +43,7 @@ function GetPid()
 
 function Boot()
 {
-    cd $SERVER_PATH; ./$SERVER $PROJECT_HOME
+    cd $SERVER_PATH; ./$SERVER "-projecthome=$PROJECT_HOME" "-threadcnt=$THREADCNT" "-processcnt=$PROCESSCNT" "-requestcnt=$REQUESTCNT"
     echo "$DATE $SERVER starts OK" 
 }
 

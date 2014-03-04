@@ -26,7 +26,7 @@ clean:
 		echo "Done"; \
 	done
 					
-	cd ${PROJECT_HOME}/bin     && ls | grep -v ".*.sh"  | xargs rm -f
+	#cd ${PROJECT_HOME}/bin     && ls | grep -v ".*.sh"  | xargs rm -f
 	cd ${PROJECT_HOME}/package && ls | grep -v "README" | grep -v "tar.sh"| xargs rm -rf
 
 	
