@@ -175,40 +175,55 @@ void CServer::run()
 			// current time
 			char szLocalTime[36] =  {0};
 			time_t now           =  time(NULL);
-			strftime(szLocalTime, sizeof(szLocalTime), "%Y%m%d-%H%M%S", localtime(&now));
+			//strftime(szLocalTime, sizeof(szLocalTime), "%Y%m%d-%H%M%S", localtime(&now));
 
 #ifdef CLIENT_MODE
-			INFO("client running...\n");
+			//INFO("client running...\n");
 
 			// build request
 			char szBuf[2048] = {0};
-			snprintf(szBuf, sizeof(szBuf), "Hello, My name is gerryyang, time is %s", szLocalTime);
+			//snprintf(szBuf, sizeof(szBuf), "Hello, My name is gerryyang, time is %s", szLocalTime);
+			snprintf(szBuf, sizeof(szBuf), "%d", now);
 
 			int iRet = enqueue(szBuf, strlen(szBuf), IPC_NOWAIT);
 			if (iRet != E_OK)
 			{
-				ERROR("send req to SV-MQ, key[%d] error[%s]\n", m_iSendKey, m_szErrInfo);
+				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iSendKey, m_szErrInfo);
+				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iSendKey, m_szErrInfo);
 			}
 			else
 			{
 				INFO("send req to SV-MQ, key[%d] ok!\n", m_iSendKey); 
 			}
 
+#if 0
 			// sleep 1001 ms
 			struct timeval delay;
 			delay.tv_sec  =  1;
 			delay.tv_usec =  1 * 1000;
 			select(0, NULL, NULL, NULL, &delay);
+#endif
 
 #else/* SERVER_MODE */
-			INFO("server running...\n");
+			//INFO("server running...\n");
 
 			// receive request
 			char szBuf[REQUSTMSG_MAX_LENGTH] =  {0};
 			int iDataLen                     =  sizeof(szBuf);
 
-#if 0
-			// block mode
+
+			static int iReqNum  =  0;
+			static int iCurrent =  0;
+			static bool bFirst  =  true;
+
+
+#ifdef SVR_BLOCK_ACCEPT
+			/* block mode
+			 * If (msgflg & IPC_NOWAIT) is 0, the calling thread will suspend execution until one of the following occurs:
+			 * [1] A message of the desired type is placed on the queue.
+			 * [2] The message queue identifier msqid is removed from the system; when this occurs, errno is set equal to [EIDRM] and -1 is returned.
+			 * [3] The calling thread receives a signal that is to be caught; in this case a message is not received and the calling thread resumes execution in the manner prescribed in sigaction(). 
+			 * */
 			int iRet = dequeue(szBuf, iDataLen, 0);
 			if (iRet != E_OK)
 			{
@@ -224,9 +239,34 @@ void CServer::run()
 				// maybe interupted by signal that seems ok and go on working
 				continue;
 			}
-#endif
+			else
+			{
+				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iSendKey, szBuf); 
 
-			// non-block mode
+				// calc the number of every second svr could accept requset
+				int iAccept =  atoi(szBuf);
+				if (bFirst) 
+				{
+					iCurrent =  iAccept;
+					bFirst   =  false;
+				}
+
+				if (iCurrent == iAccept)
+				{
+					++iReqNum;
+				}
+				else
+				{
+					if (iReqNum % 10 == 0)
+						INFO("time[%d] req[%d]\n", iCurrent-1, iReqNum);
+
+					// reset
+					bFirst  =  true;
+					iReqNum =  1;
+				}
+			}
+#else
+			// non-block mode, Note: this will cause %CPU using too high
 			int iRet = dequeue(szBuf, iDataLen, IPC_NOWAIT);
 			if (iRet != E_OK)
 			{
@@ -234,8 +274,31 @@ void CServer::run()
 			}
 			else
 			{
-				INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iSendKey, szBuf); 
+				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iSendKey, szBuf); 
+
+				// calc the number of every second svr could accept requset
+				int iAccept =  atoi(szBuf);
+				if (bFirst) 
+				{
+					iCurrent =  iAccept;
+					bFirst   =  false;
+				}
+
+				if (iCurrent == iAccept)
+				{
+					++iReqNum;
+				}
+				else
+				{
+					INFO("time[%d] req[%d]\n", iCurrent-1, iReqNum);
+
+					// reset
+					bFirst  =  true;
+					iReqNum =  1;
+				}
 			}
+#endif
+
 #endif
 
 		}

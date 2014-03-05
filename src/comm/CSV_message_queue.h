@@ -9,6 +9,7 @@
 #include <errno.h>
 
 #define REQUSTMSG_MAX_LENGTH  1024 * 15
+//#define REQUSTMSG_MAX_LENGTH  32
 #define IPC_FLAGS             0664
 #define IPC_MQ_TYPE           1
 

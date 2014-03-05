@@ -49,7 +49,10 @@ function Boot()
 
 function Start()
 {
-  if [ "$PROC_ID" == "0" ]; then
+
+:<< COMMENT_WCDJ
+ # this check allow you can only create just one instance
+ if [ "$PROC_ID" == "0" ]; then
   	# need to run server
     Boot
 
@@ -57,6 +60,16 @@ function Start()
 	# error, server has started
   	echo "$DATE error:`basename "$PROC_ID"` already exist! use [$0 stop] first"
   fi
+COMMENT_WCDJ
+
+# if you wanna create multi-instances
+i=1
+while [ $i -le $CLIENT_WORKER_NUM ]; do
+ 	echo "start client$i..."
+	Boot
+	i=`expr $i + 1`
+done
+
 }
 
 function Stop()

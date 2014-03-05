@@ -45,25 +45,29 @@ export os_date
 # MACRO OPTIONS:
 #
 # [1] NOPRINT_TERMINAL: do not print info on terminal, a.k.a close fd 1 2 3.
+#                       Note: in order to test performance, or use [./safe_wcdj_client.sh start > /dev/null]
 # [2] CLIENT_MODE/SERVER_MODE: one mode used only, to test IPC like System V IPC.
+# [3] SVR_BLOCK_ACCEPT: if you set this macro that svr uses block msgrcv to accept request. 
+#                   In the opposite, do not set this macro that svr will accept request in non-block mode.
+#                   Note that this macro is only used in SERVER_MODE.
 #
 #==============================================================================
 
-BUILD = BUILD_DEBUG_CLIENT
-#BUILD = BUILD_DEBUG_SERVER
+#BUILD = BUILD_DEBUG_CLIENT
+BUILD = BUILD_DEBUG_SERVER
 export BUILD
 
 ifeq ($(BUILD), BUILD_DEBUG_CLIENT)
 CFLAGS = -Werror -g -O2 -pipe -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
 ifeq ($(BUILD), BUILD_DEBUG_SERVER)
-CFLAGS = -Werror -g -O2 -pipe -DSERVER_MODE -DMY_DATE=\""`$(DATE)`"\"
+CFLAGS = -Werror -g -O2 -pipe -DSERVER_MODE -DSVR_BLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
 endif
 ifeq ($(BUILD), BUILD_RELEASE_CLIENT)
 CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
 ifeq ($(BUILD), BUILD_RELEASE_SERVER)
-CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DSERVER_MODE -DMY_DATE=\""`$(DATE)`"\"
+CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DSERVER_MODE -DSVR_BLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
 endif
 
 
