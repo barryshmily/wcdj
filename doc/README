@@ -8,8 +8,7 @@ update: 2014-03-05
 Note: in order to test performance, you should use [./safe_wcdj_client.sh start > /dev/null], do not use printf, etc. system function.
 2, add some tools to show top, cpu and /proc/* info.
 3, add SVR_BLOCK_ACCEPT macro: 
-if you set this macro that svr uses block msgrcv to accept request. 
-In the opposite, do not set this macro that svr will accept request in non-block mode.
+If you set this macro that svr uses block msgrcv to accept request (CPU usage will not high). In the opposite, do not set this macro that svr will accept request in non-block mode (CPU usage is always 100%).
 Note that this macro is only used in SERVER_MODE.
 
 PS: performance test result:
