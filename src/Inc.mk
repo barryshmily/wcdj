@@ -12,7 +12,7 @@ DATE = date "+%Y/%m/%d-%H:%M:%S"
 os_date = $(shell date "+%Y%m%d-%H%M%S")
 
 # you should set yourself path
-PROJECT_HOME = /Users/gerryyang/github_project/wcdj
+PROJECT_HOME = /data/home/gerryyang/test/code_in_action/wcdj-master
 
 # check os and gcc version
 gccver=$(shell gcc -v  2>&1 | grep "gcc version" | awk -F" " '{print $$3}')
@@ -32,42 +32,33 @@ export os_ver
 export os_date
 
 #==============================================================================
-# BUILD Mode:
-#
-# System V MQ Client:
-# BUILD_DEBUG_CLIENT
-# BUILD_RELEASE_CLIENT
-#
-# System V MQ Server:
-# BUILD_DEBUG_SERVER
-# BUILD_RELEASE_SERVER
-#------------------------------------------------------------------------------
-# MACRO OPTIONS:
+# BUILD OPTIONS:
 #
 # [1] NOPRINT_TERMINAL: do not print info on terminal, a.k.a close fd 1 2 3.
 #                       Note: in order to test performance, or use [./safe_wcdj_client.sh start > /dev/null]
-# [2] CLIENT_MODE/SERVER_MODE: one mode used only, to test IPC like System V IPC.
-# [3] SVR_BLOCK_ACCEPT: if you set this macro that svr uses block msgrcv to accept request. 
+#
+# [2] CLIENT_MODE/SERVER_MODE/PROXY_MODE: one mode used only, to test IPC like System V IPC.
+#
+# [3] BLOCK_ACCEPT: if you set this macro that svr uses block msgrcv to accept request. 
 #                   In the opposite, do not set this macro that svr will accept request in non-block mode.
 #                   Note that this macro is only used in SERVER_MODE.
 #
 #==============================================================================
 
-#BUILD = BUILD_DEBUG_CLIENT
-BUILD = BUILD_DEBUG_SERVER
+BUILD = BUILD_DEBUG_CLIENT
+#BUILD = BUILD_DEBUG_SERVER
+#BUILD = BUILD_DEBUG_PROXY
+
 export BUILD
 
 ifeq ($(BUILD), BUILD_DEBUG_CLIENT)
 CFLAGS = -Werror -g -O2 -pipe -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
 endif
 ifeq ($(BUILD), BUILD_DEBUG_SERVER)
-CFLAGS = -Werror -g -O2 -pipe -DSERVER_MODE -DSVR_BLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
+CFLAGS = -Werror -g -O2 -pipe -DSERVER_MODE -DBLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
 endif
-ifeq ($(BUILD), BUILD_RELEASE_CLIENT)
-CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DCLIENT_MODE -DMY_DATE=\""`$(DATE)`"\"
-endif
-ifeq ($(BUILD), BUILD_RELEASE_SERVER)
-CFLAGS = -Werror -g -O2 -pipe -DNOPRINT_TERMINAL -DSERVER_MODE -DSVR_BLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
+ifeq ($(BUILD), BUILD_DEBUG_PROXY)
+CFLAGS = -Werror -g -O2 -pipe -DPROXY_MODE -DBLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
 endif
 
 

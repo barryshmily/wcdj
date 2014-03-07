@@ -1,6 +1,4 @@
 #!/bin/sh
-# modified by gerryyang 20120426
-
 # ================================================
 
 # include public script
@@ -43,7 +41,8 @@ function GetPid()
 
 function Boot()
 {
-    cd $SERVER_PATH; ./$SERVER "-projecthome=$PROJECT_HOME" "-threadcnt=$THREADCNT" "-processcnt=$PROCESSCNT" "-requestcnt=$REQUESTCNT"
+    #cd $SERVER_PATH; ./$SERVER $PROC_PARAS > /dev/null 2>&1
+    cd $SERVER_PATH; ./$SERVER $PROC_PARAS 
     echo "$DATE $SERVER starts OK" 
 }
 

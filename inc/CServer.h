@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <ctime>
 #include "CSV_message_queue.h"
+#include "CAppConfig.h"
 
 using namespace std;
 
@@ -19,25 +20,25 @@ public:
 	CServer();
 	~CServer();
 
-	void init(int argc, char** argv) throw(runtime_error, logic_error);
+	void init(CAppConfig &appconf_instance) throw(runtime_error, logic_error);
 	void run();
 
 	// SV-MQ operations
-	void init_svmq() throw (runtime_error);
-	//int enqueue(int iQueIndex, const void* vData, int iDataLen, int flag = IPC_NOWAIT);
-	//int dequeue(int iQueIndex, void *vData, int& iDataLen, int iMaxDataLen, int flag = IPC_NOWAIT);
-	int enqueue(const void* vData, int iDataLen, int flag = IPC_NOWAIT);
-	int dequeue(void *vData, int iDataLen, int flag = IPC_NOWAIT);
+	void init_svmq(CAppConfig &appconf_instance) throw (runtime_error);
+	void create_svmq(CSVMessageQueue * &pCSVMessageQueue, int iSvMqKey) throw (runtime_error);
+	int enqueue(CSVMessageQueue * &pCSVMessageQueue, const void* vData, int iDataLen, int flag = IPC_NOWAIT);
+	int dequeue(CSVMessageQueue * &pCSVMessageQueue, void *vData, int iDataLen, int flag = IPC_NOWAIT);
 
 	void clean_up();
 
 
-
 private:
-	CSVMessageQueue *m_pCSVMessageQueue;
+	CSVMessageQueue *m_pCSVMessageQueueClient;
+	CSVMessageQueue *m_pCSVMessageQueueServer;
 	char m_szErrInfo[512];
 
-	int m_iSendKey;
+	int m_iClientSvMqKey;
+	int m_iServerSvMqKey;
 };
 
 #endif

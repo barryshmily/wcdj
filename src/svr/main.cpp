@@ -15,7 +15,7 @@ const unsigned char SIG_QUIT =  2;
 unsigned char SIG_STAT       =  0;
 
 
-void Usage(const string& progname)
+void usage(const string& progname)
 {
     cout << "Welcome to use WCDJ-svr, the version is:\n" << VERSION << " \n"
         << "Usage: " << progname << " [OPTION]..." << "\n"
@@ -35,7 +35,7 @@ void sigusr2_handle(int iSigVal)
     signal(SIGUSR2, sigusr2_handle);
 }
 
-void Daemon()
+void daemon()
 {
 	pid_t pid;
 
@@ -80,7 +80,7 @@ void Daemon()
 
 }
 
-int CreatePIDFile(const char *sPIDFile)
+int create_pid_file(const char *sPIDFile)
 {    
 	FILE *pstFile;
 
@@ -99,24 +99,8 @@ int CreatePIDFile(const char *sPIDFile)
 	return 0;
 }
 
-/*
- * prog entry
- * */
-int main(int argc, char **argv)
+void read_conf(COption &opt, CAppConfig &appconf_instance)
 {
-
-
-    if (argc < 2)
-    {
-        Usage(argv[0]);
-        return E_FAIL;
-    } 
-
-	CAppConfig& appconf_instance = CAppConfig::getapp_config_instance();
-
-	COption opt;
-	opt.read_arg(argc, argv);
-
 	// if find config file, then read firstly
 	if (opt["config"] != "")
 	{
@@ -124,46 +108,64 @@ int main(int argc, char **argv)
 	}
 
 	// after reading config from file then read terminal para
-	
-	if (opt["projecthome"] != "")
-	{
+	if (opt["projecthome"] != "") {
 		appconf_instance.set_projecthome(opt["projecthome"].c_str());
 	}
-	if (opt["threadcnt"] != "")
-	{
-		appconf_instance.set_threadcnt((unsigned)atoi(opt["threadcnt"].c_str()));
+	if (opt["clientsvmqkey"] != "") {
+		appconf_instance.set_clientsvmqkey(atoi(opt["clientsvmqkey"].c_str()));
 	}
-	if (opt["processcnt"] != "")
-	{
-		appconf_instance.set_processcnt((unsigned)atoi(opt["processcnt"].c_str()));
-	}
-	if (opt["requestcnt"] != "")
-	{
-		appconf_instance.set_requestcnt((unsigned)atoi(opt["requestcnt"].c_str()));
+	if (opt["serversvmqkey"] != "") {
+		appconf_instance.set_serversvmqkey(atoi(opt["serversvmqkey"].c_str()));
 	}
 
+	return;
+}
+
+/*
+ * prog entry
+ * */
+int main(int argc, char **argv)
+{
+
+	// check input
+    if (argc < 2)
+    {
+        usage(argv[0]);
+        return E_FAIL;
+    } 
+
+	// parse input paras
+	COption opt;
+	opt.read_arg(argc, argv);
+
+	// init conf
+	CAppConfig& appconf_instance = CAppConfig::getapp_config_instance();
+	read_conf(opt, appconf_instance);
+
+	// check paras
 	appconf_instance.check_conf();
 	
-	Daemon();
+	// set to daemon process
+	daemon();
 
 	// prevent multi instance
 	string strHome    =  opt["projecthome"];
 	string strProg    =  argv[0];
 	string strPidFile =  strHome + "/bin/" + strProg + ".pid";
-
-	if (CreatePIDFile(strPidFile.c_str()) != 0)
+	if (create_pid_file(strPidFile.c_str()) != 0)
 	{
 		cerr << "CreatePIDFile err, so quit!" << endl;
 		return E_FAIL;
 	}
 
+	// start server
 	try 
 	{
 		signal(SIGUSR1, sigusr1_handle);
 		signal(SIGUSR2, sigusr2_handle);
 
 		CServer* server = new CServer();
-		server->init(argc, argv);
+		server->init(appconf_instance);
 		server->run();
 	}
 	catch (runtime_error& e)

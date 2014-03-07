@@ -19,6 +19,10 @@ ifeq ($(BUILD), BUILD_DEBUG_SERVER)
 BIN_SVR = wcdj_svr 
 endif
 
+ifeq ($(BUILD), BUILD_DEBUG_PROXY)
+BIN_SVR = wcdj_proxy 
+endif
+
 BINS = $(BIN_SVR)
 
 

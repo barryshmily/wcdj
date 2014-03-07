@@ -3,11 +3,23 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-06
+1, add BUILD_DEBUG_PROXY macro:
+Note use proxy, you should set correct SV-MQ key in Inc.sh, so that the message can go like below:
+client (set CLIENTSVMQKEY[10088]) -> proxy (set CLIENTSVMQKEY[10088] and SERVERSVMQKEY[10089]) -> server (set SERVERSVMQKEY[10089])
+
+PS: performance test result:
+Environment, suse32, 15G memory, 1cpu, 4cores
+1 client -> 1 proxy -> 1 svr, 15k msgsize, 8w+/s, %CPU=100, so read/write bandwidth is about (15k*8W)/s = 1.2G/s
+1 client -> 5 proxy -> 1 svr, 15k msgsize, 35k+/s, %CPU=80, so read/write bandwidth is about (15k*35k)/s = 525M/s
+
+
+----------------------------------------------------
 update: 2014-03-05
 1, modify start shell script to support multi-client.
 Note: in order to test performance, you should use [./safe_wcdj_client.sh start > /dev/null], do not use printf, etc. system function.
 2, add some tools to show top, cpu and /proc/* info.
-3, add SVR_BLOCK_ACCEPT macro: 
+3, add BLOCK_ACCEPT macro: 
 If you set this macro that svr uses block msgrcv to accept request (CPU usage will not high). In the opposite, do not set this macro that svr will accept request in non-block mode (CPU usage is always 100%).
 Note that this macro is only used in SERVER_MODE.
 
@@ -15,6 +27,9 @@ PS: performance test result:
 Environment, suse32, 15G memory, 1cpu, 4cores
 10 clients -> svmq -> 1 svr, 15k msgsize, 10w+/s, %CPU=100, so read/write bandwidth is about (15k*10^5)/s = 1.5GB/s 
 10 clients -> svmq -> 1 svr, 32 msgsize, 70w+/s, %CPU=100, so read/write bandwidth is about (32*7*10^5)/s = 22MB/s
+
+System V IPC vs POSIX IPC: 
+http://stackoverflow.com/questions/4582968/system-v-ipc-vs-posix-ipc
 
 
 ----------------------------------------------------

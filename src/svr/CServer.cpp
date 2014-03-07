@@ -4,8 +4,10 @@
 
 CServer::CServer()
 {
-	m_pCSVMessageQueue =  NULL;
-	m_iSendKey         =  10088;// 0x2768
+	m_pCSVMessageQueueClient =  NULL;
+	m_pCSVMessageQueueServer =  NULL;
+	m_iClientSvMqKey         =  10088;// 0x2768
+	m_iServerSvMqKey         =  10089;// 0x2769
 
 	memset(m_szErrInfo, 0x0, sizeof(m_szErrInfo));
 }
@@ -17,28 +19,58 @@ CServer::~CServer()
 
 void CServer::clean_up()
 {
-	if (m_pCSVMessageQueue != NULL)
+	if (m_pCSVMessageQueueClient != NULL)
 	{
-		delete m_pCSVMessageQueue;
-		m_pCSVMessageQueue = NULL;
+		delete m_pCSVMessageQueueClient;
+		m_pCSVMessageQueueClient = NULL;
+	}
+
+	if (m_pCSVMessageQueueServer != NULL)
+	{
+		delete m_pCSVMessageQueueServer;
+		m_pCSVMessageQueueServer = NULL;
 	}
 }
 
-void CServer::init_svmq() throw (runtime_error)
+void CServer::init_svmq(CAppConfig &appconf_instance) throw (runtime_error)
 {
 	/*  create and init SV-MQ
 	 *  echo 65535    > /proc/sys/kernel/msgmax, 64K
 	 *  echo 16777216 > /proc/sys/kernel/msgmnb, 16M
 	 *  so, msg_num = 256
 	 *  */
-	
-	m_pCSVMessageQueue = new CSVMessageQueue();
-	m_pCSVMessageQueue->init(m_iSendKey, IPC_FLAGS);// 0x272e
 
-	int iRet = m_pCSVMessageQueue->create();
+#ifdef CLIENT_MODE
+	m_iClientSvMqKey = appconf_instance.get_clientsvmqkey();
+#elif defined SERVER_MODE
+	m_iServerSvMqKey = appconf_instance.get_serversvmqkey();
+#elif defined PROXY_MODE
+	m_iClientSvMqKey = appconf_instance.get_clientsvmqkey();
+	m_iServerSvMqKey = appconf_instance.get_serversvmqkey();
+#endif
+
+	// create client and server SV-MQ
+#ifdef CLIENT_MODE
+	create_svmq(m_pCSVMessageQueueClient, m_iClientSvMqKey);
+#elif defined SERVER_MODE
+	create_svmq(m_pCSVMessageQueueServer, m_iServerSvMqKey);
+#elif defined PROXY_MODE
+	create_svmq(m_pCSVMessageQueueClient, m_iClientSvMqKey);
+	create_svmq(m_pCSVMessageQueueServer, m_iServerSvMqKey);
+#endif
+
+	return;
+}
+
+void CServer::create_svmq(CSVMessageQueue * &pCSVMessageQueue, int iSvMqKey) throw (runtime_error)
+{
+	pCSVMessageQueue = new CSVMessageQueue();
+	pCSVMessageQueue->init(iSvMqKey, IPC_FLAGS);
+
+	int iRet = pCSVMessageQueue->create();
 	if (iRet < 0) 
 	{
-		ERROR("CSVMessageQueue create err[%d:%s]", iRet, m_pCSVMessageQueue->get_err_info());
+		ERROR("CSVMessageQueue create err[%d:%s]", iRet, pCSVMessageQueue->get_err_info());
 		throw runtime_error("CSVMessageQueue create err");
 	}
 	else if (1 == iRet)
@@ -47,24 +79,26 @@ void CServer::init_svmq() throw (runtime_error)
 		/* OK */
 	}
 
-	iRet = m_pCSVMessageQueue->open();
+	iRet = pCSVMessageQueue->open();
 	if (iRet != 0) 
 	{
-		ERROR("CSVMessageQueue open err[%d:%s]", iRet, m_pCSVMessageQueue->get_err_info());
+		ERROR("CSVMessageQueue open err[%d:%s]", iRet, pCSVMessageQueue->get_err_info());
 		throw runtime_error("CSVMessageQueue open err");
 	}
+
+	return;
 }
 
-void CServer::init(int argc, char** argv) throw(runtime_error, logic_error)
+void CServer::init(CAppConfig &appconf_instance) throw(runtime_error, logic_error)
 {
 
 	// create and init SV-MQ
-	init_svmq();
+	init_svmq(appconf_instance);
 
 	INFO("CServer init ok!\n");
 }
 
-int CServer::enqueue(const void* vData, int iDataLen, int flag)
+int CServer::enqueue(CSVMessageQueue * &pCSVMessageQueue, const void* vData, int iDataLen, int flag)
 {
 
 	if (iDataLen >= REQUSTMSG_MAX_LENGTH)
@@ -84,7 +118,7 @@ int CServer::enqueue(const void* vData, int iDataLen, int flag)
 
 	for (;;)
 	{
-		iRet = m_pCSVMessageQueue->send(buf, sizeof(ur_msgbuf) - sizeof(long), flag);
+		iRet = pCSVMessageQueue->send(buf, sizeof(ur_msgbuf) - sizeof(long), flag);
 		if (iRet != E_OK)
 		{
 			// nonblock mode, sleep for a while and try some times
@@ -101,7 +135,7 @@ int CServer::enqueue(const void* vData, int iDataLen, int flag)
 			else
 			{
 				// sorry, the SV-MQ can not be used!
-				strcpy(m_szErrInfo, m_pCSVMessageQueue->get_err_info());
+				strcpy(m_szErrInfo, pCSVMessageQueue->get_err_info());
 			}
 		}
 
@@ -111,7 +145,7 @@ int CServer::enqueue(const void* vData, int iDataLen, int flag)
 	return iRet;
 }
 
-int CServer::dequeue(void *vData, int iDataLen, int flag)
+int CServer::dequeue(CSVMessageQueue * &pCSVMessageQueue, void *vData, int iDataLen, int flag)
 {
 
 	if (iDataLen < REQUSTMSG_MAX_LENGTH)
@@ -125,7 +159,7 @@ int CServer::dequeue(void *vData, int iDataLen, int flag)
 
 	for (;;)
 	{
-		int iRet = m_pCSVMessageQueue->recv(buf, sizeof(ur_msgbuf) - sizeof(long), IPC_MQ_TYPE, flag);
+		int iRet = pCSVMessageQueue->recv(buf, sizeof(ur_msgbuf) - sizeof(long), IPC_MQ_TYPE, flag);
 		if (iRet != E_OK)
 		{
 			if (flag == IPC_NOWAIT && errno == ENOMSG)
@@ -134,7 +168,7 @@ int CServer::dequeue(void *vData, int iDataLen, int flag)
 			}
 			else
 			{
-				strcpy(m_szErrInfo, m_pCSVMessageQueue->get_err_info());
+				strcpy(m_szErrInfo, pCSVMessageQueue->get_err_info());
 				return iRet;
 			}
 		}
@@ -185,15 +219,201 @@ void CServer::run()
 			//snprintf(szBuf, sizeof(szBuf), "Hello, My name is gerryyang, time is %s", szLocalTime);
 			snprintf(szBuf, sizeof(szBuf), "%d", now);
 
-			int iRet = enqueue(szBuf, strlen(szBuf), IPC_NOWAIT);
+			static int iReqNum    =  0;
+			static int iCurrent   =  0;
+			static bool bFirst    =  true;
+			static int iPrintFreq =  0;
+
+			int iRet = enqueue(m_pCSVMessageQueueClient, szBuf, strlen(szBuf), IPC_NOWAIT);
 			if (iRet != E_OK)
 			{
-				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iSendKey, m_szErrInfo);
-				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iSendKey, m_szErrInfo);
+				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
+				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
 			}
 			else
 			{
-				INFO("send req to SV-MQ, key[%d] ok!\n", m_iSendKey); 
+				//INFO("send req to SV-MQ, key[%d] ok! req[%s] \n", m_iClientSvMqKey, szBuf); 
+
+				// calc the number of every second client could send requset
+				int iSend =  now;
+				if (bFirst) {
+					iCurrent =  iSend;
+					bFirst   =  false;
+				}
+				if (iCurrent == iSend) {
+					++iReqNum >= 2147483647 ? iReqNum = 0 : NULL;
+				} else {
+					if (++iPrintFreq % 10 == 0) {
+						INFO("send req to SV-MQ, key[%d] ok! time[%d] reqnum[%d] req[%d]\n", 
+								m_iClientSvMqKey, iCurrent, iReqNum, iSend-1);
+						iPrintFreq = 0;
+					}
+
+					// reset
+					bFirst  =  true;
+					iReqNum =  1;
+				}
+
+			}
+
+#if 1
+			// sleep 1 us
+			struct timeval delay;
+			delay.tv_sec  =  0;
+			delay.tv_usec =  1 * 1;
+			select(0, NULL, NULL, NULL, &delay);
+#endif
+
+#elif defined SERVER_MODE
+			//INFO("server running...\n");
+
+			// receive request
+			char szBuf[REQUSTMSG_MAX_LENGTH] =  {0};
+			int iDataLen                     =  sizeof(szBuf);
+
+
+			static int iReqNum    =  0;
+			static int iCurrent   =  0;
+			static bool bFirst    =  true;
+			static int iPrintFreq =  0;
+
+
+#ifdef BLOCK_ACCEPT
+			/* block mode
+			 * If (msgflg & IPC_NOWAIT) is 0, the calling thread will suspend execution until one of the following occurs:
+			 * [1] A message of the desired type is placed on the queue.
+			 * [2] The message queue identifier msqid is removed from the system; when this occurs, errno is set equal to [EIDRM] and -1 is returned.
+			 * [3] The calling thread receives a signal that is to be caught; in this case a message is not received and the calling thread resumes execution in the manner prescribed in sigaction(). 
+			 * */
+			int iRet = dequeue(m_pCSVMessageQueueServer, szBuf, iDataLen, 0);
+			if (iRet != E_OK)
+			{
+				if (errno != EINTR)
+				{
+					ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+					__LOG("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+					/* fatal error, prog exit*/
+					break;
+				}
+
+				// maybe interupted by signal that seems ok and go on working
+				continue;
+			}
+			else
+			{
+				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iServerSvMqKey, szBuf); 
+
+				// calc the number of every second svr could accept requset
+				int iAccept =  atoi(szBuf);
+				if (bFirst) {
+					iCurrent =  iAccept;
+					bFirst   =  false;
+				}
+				if (iCurrent == iAccept) {
+					++iReqNum >= 2147483647 ? iReqNum = 0 : NULL;
+				} else {
+					if (++iPrintFreq % 10 == 0) {
+						INFO("receive req from SV-MQ, key[%d] ok! time[%d] reqnum[%d] req[%d]\n", 
+								m_iServerSvMqKey, iCurrent, iReqNum, iAccept-1);
+						iPrintFreq = 0;
+					}
+
+					// reset
+					bFirst  =  true;
+					iReqNum =  1;
+				}
+			}
+#else
+			// non-block mode, Note: this will cause CPU usage too high, so don't use this usually!
+			int iRet = dequeue(m_pCSVMessageQueueServer, szBuf, iDataLen, IPC_NOWAIT);
+			if (iRet != E_OK) {
+				ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+			} else {
+				INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iServerSvMqKey, szBuf); 
+			}
+#endif
+
+#elif defined PROXY_MODE
+
+			//INFO("proxy running...\n");
+
+			// receive request
+			char szBuf[REQUSTMSG_MAX_LENGTH] =  {0};
+			int iDataLen                     =  sizeof(szBuf);
+
+
+			static int iReqNum    =  0;
+			static int iCurrent   =  0;
+			static bool bFirst    =  true;
+			static int iPrintFreq =  0;
+
+
+#ifdef BLOCK_ACCEPT
+			/* block mode
+			 * If (msgflg & IPC_NOWAIT) is 0, the calling thread will suspend execution until one of the following occurs:
+			 * [1] A message of the desired type is placed on the queue.
+			 * [2] The message queue identifier msqid is removed from the system; when this occurs, errno is set equal to [EIDRM] and -1 is returned.
+			 * [3] The calling thread receives a signal that is to be caught; in this case a message is not received and the calling thread resumes execution in the manner prescribed in sigaction(). 
+			 * */
+			int iRet = dequeue(m_pCSVMessageQueueClient, szBuf, iDataLen, 0);
+			if (iRet != E_OK)
+			{
+				if (errno != EINTR)
+				{
+					ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+					__LOG("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+					/* fatal error, prog exit*/
+					break;
+				}
+
+				// maybe interupted by signal that seems ok and go on working
+				continue;
+			}
+			else
+			{
+				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iServerSvMqKey, szBuf); 
+
+				// calc the number of every second proxy could accept requset
+				int iAccept =  atoi(szBuf);
+				if (bFirst) {
+					iCurrent =  iAccept;
+					bFirst   =  false;
+				}
+				if (iCurrent == iAccept) {
+					++iReqNum >= 2147483647 ? iReqNum = 0 : NULL;
+				} else {
+					if (++iPrintFreq % 10 == 0) {
+						INFO("receive req from SV-MQ, key[%d] ok! time[%d] reqnum[%d] req[%d]\n", 
+								m_iServerSvMqKey, iCurrent, iReqNum, iAccept-1);
+						iPrintFreq = 0;
+					}
+
+					// reset
+					bFirst  =  true;
+					iReqNum =  1;
+				}
+			}
+#else
+			// non-block mode, Note: this will cause CPU usage too high, so don't use this usually!
+			int iRet = dequeue(m_pCSVMessageQueueClient, szBuf, iDataLen, IPC_NOWAIT);
+			if (iRet != E_OK) {
+				ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iServerSvMqKey, m_szErrInfo);
+			} else {
+				INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iServerSvMqKey, szBuf); 
+			}
+#endif
+
+			//  repost request to back-end svr
+
+			iRet = enqueue(m_pCSVMessageQueueServer, szBuf, strlen(szBuf), IPC_NOWAIT);
+			if (iRet != E_OK)
+			{
+				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
+				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
+			}
+			else
+			{
+				//INFO("send req to SV-MQ, key[%d] ok! req[%s] \n", m_iClientSvMqKey, szBuf); 
 			}
 
 #if 0
@@ -204,102 +424,8 @@ void CServer::run()
 			select(0, NULL, NULL, NULL, &delay);
 #endif
 
-#else/* SERVER_MODE */
-			//INFO("server running...\n");
 
-			// receive request
-			char szBuf[REQUSTMSG_MAX_LENGTH] =  {0};
-			int iDataLen                     =  sizeof(szBuf);
-
-
-			static int iReqNum  =  0;
-			static int iCurrent =  0;
-			static bool bFirst  =  true;
-
-
-#ifdef SVR_BLOCK_ACCEPT
-			/* block mode
-			 * If (msgflg & IPC_NOWAIT) is 0, the calling thread will suspend execution until one of the following occurs:
-			 * [1] A message of the desired type is placed on the queue.
-			 * [2] The message queue identifier msqid is removed from the system; when this occurs, errno is set equal to [EIDRM] and -1 is returned.
-			 * [3] The calling thread receives a signal that is to be caught; in this case a message is not received and the calling thread resumes execution in the manner prescribed in sigaction(). 
-			 * */
-			int iRet = dequeue(szBuf, iDataLen, 0);
-			if (iRet != E_OK)
-			{
-				if (errno != EINTR)
-				{
-					ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iSendKey, m_szErrInfo);
-					break;
-
-					/* fatal error, prog exit*/
-					ERROR("server exit abnormally!\n");
-				}
-
-				// maybe interupted by signal that seems ok and go on working
-				continue;
-			}
-			else
-			{
-				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iSendKey, szBuf); 
-
-				// calc the number of every second svr could accept requset
-				int iAccept =  atoi(szBuf);
-				if (bFirst) 
-				{
-					iCurrent =  iAccept;
-					bFirst   =  false;
-				}
-
-				if (iCurrent == iAccept)
-				{
-					++iReqNum;
-				}
-				else
-				{
-					if (iReqNum % 10 == 0)
-						INFO("time[%d] req[%d]\n", iCurrent-1, iReqNum);
-
-					// reset
-					bFirst  =  true;
-					iReqNum =  1;
-				}
-			}
-#else
-			// non-block mode, Note: this will cause %CPU using too high
-			int iRet = dequeue(szBuf, iDataLen, IPC_NOWAIT);
-			if (iRet != E_OK)
-			{
-				ERROR("receive req from SV-MQ, key[%d] error[%s]\n", m_iSendKey, m_szErrInfo);
-			}
-			else
-			{
-				//INFO("receive req from SV-MQ, key[%d] ok! info[%s]\n", m_iSendKey, szBuf); 
-
-				// calc the number of every second svr could accept requset
-				int iAccept =  atoi(szBuf);
-				if (bFirst) 
-				{
-					iCurrent =  iAccept;
-					bFirst   =  false;
-				}
-
-				if (iCurrent == iAccept)
-				{
-					++iReqNum;
-				}
-				else
-				{
-					INFO("time[%d] req[%d]\n", iCurrent-1, iReqNum);
-
-					// reset
-					bFirst  =  true;
-					iReqNum =  1;
-				}
-			}
-#endif
-
-#endif
+#endif/*mode end*/
 
 		}
 		catch (std::bad_alloc &e)

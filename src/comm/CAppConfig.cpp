@@ -13,14 +13,14 @@ CAppConfig& CAppConfig::getapp_config_instance()
 
 void CAppConfig::check_conf() throw (runtime_error)
 {
-	if (m_strProjectHome == "") throw runtime_error("please check option projecthome");
-	if (m_ithreadcnt == 0) throw runtime_error("please check option threadcnt");
-	if (m_iprocesscnt == 0) throw runtime_error("please check option processcnt");
-	if (m_irequestcnt == 0) throw runtime_error("please check option requestcnt");
+	if (m_strprojecthome == "") throw runtime_error("please check option projecthome");
+	if (m_iclient_svmqkey == 0) throw runtime_error("please check option clientsvmqkey");
+	if (m_iserver_svmqkey == 0) throw runtime_error("please check option serversvmqkey");
+
 
 	cout << "------------------- Paras info [beg] -------------------" << endl;
-	cout << "projecthome[" << m_strProjectHome.c_str() << "]" << endl;
-	cout << "threadcnt[" << m_ithreadcnt << "] processcnt[" << m_iprocesscnt << "] requestcnt[" << m_irequestcnt << "]" << endl;
+	cout << "projecthome[" << m_strprojecthome.c_str() << "]" << endl;
+	cout << "clientsvmqkey[" << m_iclient_svmqkey << "] serversvmqkey[" << m_iserver_svmqkey << "]" << endl;
 	cout << "------------------- Paras info [end] -------------------" << endl;
 
 	return;

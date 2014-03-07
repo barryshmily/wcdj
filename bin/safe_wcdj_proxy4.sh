@@ -17,12 +17,12 @@
 #$MY_DIR/Inc.sh
 
 # [4] 
-source $(dirname $0)/Inc.sh
+source $(dirname $0)/Inc4.sh
 
 # ================================================
 
 
-SERVER=wcdj_svr
+SERVER=wcdj_proxy4
 SERVER_PATH=$PROJECT_HOME/bin
 SERVER_CONF=$PROJECT_HOME/conf/$SERVER.conf
 SERVER_PID=$PROJECT_HOME/bin/$SERVER.pid
