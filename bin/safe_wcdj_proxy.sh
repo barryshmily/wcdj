@@ -16,14 +16,13 @@
 #$MY_DIR/Inc.sh
 #
 # [4] 
-source $(dirname $0)/Inc.sh
+source $(dirname $0)/Inc_proxy.sh
 #
 # ================================================
 
-SERVER=wcdj_client
-SERVER_PATH=$PROJECT_HOME/bin
-SERVER_CONF=$PROJECT_HOME/conf/$SERVER.conf
-SERVER_PID=$PROJECT_HOME/bin/$SERVER.pid
+SERVER=wcdj_proxy
+SERVER_BACKUP=wcdj_proxy
+SERVER_PATH="$PROJECT_HOME/bin/$PROXY_BIN"
 
 
 # save pid into PROC_ID
@@ -39,15 +38,17 @@ function GetPid()
 
 function Boot()
 {
-	cd $SERVER_PATH; ./$SERVER $PROC_PARAS > /dev/null 2>&1
-	#cd $SERVER_PATH; ./$SERVER $PROC_PARAS 
+	#echo "start $SERVER...$CLIENTSVMQKEY...$SERVERSVMQKEY"
+	cd $SERVER_PATH; ./$SERVER "-projecthome=$PROJECT_HOME" \
+		"-clientsvmqkey=$CLIENTSVMQKEY" \
+		"-serversvmqkey=$SERVERSVMQKEY" > /dev/null
+
 	echo "$DATE $SERVER starts OK" 
 }
 
 function Start()
 {
 :<< COMMENT_WCDJ
-	# this check allow you can only create just one instance
 	if [ "$PROC_ID" == "0" ]; then
 		# need to run server
 		Boot
@@ -59,15 +60,28 @@ COMMENT_WCDJ
 
 	# if you wanna create multi-instances
 	i=1
-	while [ $i -le $CLIENT_WORKER_NUM ]; do
-		echo "start client$i..."
+	TMPSVMQKEY=""
+	TMPSERVER=""
+	while [ "$i" -le "$PROXY_NUM" ]; do
+
+		TMPSERVER=$SERVER
+		SERVER=$SERVER$i
+		TMPSVMQKEY=$SERVERSVMQKEY
+
+		ln -s "$SERVER_BACKUP" "$SERVER_PATH/$SERVER"
 		Boot
-		i=`expr $i + 1`
+
+		SERVER=$TMPSERVER
+		CLIENTSVMQKEY=`expr "$TMPSVMQKEY"`
+		SERVERSVMQKEY=`expr "$SERVERSVMQKEY" + 1`
+
+		i=`expr "$i" + 1`
 	done
 }
 
 function Stop()
 {
+:<< WCDJ_COMMENT
 	if [ "$PROC_ID" == "0" ]; then
 		echo "$DATE $SERVER is not running"
 	else
@@ -79,6 +93,22 @@ function Stop()
 		# make sure that server has stopped
 		sleep 0.2; killall -9 $SERVER >/dev/null 2>&1
 	fi
+WCDJ_COMMENT
+
+	# stop multi-instances
+	i=1
+	TMPSERVER=""
+	while [ $i -le $PROXY_NUM ]; do
+		TMPSERVER="$SERVER_BACKUP$i"
+		echo "stop $TMPSERVER"
+		killall -9 $TMPSERVER >/dev/null 2>&1
+
+		rm -f "$TMPSERVER.pid"
+		rm -f "$SERVER_PATH/$TMPSERVER"
+
+		sleep 0.2
+		i=`expr $i + 1`
+	done
 }
 
 function Reboot()
@@ -90,7 +120,7 @@ function Reboot()
 
 # run from here
 
-GetPid
+#GetPid
 ulimit -c unlimited
 
 if [ "$1" == "start" ]; then

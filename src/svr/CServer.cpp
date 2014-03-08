@@ -408,8 +408,8 @@ void CServer::run()
 			iRet = enqueue(m_pCSVMessageQueueServer, szBuf, strlen(szBuf), IPC_NOWAIT);
 			if (iRet != E_OK)
 			{
-				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
-				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
+				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", (int)now, m_iClientSvMqKey, m_szErrInfo);
+				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", (int)now, m_iClientSvMqKey, m_szErrInfo);
 			}
 			else
 			{

@@ -12,7 +12,7 @@ DATE = date "+%Y/%m/%d-%H:%M:%S"
 os_date = $(shell date "+%Y%m%d-%H%M%S")
 
 # you should set yourself path
-PROJECT_HOME = /data/home/gerryyang/test/code_in_action/wcdj-master
+PROJECT_HOME = /Users/gerryyang/github_project/wcdj
 
 # check os and gcc version
 gccver=$(shell gcc -v  2>&1 | grep "gcc version" | awk -F" " '{print $$3}')
@@ -45,9 +45,9 @@ export os_date
 #
 #==============================================================================
 
-BUILD = BUILD_DEBUG_CLIENT
+#BUILD = BUILD_DEBUG_CLIENT
 #BUILD = BUILD_DEBUG_SERVER
-#BUILD = BUILD_DEBUG_PROXY
+BUILD = BUILD_DEBUG_PROXY
 
 export BUILD
 
