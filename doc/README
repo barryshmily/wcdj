@@ -4,7 +4,7 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 ----------------------------------------------------
 update: 2014-03-08
-1, add Inc_proxy.sh and safe_wcdj_proxy.sh then you can start any proxy you like.
+1, add Inc_proxy.sh and safe_wcdj_proxy.sh then you can start any number of proxy you like.
 For example, if you set PROXY_NUM (in Inc_proxy.sh) to 2, then the calculation is like below:
 client -> (10088) proxy1 (10089) -> (10089) proxy1 (10090) -> server
 You can use command [ipcs -q] to check the SV-MQs are created that is right or not.
