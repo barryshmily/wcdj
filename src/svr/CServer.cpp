@@ -217,7 +217,7 @@ void CServer::run()
 			// build request
 			char szBuf[2048] = {0};
 			//snprintf(szBuf, sizeof(szBuf), "Hello, My name is gerryyang, time is %s", szLocalTime);
-			snprintf(szBuf, sizeof(szBuf), "%d", now);
+			snprintf(szBuf, sizeof(szBuf), "%d", (int)now);
 
 			static int iReqNum    =  0;
 			static int iCurrent   =  0;
@@ -227,8 +227,8 @@ void CServer::run()
 			int iRet = enqueue(m_pCSVMessageQueueClient, szBuf, strlen(szBuf), IPC_NOWAIT);
 			if (iRet != E_OK)
 			{
-				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
-				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", now, m_iClientSvMqKey, m_szErrInfo);
+				ERROR("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", (int)now, m_iClientSvMqKey, m_szErrInfo);
+				__LOG("[time=%d]send req to SV-MQ, key[%d] error[%s]\n", (int)now, m_iClientSvMqKey, m_szErrInfo);
 			}
 			else
 			{

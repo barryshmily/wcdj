@@ -12,7 +12,7 @@ SERVERSVMQKEY=10089
 # client -> (10088) proxy1 (10089) -> (10089) proxy1 (10090) -> server
 # You can use command [ipcs -q] to check the SV-MQs are created that is right or not.
 PROXY_NUM=5
-PROXY_BIN="proxy/bin"
+PROXY_BIN="proxy/bin/"
 
 #DATE=`date "+%Y-%m-%d %H:%M:%S"`
 DATE=`date "+%F %T"`

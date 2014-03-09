@@ -22,7 +22,8 @@ source $(dirname $0)/Inc_proxy.sh
 
 SERVER=wcdj_proxy
 SERVER_BACKUP=wcdj_proxy
-SERVER_PATH="$PROJECT_HOME/bin/$PROXY_BIN"
+SERVER_PATH="$PROJECT_HOME/bin/"
+SERVER_LINK_PATH="$PROJECT_HOME/bin/$PROXY_BIN"
 
 
 # save pid into PROC_ID
@@ -38,12 +39,17 @@ function GetPid()
 
 function Boot()
 {
-	#echo "start $SERVER...$CLIENTSVMQKEY...$SERVERSVMQKEY"
-	cd $SERVER_PATH; ./$SERVER "-projecthome=$PROJECT_HOME" \
+	#echo "start $SERVER_LINK_PATH$SERVER...$CLIENTSVMQKEY...$SERVERSVMQKEY"
+	cd $SERVER_LINK_PATH; ./$SERVER "-projecthome=$PROJECT_HOME" \
 		"-clientsvmqkey=$CLIENTSVMQKEY" \
 		"-serversvmqkey=$SERVERSVMQKEY" > /dev/null
 
-	echo "$DATE $SERVER starts OK" 
+	RET=$?
+	if [ $RET == "0" ]; then
+		echo "$DATE $SERVER starts OK" 
+	else
+		echo "$DATE $SERVER starts Error[$RET]" 
+	fi
 }
 
 function Start()
@@ -68,7 +74,7 @@ COMMENT_WCDJ
 		SERVER=$SERVER$i
 		TMPSVMQKEY=$SERVERSVMQKEY
 
-		ln -s "$SERVER_BACKUP" "$SERVER_PATH/$SERVER"
+		ln -s "$SERVER_PATH/$SERVER_BACKUP" "$SERVER_LINK_PATH/$SERVER"
 		Boot
 
 		SERVER=$TMPSERVER
@@ -104,7 +110,7 @@ WCDJ_COMMENT
 		killall -9 $TMPSERVER >/dev/null 2>&1
 
 		rm -f "$TMPSERVER.pid"
-		rm -f "$SERVER_PATH/$TMPSERVER"
+		rm -f "$SERVER_LINK_PATH/$TMPSERVER"
 
 		sleep 0.2
 		i=`expr $i + 1`

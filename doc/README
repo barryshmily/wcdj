@@ -3,6 +3,27 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-09
+1, add clear_svmq_mac.sh tool to clear svmq. the usage is like below:
+$./clear_svmq_mac.sh 
+svmq info(6): 0x0000276d 0x00002768 0x00002769 0x0000276a 0x0000276b 0x0000276c
+clear 0x0000276d SVMQ-keys
+clear 0x00002768 SVMQ-keys
+clear 0x00002769 SVMQ-keys
+clear 0x0000276a SVMQ-keys
+clear 0x0000276b SVMQ-keys
+clear 0x0000276c SVMQ-keys
+clear over
+$./clear_svmq_mac.sh 
+svmq info(0): 
+noting to clear
+clear over
+
+Note that if you clear msgkey from system, the server would throw exception, because server used blocking mode, the error information likes below:
+ERROR: [pid=822,CServer.cpp:293]receive req from SV-MQ, key[10093] error[msgrcv: msgid[131072] err[90:Identifier removed]]
+
+
+----------------------------------------------------
 update: 2014-03-08
 1, add Inc_proxy.sh and safe_wcdj_proxy.sh then you can start any number of proxy you like.
 For example, if you set PROXY_NUM (in Inc_proxy.sh) to 2, then the calculation is like below:
