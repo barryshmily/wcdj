@@ -1,7 +1,7 @@
 #!/bin/bash
 
 :<< WCDJ_COMMENT
-This script is used to clear SystemV Message Queue.
+This script is used to clear SystemV Message Queue for Mac OS X.
 WCDJ_COMMENT
 
 username="gerryyang"
