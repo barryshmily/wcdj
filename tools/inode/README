@@ -1,0 +1,76 @@
+
+理解inode
+
+
+0 存储的基础概念
+
+文件存储在硬盘上，硬盘的最小存储单位是扇区(sector)，每个扇区存储512字节，OS在读取硬盘的时候，不会一个个扇区的读取，这样效率太低而是一次连续读多个扇区，即一次性读取一个块(block)，这种由多个扇区组成的块，是文件存取的最小单位。块的大小，最常见的是4KB(通过stat file可以看到IO Block)。
+sector(512B) -> block(8 * secotr = 4KB)
+
+文件数据都存储在block中，而元数据(比如文件的创建者、文件的创建日期、文件的大小等)存储在inode(索引结点)中。每个文件都有对应的inode，里面包含了与该文件有关的一些信息，inode的大小一般是128B或256B(通过dumpe2fs命令可以查看)，inode的数量在格式化时就给定了。几种查看inode信息的命令：
+(1) stat file   可以查看文件的inode信息
+(2) df -i       查看每个硬盘分区的inode总数和已经使用的数量
+(3) ls -i file  查看文件inode号码
+例如：
+stat E-mail 
+File: "E-mai"
+Size: 396             Blocks: 8          IO Block: 4096   regular file
+Device: 804h/2052d    Inode: 2083001     Links: 1
+Access: (0744/-rwxr--r--)  Uid: ( 1006/gerryyang)   Gid: (  100/   users)
+Access: 2012-05-24 09:07:17.000000000 +0800
+Modify: 2012-05-24 09:07:17.000000000 +0800
+Change: 2012-07-14 11:42:06.000000000 +0800
+
+
+1 inode号码
+
+每个文件都有一个inode(使用命令[ls -i file]可以查看文件对应的inode号码)，OS使用inode来识别不同的文件。*nix系统内部不使用文件名而使用inode来识别文件，对于OS来说，文件名只是inode号码便于识别的称号或者绰号。用户打开一个文件具体的过程是：
+(1) 系统通过文件名找到对应的inode号码；
+(2) 然后通过inode号码获取inode的信息(stat file)；
+(3) 根据inode信息找到文件所在的block数据块，然后开始访问数据。
+
+
+2 几个问题
+
+Note:
+(1) 为什么文件名没有在inode内？
+目录文件，包含一些列目录项(dirent)的列表，每个目录项由两部分组成：所包含文件的文件名，以及该文件名对应的inode号码。
+(2) sudo dumpe2fs -h /dev/hda | grep "Inode size" (dumpe2fs cmd is not found on SUSE Linux)
+(3) 由于每个文件都必须有一个inode，因此有可能发生inode已经用完，但是硬盘还未存满的情况，这时就无法在硬盘上创建新文件。
+(4) 每个inode都有一个号码, 操作系统用inode号码来识别不同的文件。
+(5) *nix系统中，directory也是一种文件，打开目录实际上就是打开文件。
+(6) 一般情况下，文件名和inode号码是一一对应的，但是*nix允许多个文件名指向同一个inode号码，即可以通过不同的文件名访问同样的内容，对文件内容进行修改，会影响到所有文件，但是删除一个文件，不影响另一个文件的访问。即，硬连接，所有文件名指向相同的inode。inode信息中有一项叫做连接数，记录指向该inode的文件名总数，可以通过[stat file]查看Links的信息。
+(7) 关于directory的连接数。创建目录时，默认会生成两个目录项：.和..，前者的inode号码就是当前目录的inode号码，等同于当前目录的硬连接, 因此，任何一个目录的硬连接总数 = 2 + 它的子目录总数(包含隐藏目录)。例如利用inode就可以删除一个目录[rm -rfi `find -inum 1805121`]。
+
+Tencent:/data/home/gerryyang/tmp1 # ls -ia
+1805120 .  1788466 ..  1805121 tmp2
+Tencent:/data/home/gerryyang/tmp1 # cd tmp2
+Tencent:/data/home/gerryyang/tmp1/tmp2 # ls -ia
+1805121 .  1805120 ..
+
+(8) 相反是软连接。文件A和文件B的inode号码虽然不一样，但是文件A的内容是文件B的路径，读取文件A时系统会自动将访问者导向文件B，类似Windows的快捷方式。这时文件A就称为文件B的soft link或者symbolic link。注意：软连接与硬连接最大的不同是：文件A指向文件B的文件名，而不是文件B的inode号码，故文件B的inode连接数不会因此发生变化。
+
+
+
+3 inode的特殊作用
+
+由于inode号码与文件名分离，这种机制导致了一些Unix/Linux系统特有的现象:
+1. 有时，文件名包含特殊字符，无法正常删除。这时，直接删除inode节点，就能起到删除文件的作用。
+2. 移动文件或重命名文件，只是改变文件名，不影响inode号码。
+3. 打开一个文件以后，系统就以inode号码来识别这个文件，不再考虑文件名。因此，通常来说，系统无法从inode号码得知文件名。
+第3点使得软件更新变得简单，可以在不关闭软件的情况下进行更新，不需要重启。因为系统通过inode号码，识别运行中的文件，不通过文件名。更新的时候，新版文件以同样的文件名，生成一个新的inode，不会影响到运行中的文件。等到下一次运行这个软件的时候，文件名就自动指向新版文件，旧版文件的inode则被回收。
+
+
+4 总结
+
+在*nix系统中，inode和filename是分离的，filename只是inode的一个readable的绰号，directory文件通过一系列dirent记录了filename和inode的对应关系，用户读取一个文件通过filename->inode->data的3+n(n>=0)层索引最终找到要读取的block。
+(1) *nix允许多个文件名指向同一个inode号码(stat file可查看连接数)，即hard-link；相反soft-link不会增加Links数目，只会增加新的inode。
+(2) 当filename包含特殊字符，无法正常rm时，可以通过先找到文件的inode号码再对其进行delete。例如：rm -rfi `find -inum 1805121`
+(3) mv重命名文件不影响inode号码，因此在对现网配置进行更新时不会导致程序crash。
+
+
+More: http://www.ruanyifeng.com/blog/2011/12/inode.html
+
+
+
+

@@ -3,6 +3,11 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-12
+1, add tools about inode and hack dirs.
+
+
+----------------------------------------------------
 update: 2014-03-10
 1, update Inc.sh to distinguish OS and set it's PROJECT_HOME path.
 2, add clear_svmq_linux_suse.sh in tools.
