@@ -1,0 +1,130 @@
+
+查看CPU和内存信息的常用命令
+
+
+
+0 top
+
+u also can use command [top] to see CPU info:
+
+--- total control ---
+h: show help about top command (Remark: very useful when u forget how to use), or use [man top].
+
+Z,B       Global: 'Z' change color mappings; 'B' disable/enable bold
+1,I       Toggle SMP view: '1' single/separate states; 'I' Irix/Solaris mode
+f,o     . Fields/Columns: 'f' add or remove; 'o' change display order
+F or O  . Select sort field (Remark: by default)
+<,>     . Move sort field: '<' next col left; '>' next col right (Remark: very useful)
+R,H     . Toggle: 'R' normal/reverse sort; 'H' show threads (Remark: very useful)
+c,i,S   . Toggle: 'c' cmd name/line; 'i' idle tasks; 'S' cumulative time (Remark: very usefu)
+x,y     . Toggle highlights: 'x' sort field; 'y' running tasks
+z,b     . Toggle: 'z' color/mono; 'b' bold/reverse (only if 'x' or 'y') (Remark: very useful)
+u       . Show specific user only (Remark: very useful)
+n or #  . Set maximum tasks displayed (Remark: some useful)
+k,r       Manipulate tasks: 'k' kill; 'r' renice
+d or s    Set update interval
+W         Write configuration file
+q         Quit
+
+--- first part control ---
+Toggle Summaries: 'l' load avg; 't' task/cpu stats; 'm' mem info
+
+l: show or hide first line info in the first part
+t: show or hide second and thrid lines info in the first part
+m: show or hide fourth and fifth lines info int the first part
+
+--- thrid part control ---
+N: show PID sorted by number
+P: show CPU sorted by number
+M: show MEM sorted by number
+
+
+
+1 dmidecode (需要root权限)
+
+dmidecode is a tool for dumping a computer's DMI (some say SMBIOS) table contents in a human-readable format. This table contains a description of the system's hardware components, as well as other useful pieces of information such as serial numbers and BIOS revision. Thanks to this table, you can retrieve this information without having to probe for the actual hardware. While this is a good point in terms of report speed and safeness, this also makes the presented information possibly unreliable.
+
+查看内存信息
+dmidecode -t memory
+
+更多类型：
+bios         bios的各项信息
+system       系统信息，在我的笔记本上可以看到版本、型号、序号等信息。
+baseboard    主板信息
+chassis      机架信息，包络制造商、机架类型、机架高度、SN号、电源模块数等。
+processor    CPU的详细信息
+memory       内存信息，包括目前插的内存条数及大小，支持的单条最大内存和总内存大小等等。
+cache        缓存信息，似乎是CPU的缓存信息
+connector    在我的电脑是PCI设备的信息
+slot         插槽信息 
+
+或者使用数字：
+
+查看处理器信息
+dmidecode -t 4
+
+Type   Information
+----------------------------------------
+0   BIOS
+1   System
+2   Base Board
+3   Chassis
+4   Processor
+5   Memory Controller
+6   Memory Module
+7   Cache
+8   Port Connector
+9   System Slots
+10   On Board Devices
+11   OEM Strings
+12   System Configuration Options
+13   BIOS Language
+14   Group Associations
+15   System Event Log
+16   Physical Memory Array
+17   Memory Device
+18   32-bit Memory Error
+19   Memory Array Mapped Address
+20   Memory Device Mapped Address
+21   Built-in Pointing Device
+22   Portable Battery
+23   System Reset
+24   Hardware Security
+25   System Power Controls
+26   Voltage Probe
+27   Cooling Device
+28   Temperature Probe
+29   Electrical Current Probe
+30   Out-of-band Remote Access
+31   Boot Integrity Services
+32   System Boot
+33   64-bit Memory Error
+34   Management Device
+35   Management Device Component
+36   Management Device Threshold Data
+37   Memory Channel
+38   IPMI Device
+39   Power Supply
+
+
+
+查看服务器型号
+dmidecode | grep "Product Name"
+
+查看主板序列号
+dmidecode | grep "Serial Number"
+
+查看系统序列号
+dmidecode -s system-serial-number
+
+查看OEM信息
+dmidecode -t 11
+
+
+
+3 vmstat
+
+
+4 mpstat
+
+

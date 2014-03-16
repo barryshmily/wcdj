@@ -1,0 +1,106 @@
+
+命名管道 FIFO
+
+
+0 简介
+
+如果我们想在本地不相关的进程之间交换数据，可以考虑使用FIFO(named pipe)。
+
+
+命名管道是一种特殊类型的文件(对，Linux中所有事物都是文件)，它在文件系统中以文件名的形式存在，我们可以在命令行上创建命名管道，也可以在程序中创建它。
+(1) mknod filename p (不推荐)
+(2) mkfifo filename (推荐)
+注意：但mknod命令并未出现在X/Open规范的命令列表中，所以可能并不是所有的类UNIX系统都可以这样做。Linux系统非常友好，它同时支持mknod和mkfifo。
+
+在程序中，可以通过以下两个函数调用来创建FIFO：
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int mkfifo(const char *filename, mode_t mode);
+int mknod(const cahr *filename, node_t mode | S_IFIFO, (dev_t) 0);
+
+说明：与mknod命令一样，我们可以用mknod函数建立许多特殊类型的文件。要想通过这个函数创建一个FIFO，唯一具有可移植的方法是使用一个dev_t类型的0值，并将文件访问模式与S_IFIFO按位或。建议我们使用更简单的mkfifo函数。
+
+
+
+1 查看FIFO的命令
+
+gerryyang@Tencent:~/tmp/fifo> mknod test1 p
+gerryyang@Tencent:~/tmp/fifo> mkfifo test2
+gerryyang@Tencent:~/tmp/fifo> ls -lh
+总计 0
+prw-r--r-- 1 gerryyang users 0 2014-03-16 14:07 test1
+prw-r--r-- 1 gerryyang users 0 2014-03-16 14:07 test2
+gerryyang@Tencent:~/tmp/fifo> ls -lhF
+总计 0
+prw-r--r-- 1 gerryyang users 0 2014-03-16 14:07 test1|
+prw-r--r-- 1 gerryyang users 0 2014-03-16 14:07 test2|
+
+说明：
+(1) 输出结果中的第一个字符为p，标识这是一个管道。最后的 | 符号是由ls命令的 -F 选项添加的，它也表示这是一个管道。
+(2) 若使用mkfifo函数创建一个FIFO，虽然我们要求的文件模式为0777，但它被用户掩码(umask)设置(使用umask命令可以查看, 本地是0022)给改变了，这与普通文件的创建是一样的，所以文件的最终模式是755。
+gerryyang@Tencent:~/test/code_in_action/wcdj-master/tools/fifo/src> ls -rtlh /tmp/my_fifo 
+prwxr-xr-x 1 gerryyang users 0 2014-03-16 14:29 /tmp/my_fifo
+(3) 我们可以像删除一个普通文件那样用rm命令删除FIFO文件，或者也可以在程序中用unlink系统调用来删除它。
+
+
+2 访问FIFO文件
+
+打开FIFO的一个主要限制是，程序不能以O_RDWR模式打开FIFO文件进行读写操作，这样做的后果并未明确定义。但这个限制是有道理的，因为我们通常使用FIFO只是为了单向传递数据，所以没有必要使用O_RDWR模式。如果一个管道以读/写方式打开，进程就会从这个管道读回它自己的输出。
+注意：如果确实需要在程序之间双向传递数据，最好使用一对FIFO或管道，一个方向使用一个，或者(但不常用)采用先关闭再重新打开FIFO的方法来明确地改变数据流的方向。
+
+O_RDONLY, O_WRONLY 和 O_NONBLOCK标志共有4种合法的组合方式：
+(1) O_RDONLY
+在这种情况下，open调用将阻塞，除非一个进程以写方式打开同一个FIFO，否则它不会返回。与下面的cat例子类似。
+(2) O_RDONLY | O_NONBLOCK
+即使没有其他进程以写方式打开FIFO，这个open调用也将成功并立刻返回。
+(3) O_WRONLY
+在这种情况下，open调用将阻塞，直到有一个进程以读方式打开同一个FIFO为止。
+(4) O_WRONLY | O_NONBLOCK
+这个函数调用总是立刻返回，但如果没有进程以读方式打开同一个FIFO文件，open调用将返回一个错误-1并且FIFO也不会被打开。如果确实有一个进程以读方式打开FIFO文件，那么我们就可以通过它返回的文件描述符对这个FIFO文件进行写操作。
+
+
+# 通过命令行创建FIFO和测试读写
+gerryyang@Tencent:~/tmp/fifo> ls
+test1  test2
+gerryyang@Tencent:~/tmp/fifo> cat < test1 &
+[1] 6725
+gerryyang@Tencent:~/tmp/fifo> echo "My name is gerry" > test1
+gerryyang@Tencent:~/tmp/fifo> My name is gerry
+
+[1]+  Done                    cat < test1
+
+
+小结：
+(1) O_NONBLOCK分别搭配O_RDONLY和O_WRONLY在效果上的不同，如果没有进程以读方式打开管道，非阻塞写方式的open调用将失败，但非阻塞读方式的open调用总是成功。close调用的行为并不受O_NONBLOCK标志的影响。
+read调用：对一个空的，阻塞的FIFO的read调用将等待，直到有数据可以读时才继续执行；与此相反，对一个空的非阻塞的FIFO的read调用将立刻返回0字节。
+write调用：对一个完全阻塞的FIFO的write调用将等待，直到数据可以被写入时才继续执行；与此相反，非阻塞时，如果FIFO不能接收所有写入的数据，它将按下面的规则执行：
+[1] 如果请求写入的数据的长度<=PIPE_BUF大小，若调用失败，数据不能写入(即，系统保证原子操作)；
+[2] 如果请求写入的数据的长度>PIPE_BUF大小，将写入部分数据，返回实际写入的字节数，返回值也可能是0。
+
+理解：FIFO的长度是需要考虑的一个很重要的因素。系统对任一时刻在FIFO中可以存在的数据长度是有限制的。它由#define PIPE_BUF语句定义，通常可以在头文件limits.h中找到它。在Linux和许多其他类UNIX系统中，它的值通常是4096字节，但在某些系统中它可能会小到512字节。系统规定：在一个以O_WRONLY方式(即阻塞写方式)打开的FIFO中，如果写入的数据长度<=PIPE_BUF大小，那么或者写入全部字节，或者一个字节都不写入（即，系统保证原子操作）。因此，如果你能保证所有的写请求是发往一个阻塞的FIFO，并且每个写请求的数据长度<=PIPE_BUF字节，此时系统就可以确保数据绝不会交错在一起，通常将每次通过FIFO传递的数据长度限制为PIPE_BUF字节是个好办法(否则在多进程向一个FIFO进行写操作时，可能会出现数据错乱)，除非你只使用一个写进程和一个读进程。
+
+/usr/include/linux/limits.h:#define PIPE_BUF        4096        /* # bytes in atomic write to a pipe */
+
+(2) FIFO最常见的用法：先启动读进程，并在open调用中等待，当第二个程序打开FIFO文件时，两个程序继续运行(读进程和写进程在open调用处取得同步)。
+(3) 当一个Linux进程被阻塞时，它并不消耗CPU资源，所以这种进程的同步方式对CPU来说是非常有效率的。
+(4) 两个程序都使用阻塞模式的FIFO，一个读，一个写:[在SUSE Linux32, 1cpu, 4cores, 16mem], 通过使用time测试：写1G的数据耗时1.1s左右，这说明管道在现代的Linux系统中传递数据的效率还是非常高的。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
