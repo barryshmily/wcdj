@@ -51,7 +51,6 @@ Tencent:/data/home/gerryyang/tmp1/tmp2 # ls -ia
 (8) 相反是软连接。文件A和文件B的inode号码虽然不一样，但是文件A的内容是文件B的路径，读取文件A时系统会自动将访问者导向文件B，类似Windows的快捷方式。这时文件A就称为文件B的soft link或者symbolic link。注意：软连接与硬连接最大的不同是：文件A指向文件B的文件名，而不是文件B的inode号码，故文件B的inode连接数不会因此发生变化。
 
 
-
 3 inode的特殊作用
 
 由于inode号码与文件名分离，这种机制导致了一些Unix/Linux系统特有的现象:
@@ -60,6 +59,13 @@ Tencent:/data/home/gerryyang/tmp1/tmp2 # ls -ia
 3. 打开一个文件以后，系统就以inode号码来识别这个文件，不再考虑文件名。因此，通常来说，系统无法从inode号码得知文件名。
 第3点使得软件更新变得简单，可以在不关闭软件的情况下进行更新，不需要重启。因为系统通过inode号码，识别运行中的文件，不通过文件名。更新的时候，新版文件以同样的文件名，生成一个新的inode，不会影响到运行中的文件。等到下一次运行这个软件的时候，文件名就自动指向新版文件，旧版文件的inode则被回收。
 
+
+4 总结
+
+在*nix系统中，inode和filename是分离的，filename只是inode的一个readable的绰号，directory文件通过一系列dirent记录了filename和inode的对应关系，用户读取一个文件通过filename->inode->data的3+n(n>=0)层索引最终找到要读取的block。
+(1) *nix允许多个文件名指向同一个inode号码(stat file可查看连接数)，即hard-link；相反soft-link不会增加Links数目，只会增加新的inode。
+(2) 当filename包含特殊字符，无法正常rm时，可以通过先找到文件的inode号码再对其进行delete。例如：rm -rfi `find -inum 1805121`
+(3) mv重命名文件不影响inode号码，因此在对现网配置进行更新时不会导致程序crash。
 
 More: http://www.ruanyifeng.com/blog/2011/12/inode.html
 
