@@ -3,6 +3,12 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-16
+1, add tools about fifo dirs that includes four examples of using fifo.
+2, update cpu_mem notes about top command usage.
+
+
+----------------------------------------------------
 update: 2014-03-12
 1, add tools about inode and hack dirs.
 
