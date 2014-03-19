@@ -1,15 +1,15 @@
 include ../../Inc.mk
 
 
-LIB_SV_QUEUE     = ../../../lib/libhttp.a
-OBJS_SV_QUEUE    = http_handle.o
+LIB_HTTP     = ../../../lib/libhttp.a
+OBJS_HTTP    = http_handle.o
 
-LIBS = $(LIB_SV_QUEUE) 
-OBJS = $(OBJS_SV_QUEUE) 
+LIBS = $(LIB_HTTP) 
+OBJS = $(OBJS_HTTP) 
 
 all: $(LIBS)
 
-$(LIB_SV_QUEUE): $(OBJS_SV_QUEUE)
+$(LIB_HTTP): $(OBJS_HTTP)
 	$(AR) $(AROPT) $@ $? 
 	$(RANLIB) $@
 
