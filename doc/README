@@ -3,6 +3,12 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-19
+1, add modules directory includes http(libcurl) module. 
+PS: of course, you may also use [curl] command tool to send http request.
+
+
+----------------------------------------------------
 update: 2014-03-16
 1, add tools about fifo dirs that includes four examples of using fifo.
 2, update cpu_mem notes about top command usage.
