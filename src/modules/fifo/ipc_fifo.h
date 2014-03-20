@@ -1,10 +1,6 @@
 #ifndef __WCDJ_IPC_FIFO_H__
 #define __WCDJ_IPC_FIFO_H__
 
-/**
- * progcess, thread, mutex related 
- */
-
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
