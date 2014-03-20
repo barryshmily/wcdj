@@ -1,0 +1,29 @@
+
+NPTL(Native POSIX Thread Library, 本地POSIX线程库)
+
+getconf GNU_LIBPTHREAD_VERSION
+NPTL 2.4
+
+
+同步
+
+1 信号量
+它的作用如同看守一段代码的看门人。
+
+
+2 互斥量
+它的作用如同保护代码段的一个互斥设备、它允许程序员锁住某个对象，使得每次只能有一个线程访问它。为了控制对关键代码的访问，必须在进入这段代码之前锁住一个互斥量，然后在完成操作之后解锁它。
+
+#include <pthread.h>
+
+int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *mutexattr);
+int phtread_mutex_lock(pthread_mutex_t *mutex);
+int pthread_mutex_unlock(pthread_mutex_t *mutex);
+int pthread_mutex_destroy(pthread_mutex_t *mutex);
+
+注意：
+(1) 成功时返回0，失败时返回错误码，但这些函数并不设置errno，所以必须对返回值进行检查。
+(2) pthread_mutex_init函数允许我们设置互斥量的属性，而属性控制互斥量的行为，属性类型默认为fast，但它有一个缺点：如果程序试图对一个已经加了锁的互斥量调用pthread_mutex_lock，程序就会被阻塞，而如果拥有互斥量的这个线程正是现在被阻塞的线程，那么互斥量永远就不会解锁了，程序就进入了死锁状态。这个问题可以通过改变互斥量的属性来解决，让它检查这种情况并返回一个错误，或者让它递归的操作，给同一个线程加上多个锁，但必须注意在后面执行同等数量的解锁操作。
+man pthread_mutex_init 查看更多信息。
+
+

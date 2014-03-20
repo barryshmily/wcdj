@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(int argv, char **argc)
+int main(int argc, char **argv)
 {
 
 #if 0
@@ -18,9 +18,9 @@ int main(int argv, char **argc)
 #endif
 
 	string strReq = "http://172.25.81.16:80/cgi-bin/test.cgi?a=b&c=d";
-	if (argv == 2)
+	if (argc == 2)
 	{
-		strReq = argc[1];
+		strReq = argv[1];
 	}
 	printf("http req[%s]\n", strReq.c_str());
 

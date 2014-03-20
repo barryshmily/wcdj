@@ -52,7 +52,9 @@ export os_date
 #
 #==============================================================================
 
-BUILD = BUILD_DEBUG_CLIENT
+BUILD = BUILD_COMMON
+
+#BUILD = BUILD_DEBUG_CLIENT
 #BUILD = BUILD_DEBUG_SERVER
 #BUILD = BUILD_DEBUG_PROXY
 
@@ -67,6 +69,10 @@ endif
 ifeq ($(BUILD), BUILD_DEBUG_PROXY)
 CFLAGS = -Werror -g -O2 -pipe -DPROXY_MODE -DBLOCK_ACCEPT -DMY_DATE=\""`$(DATE)`"\"
 endif
+ifeq ($(BUILD), BUILD_COMMON)
+CFLAGS = -Wall -g -O2 -pipe -D_REENTRANT
+endif
+
 
 
 # calc relation between files automatically

@@ -2,6 +2,13 @@
 Note: wcdj is a repo that includes useful codes or libs at common work or study (first commit locally from my macbook)
 
 
+
+----------------------------------------------------
+update: 2014-03-20
+1, add modules directory includes fifo module.
+There is a simple demo that client using non-block write and svr using block read in demo/fifo dir.
+
+
 ----------------------------------------------------
 update: 2014-03-19
 1, add modules directory includes http(libcurl) module. 
