@@ -1,0 +1,29 @@
+
+
+ftok (convert a pathname and a project identifier to a System V IPC key)
+通过t_ftok.c的测试demo可以验证ftok生成key的计算规则：
+
+
+gerryyang@Tencent:~/test/code_in_action/wcdj-master/tools/shm> ls -i
+4277029 test  4277028 t_ftok  4277032 t_ftok.c
+gerryyang@Tencent:~/test/code_in_action/wcdj-master/tools/shm> ./t_ftok test 255    
+Size of key_t = 4 bytes
+Key = ff044325 i-node = 414325 st_dev = 804 proj = ff
+
+ino: 10000010100001100100101 = 0x414325
+ino的低位2个字节: 0100001100100101 = 0x804
+dev: 100000000100
+dev的低位1个字节: 00000100
+proj: 11111111 = 0xff
+
+key的生成规则: proj_id(ff)dev(ff)ino(ffff)
+11111111 00000100 0100001100100101 = ff044325
+
+调用ftok和上述规则计算出的结果是一致的, Key = ff044325
+
+More: 
+(1) http://man7.org/linux/man-pages/man3/ftok.3.html
+(2) http://man7.org/tlpi/code/online/dist/svshm/svshm_create.c.html
+
+
+

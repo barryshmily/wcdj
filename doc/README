@@ -2,6 +2,12 @@
 Note: wcdj is a repo that includes useful codes or libs at common work or study (first commit locally from my macbook)
 
 
+----------------------------------------------------
+update: 2014-03-24
+1, add tools about sv_shm.
+key_t ftok(const char *path, int id);
+The ftok function creates key_t like this: proj_id(ff)dev(ff)ino(ffff)
+
 
 ----------------------------------------------------
 update: 2014-03-20
