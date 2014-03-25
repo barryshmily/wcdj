@@ -3,6 +3,12 @@ Note: wcdj is a repo that includes useful codes or libs at common work or study 
 
 
 ----------------------------------------------------
+update: 2014-03-25
+1, add tools about glibc, tell 'How to check glibc version'.
+2, add ftok.c from glibc codes.
+
+
+----------------------------------------------------
 update: 2014-03-24
 1, add tools about sv_shm.
 key_t ftok(const char *path, int id);
