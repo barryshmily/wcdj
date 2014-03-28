@@ -10,7 +10,7 @@ A=
 B=
 
 # calc unique data in A
-comm -12 <(sort A|uniq) <(sort B|uniq)
+comm -23 <(sort A|uniq) <(sort B|uniq)
 
 # calc unique data in B
 comm -13 <(sort A|uniq) <(sort B|uniq)

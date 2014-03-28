@@ -1,0 +1,18 @@
+
+crontab使用问题
+
+方法1：用户设置
+crontab -e 添加任务
+crontab -l 显示添加的任务
+crontab -r 删除全部任务
+
+方法2：系统设置 
+(1) vi /etc/crontab  添加任务
+(2) /etc/init.d/cron restart 使之生效
+
+注意一点：环境变量的问题，要确保crontab使用的是当前用户的路径
+例如，使用系统设置
+# gerryyang edit for pushing daily data to mysql
+*/2 16 * * * root cd /data/home/gerryyang/DB/bin; ./get_result_file.sh 
+
+
