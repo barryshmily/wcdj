@@ -64,7 +64,7 @@ Tencent:/data/home/gerryyang/tmp1/tmp2 # ls -ia
 
 在*nix系统中，inode和filename是分离的，filename只是inode的一个readable的绰号，directory文件通过一系列dirent记录了filename和inode的对应关系，用户读取一个文件通过filename->inode->data的3+n(n>=0)层索引最终找到要读取的block。
 (1) *nix允许多个文件名指向同一个inode号码(stat file可查看连接数)，即hard-link；相反soft-link不会增加Links数目，只会增加新的inode。
-(2) 当filename包含特殊字符，无法正常rm时，可以通过先找到文件的inode号码再对其进行delete。例如：rm -rfi `find -inum 1805121`
+(2) 当filename包含特殊字符，无法正常rm时，可以通过先找到文件的inode号码再对其进行delete。例如：rm -rfi `find . -inum 1805121`
 (3) mv重命名文件不影响inode号码，因此在对现网配置进行更新时不会导致程序crash。
 
 More: http://www.ruanyifeng.com/blog/2011/12/inode.html
