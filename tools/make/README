@@ -1,5 +1,12 @@
 
-不要使用make.sh，而要使用make的原因
+关于GNU Make的介绍
+
+GNU Make is a tool which controls the generation of executables and other non-source files of a program from the program's source files.
+
+Make gets its knowledge of how to build your program from a file called the makefile, which lists each of the non-source files and how to compute it from other files. When you write a program, you should write a makefile for it, so that it is possible to use Make to build and install the program.
+
+
+"不使用makefile遇到的问题" —— 不要使用make.sh，而要使用make的原因
 
 (1) 敲这么多命令，你累不累啊？
 (2) 你把它写成shell脚本？如果添加一个mul.cpp，你的脚本需要改动不？
@@ -7,5 +14,46 @@
 (4) 可以比对时间戳，只编译改动的.cpp文件？如果改动了.h文件，知道要重新编译哪些.cpp文件吗？
  
 你的shell可以找出.cpp依赖的.h文件？GOOD，你很强，上面的问题都解决了，可是make也能完成上述功能，而且还很简洁，有兴趣么？总的来说，make就是解决上述几个问题的。如果你厌倦编写强大的shell脚本，那么make非常适合你，代价就是你得遵循它的规则。
+
+
+用一个make命令替代了四个编译命令，第一个问题，已解决；“静态模式规则”，能够自动生成规则，第二个问题，已解决了；“规则语法”，能够对比目标文件与依赖文件的时间戳，编译修改过的文件，第三个问题，已解决。改动了头文件，编译依赖于它的cpp文件，这个问题解决了么？是的，已经解决了。在编译的时候，指定了-MMD –MP –MF dep文件参数。
+ 
+(1) -MMD:输出.o文件依赖的源文件和头文件（用户头文件），其实tmp/main.o还依赖于iostream头文件，因为-MMD只输出依赖的用户文件，系统头文件被滤过了。 
+(2) -MP:为每个依赖项添加一个空依赖，这样即使所依赖的头文件被删除，执行make的时候也不会报错。它会把除了主文件（就是生成.o的文件源文件）外的其他依赖文件，都添加上一个空依赖。
+(3) -MF:将依赖关系输出到文件dep文件（例如：编译add.cpp的时候是输出到./tmp/add.o.d）。指定-MF ./tmp/main.o.d就把依赖关系输出到./tmp/main.o.d文件。
+
+tmp/add.o.d 和tmp/sub.o.d 的生成与内容与此类似。最后在使用include命令把这些依赖文件包含到makefile。这样，修改了头文件，依赖与它的目标文件也会得到更新。“不使用makefile遇到的问题”中的问题4也解决了。
+
+make的内嵌函数
+内嵌函数的格式是：$(函数名称 参数[, 参数...])
+函数可以有多个参数，多个参数间用英文逗号隔开，参数里面可以使用通配符?(任意一个字符)，*(任意多个字符)。
+(1) $(wildcard 文件名模式)
+获取符合文件模式的所有文件列表，例如，$(wildcard src/*.cpp)就是得到src目录下所有cpp文件列表，文件之间用空格分隔。
+(2) $(notdir 文件列表)
+获取文件列表中每个文件的文件名，例如，src/add.cpp的文件名就是add.cpp。函数返回的是一个文件列表，多个文件间用空格分隔。
+(3) $(basename 文件列表)
+获取文件列表中的每个文件的，不带后缀的文件名，例如，add.cpp的不带后缀的文件名就是add。函数返回的是一个文件列表，多个文件间用空格分隔。
+(4) $(addsuffix 后缀名, 文件列表)
+为文件列表中的每个文件，添加上后缀名。返回文件列表，多个文件间用空格分隔。
+(5) $(addprefix 前缀名, 文件列表)
+为文件列表中的每个文件，添加上前缀名。返回文件列表，多个文件间用空格分隔。
+
+
+$(TARGET):$(OBJ)
+	$(CXX) -o $@ $^
+
+$@ 表示规则的目标文件名。
+$^ 表示规则的所有依赖文件列表，使用空格分隔。
+
+
+参考
+[1] GNU Make
+http://www.gnu.org/software/make/
+[2] Documentation for Make
+http://www.gnu.org/software/make/manual/
+[3] GNU make中文手册, ver3.8
+www.yayu.org/book/gnu_make/
+[4] automake
+http://www.gnu.org/software/autoconf/manual/autoconf.html
 
 
