@@ -1,0 +1,38 @@
+
+GDB常用命令记录
+
+gdb中简写命令配合tab键使用
+
+
+dir path                        切换目录
+gdb -p PID; b xxx; c            PID方式调试（或 gdb program pid）
+gdb bin; b xxx; r 参数          bin方式调试
+
+
+break filename:lineno           在文件某行设置断点
+list filename:lineno            选择显示文件的哪一行
+list                            显示当前文件的默认行数代码信息
+run para                        调试带参数的程序
+
+
+print VarName                   显示变量当前的值
+ptype VarName                   显示变量的类型
+
+
+frame 0                         显示栈顶的信息
+frame 1                         显示堆栈栈顶下一层信息
+up <n>                          表示向栈的上面移动n层，可以不打n，表示向上移动一层。
+down <n>                        表示向栈的下面移动n层，可以不打n，表示向下移动一层。                                
+
+
+info break                      查看所有断点的信息  
+info threads                    查看所有线程的信息
+info registers                  查看所有寄存器的信息
+
+
+shell                           在gdb中调用shell，使用完后exit重新返回到gdb中
+
+
+set args                        可指定运行时参数（如：set args 10 20 30 40 50）
+show args                       命令可以查看设置好的运行参数
+
