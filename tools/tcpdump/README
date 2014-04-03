@@ -17,7 +17,7 @@ tcpdump - dump traffic on a network
 
 常用选项
 
- -i 　 指定监听的网络接口，可以指定为: lo, any, eth0, eth1等，（-i lo表示只监控网卡lo设备，默认是监控第一个网络设备。）
+-i 　  指定监听的网络接口，可以指定为: lo, any, eth0, eth1等，（-i lo表示只监控网卡lo设备，默认是监控第一个网络设备。）
 -n     使用数字形式的IP名字，不使用域名
 -s     指定抓包的长度，-s0 抓整个数据包
 -X     以hex和ASCII的形式打印每一个包
