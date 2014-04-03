@@ -1,0 +1,74 @@
+
+
+在测试网络通信各种异常情况时，可以使用iptables进行模拟测试。在Linux下需要具有root权限才可以使用此工具。
+
+netstat -unat | grep port
+常用选项
+-a -all 显示所有有效连接信息列表
+-n -numeric 直接使用ip地址，而不通过域名服务器
+-t -tcp 显示tcp传输协议的连线状况
+-u -udp 显示udp传输协议的连线状况
+-s -statistics 显示网络工作信息统计表       
+查看帮助
+
+iptables -h
+man iptables
+查看规则
+
+iptables -nvL
+iptables -L INPUT
+删除规则
+
+(1) 根据规则的编号删除规则
+iptables -D INPUT 1
+(2) 使用选项 -D 删除规则，规则内容：封掉来自此ip的所有协议请求包
+iptables -D INPUT -p all -s 172.27.198.179 -j DROP
+添加规则
+
+(1) 使用 -I 选项插入一条规则
+
+[1] 封掉来自此ip的所有协议请求包
+iptables -I INPUT -p all -s 172.27.198.179 -j DROP
+[2] 封掉来自此ip的tcp协议请求包
+iptables -I INPUT -p tcp -s 172.27.198.179 -j DROP
+[3] 封掉来自此ip的所有非tcp协议请求包
+iptables -I INPUT -p !tcp -s 172.27.198.179 -j DROP
+[4] 封掉eth0网卡上来自此ip的tcp协议请求包(/sbin/ifconfig查看网卡信息)
+iptables -I INPUT -i eth0 -p tcp -s 172.27.198.179 -j DROP
+[5] 封掉eth0网卡上发给此ip的tcp协议请求包
+iptables -I OUTPUT -o eth0 -p tcp -d 172.27.198.179 -j DROP
+[6] 封掉eth0网卡上来自此ip（请求端，入口）的所指定端口的tcp协议数据包
+iptables -I INPUT -i eth0 -p tcp -s 172.27.198.179 --sport 15000 -j DROP
+[7] 封掉eth0网卡上发给此ip（接收端，出口）的所指定端口的tcp协议数据包
+iptables -I OUTPUT -o eth0 -p tcp -d 172.27.198.179 --dport 15000 -j DROP
+
+(2) 使用 -A 选项追加一条规则
+
+[1] 封掉eth0网卡上来自此ip的所指定端口的tcp协议请求包
+iptables -A INPUT -i eth0 -p tcp -s 172.27.198.179 --dport 15000 -j DROP
+保存iptables规则
+
+service iptables save
+iptables-save > /etc/sysconfig/iptables
+iptables-save > ~/outfile
+常用选项
+
+-A --append
+-D --delete
+-R --replace
+-I --insert
+-L --list
+-F --flush
+-Z --zero    将封包计数器归零
+
+-p --protocol
+-s --src --source
+-d --dst --destination
+-i --in-interface             说明封包是从哪个网卡进入
+-o --out-interface            说明封包要从哪个网卡发送
+--sport --source-port         封包的来源端口
+--dport --destination-port    封包的目的端口
+
+参考
+[1] https://wiki.archlinux.org/index.php/Iptables_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29
+
