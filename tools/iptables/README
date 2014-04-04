@@ -2,29 +2,35 @@
 
 在测试网络通信各种异常情况时，可以使用iptables进行模拟测试。在Linux下需要具有root权限才可以使用此工具。
 
+在使用iptables时经常需要借助netstat工具来查看网络的通信状况。
+
 netstat -unat | grep port
+sudo netstat -unatp | grep -i "listen" 查看本机所有监听的进程端口 
+
 常用选项
 -a -all 显示所有有效连接信息列表
 -n -numeric 直接使用ip地址，而不通过域名服务器
 -t -tcp 显示tcp传输协议的连线状况
 -u -udp 显示udp传输协议的连线状况
--s -statistics 显示网络工作信息统计表       
-查看帮助
+-s -statistics 显示网络工作信息统计表
+-p Show the PID and name of the program to which each socket belongs.     
 
+
+查看帮助
 iptables -h
 man iptables
-查看规则
 
+查看规则
 iptables -nvL
 iptables -L INPUT
-删除规则
 
+删除规则
 (1) 根据规则的编号删除规则
 iptables -D INPUT 1
 (2) 使用选项 -D 删除规则，规则内容：封掉来自此ip的所有协议请求包
 iptables -D INPUT -p all -s 172.27.198.179 -j DROP
-添加规则
 
+添加规则
 (1) 使用 -I 选项插入一条规则
 
 [1] 封掉来自此ip的所有协议请求包
@@ -46,13 +52,13 @@ iptables -I OUTPUT -o eth0 -p tcp -d 172.27.198.179 --dport 15000 -j DROP
 
 [1] 封掉eth0网卡上来自此ip的所指定端口的tcp协议请求包
 iptables -A INPUT -i eth0 -p tcp -s 172.27.198.179 --dport 15000 -j DROP
-保存iptables规则
 
+保存iptables规则
 service iptables save
 iptables-save > /etc/sysconfig/iptables
 iptables-save > ~/outfile
-常用选项
 
+常用选项
 -A --append
 -D --delete
 -R --replace
