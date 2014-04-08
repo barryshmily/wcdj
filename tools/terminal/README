@@ -1,0 +1,83 @@
+
+SecureCRT常用配置
+
+熟悉一些快捷操作，可以提高日常的工作效率。
+
+
+编辑命令
+
+Ctrl + a ：移到命令行首
+Ctrl + e ：移到命令行尾
+Ctrl + xx：在命令行首和光标之间移动
+
+Ctrl + u ：从光标处删除至命令行首
+Ctrl + k ：从光标处删除至命令行尾
+Ctrl + w ：从光标处删除至字首
+
+alt + b ： 打开快速启动栏
+alt + 1/2/3... ： 在多个不同的session标签之间切换
+
+
+重新执行命令：
+
+Ctrl + r：逆向搜索命令历史
+Ctrl + g：从历史搜索模式退出
+Ctrl + p：历史中的上一条命令
+Ctrl + n：历史中的下一条命令
+
+
+控制命令：
+
+Ctrl + l：清屏
+Ctrl + c：终止命令
+Ctrl + z：挂起命令
+
+
+鼠标复制：（常用）
+
+options -> global options ->  Terminal  钩上Copy on select，并钩上paste on 【right】 button
+这样在SecureCRT中用鼠标选中一段字符，就可以直接复制到剪切板，按鼠标右键完成粘贴。
+
+
+双击复制并打开新session:（常用）
+
+options -> global options -> Terminal -> Tabs 选择Double-click action的下拉框为Clone tab，这样就可以在已经打开的session标签中鼠标双击，打开一个完全一样的新session标签。
+
+
+用sftp与windows之间上传现在文件：
+
+在一个已经打开的session中按alt + p组合键，打开一个该session的sftp，通过cd,ls查看远程服务器的文件，通过lcd,lls可以查看windows上面的的文件，通过put,get命令可以进行文件的上传下载，用习惯之后比rz,sz效率高。
+
+
+键盘映射：（常用）
+
+options ->  global options -> General -> Default Session,点击Edit default settings按钮，再Terminal -> Mapped Keys，在这里面用map a key按钮来设定键盘映射，对于经常需要输入的字符串，可以在这里设置，如密码。
+
+
+保持连接：
+
+options -> global options -> General -> Default Session，点击Edit default settings按钮，在Terminal中钩上Send protocol NO-OP, every 30 seconds，这样可以保证securecrt不会因为一段时间没有操作，而丢掉连接。
+
+
+改变颜色配置：
+
+最佳解决方案：Global Options => Terminal => Appearance => ANSI Color：将Normal color的颜色改成自己喜欢的颜色即可。（勾选“ANSI Color”, 才能显示鲜艳的颜色）
+
+
+改变显示的最大列(默认80列，不满屏)：（常用）
+
+1） Global Options => Terminal => Appearance， 调整最大列为300；
+2） Options => Session Options => Terminal => Emulation，调整逻辑列为132（或其他）
+
+
+让标签显示文件路径：
+
+Options => Session Options => Terminal => Emulation
+选择Terminal为Xterm/VShell，勾选“ANSI Color”，这样就会自动修改标签标题，还会包含当前目录。
+
+
+关闭“确认断开对话框”：
+
+options ->  global options -> General ，取消“显示确认断开对话框”。
+
+
