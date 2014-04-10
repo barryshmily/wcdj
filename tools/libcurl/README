@@ -1,0 +1,25 @@
+
+Libcurl库支持SSL协议的编译方法
+
+简单记录安装的方法，详细解释和说明请参考Libcurl的Docs。
+ 
+(1) 默认configure配置，则不会支持ssl协议
+./configure --prefix=/data/home/gerryyang/LAMP/libcurl/install/curl-7.34.0
+
+(2) 编译OpenSSL并且使用 –with-ssl 选项指定ssl库路径，则可以支持ssl协议
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/ssl/lib
+./configure --prefix=/data/home/gerryyang/LAMP/libcurl/install/curl-7.34.0 --with-ssl
+
+注意：防止受到Heartbleed Bug的影响，建议使用OpenSSL 1.0.1g或之后的版本。关于此漏洞的说明可参考官方的这篇文章《The Heartbleed Bug》www.heartbleed.com。
+
+确认configure信息OK后，然后make && make install即可。最后切换到install目录下可以验证编译好的二进制文件是否已经支持HTTPS协议。
+./curl -V
+curl 7.34.0 (x86_64-unknown-linux-gnu) libcurl/7.34.0 OpenSSL/1.0.0 zlib/1.2.3
+Protocols: dict file ftp ftps gopher http https imap imaps pop3 pop3s rtsp smtp smtps telnet tftp 
+Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP 
+
+参考
+[1] http://curl.haxx.se/libcurl/c/libcurl-tutorial.html
+[2] http://curl.haxx.se/docs/install.html
+[3] https://www.openssl.org/
+
