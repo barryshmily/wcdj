@@ -10,8 +10,8 @@ CFLAGS = -Wall -g -Os -pipe -D_REENTRANT -Wno-unused-function
 
 LIB_A  = liba.a
 OBJS_A = staticliba.o
-LIB_B   = libb.a
-OBJS_B  = staticlibb.o
+LIB_B  = libb.a
+OBJS_B = staticlibb.o
 
 LIBS = $(LIB_A) $(LIB_B)
 OBJS = $(OBJS_A) $(OBJS_B) 
