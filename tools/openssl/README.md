@@ -5,6 +5,12 @@ openssl - OpenSSL command line tool
 openssl command
 
 
+*reference*
+
+[1] [openssl公钥,私钥,数字签名,CA,根证书等](http://wujunfeng.blog.51cto.com/3041/804693)
+[2] [OpenSSL证书管理](http://wiki.ubuntu.org.cn/Openssl%E8%AF%81%E4%B9%A6%E7%AE%A1%E7%90%86)
+
+
 # DESCRIPTION
 
 OpenSSL is a cryptography toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) network protocols and related cryptography standards required by them.
