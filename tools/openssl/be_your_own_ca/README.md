@@ -3,7 +3,7 @@
 
 *reference*
 
-[1] [SSL/TLS协议运行机制的概述](http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)
+[1] [SSL/TLS](http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)
 
 [2] [Be your own Certificate Authority (CA) ](http://www.g-loaded.eu/2005/11/10/be-your-own-ca/)
 

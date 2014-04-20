@@ -1,5 +1,5 @@
 #!/bin/bash
-# this script refer to link: http://www.g-loaded.eu/2005/11/10/be-your-own-ca/
+# this script refers to link: http://www.g-loaded.eu/2005/11/10/be-your-own-ca/
 
 
 OPENSSL_PATH=/Users/gerryyang/LAMP/OpenSSL/install/openssl-1.0.1g
