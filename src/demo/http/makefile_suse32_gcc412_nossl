@@ -1,0 +1,35 @@
+include ../../Inc.mk
+
+DEP_PATH = ../../dep
+
+CURL_API_PATH = $(DEP_PATH)/curl/suse32_gcc412/curl-7.34.0
+
+INCLUDE = -I../../modules/http \
+		  -I$(CURL_API_PATH)/include
+
+LIBPATH = -L../../../lib/ \
+		  -L$(CURL_API_PATH)/lib
+
+
+DEP_LIBS = -lrt -lz
+LIBS     = -lhttp -lcurl $(DEP_LIBS)
+
+OBJS    = http_demo.o
+BIN_SVR = http_demo
+
+
+BINS = $(BIN_SVR)
+
+
+all: $(BINS)
+
+$(BIN_SVR):$(OBJS)
+	$(CXX) -o $@ $^ $(LIBPATH) $(LIBS)
+	@echo "build $(BIN_SVR) OK!"
+
+install:
+	@echo "nothing to install"
+
+clean:
+	rm -f $(OBJS) $(BINS)
+

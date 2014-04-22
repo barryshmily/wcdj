@@ -1,0 +1,37 @@
+include ../../Inc.mk
+
+DEP_PATH = ../../dep
+
+CURL_API_PATH    = $(DEP_PATH)/curl/osx64_gcc421/curl-7.36.0
+OPENSSL_API_PATH = $(DEP_PATH)/openssl/osx64_gcc421/openssl-1.0.1g
+
+INCLUDE = -I../../modules/http \
+		  -I$(CURL_API_PATH)/include \
+		  -I$(OPENSSL_API_PATH)/include
+
+LIBPATH = -L../../../lib/ \
+		  -L$(CURL_API_PATH)/lib \
+		  -L$(OPENSSL_API_PATH)/lib 
+
+
+DEP_LIBS = 
+LIBS     = -lhttp -lcurl -lssl -lcrypto $(DEP_LIBS)
+
+OBJS    = http_demo.o
+BIN_SVR = http_demo
+
+BINS = $(BIN_SVR)
+
+
+all: $(BINS)
+
+$(BIN_SVR):$(OBJS)
+	$(CXX) -o $@ $^ $(LIBPATH) $(LIBS)
+	@echo "build $(BIN_SVR) OK!"
+
+install:
+	@echo "nothing to install"
+
+clean:
+	rm -f $(OBJS) $(BINS)
+
