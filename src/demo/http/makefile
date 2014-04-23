@@ -1,4 +1,4 @@
-# for suse32_gcc412
+# for suse32_gcc412_ssl
 
 include ../Inc.mk
 
