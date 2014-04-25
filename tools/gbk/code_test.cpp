@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 }  
   
 /*  
-g++ -Wall -g -o code_test code_test.cpp 
+g++ -o code_test code_test.cpp 
  
 output: 
 szBuf: 123abcÄã? 

@@ -9,5 +9,5 @@ iconv文件编码转换
 
 例如将一个GBK 编码的文件转换成UTF-8编码
 
-iconv -f GBK -t UTF-8 file1 -o file2
+iconv -f GBK -t UTF-8 file1 > file2
 
