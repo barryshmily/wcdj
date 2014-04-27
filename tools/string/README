@@ -1,0 +1,28 @@
+
+
+string 常用的操作
+
+0 字符串十六进制格式化
+比如将一些加密后不可见的字符串可视化时需要使用。
+encode_hex_string.cpp  
+hex_str_convert.cpp
+
+
+1 字符串的trimming操作
+可以使用stl中string的算法自己实现, 例如：
+find_first_not_of/find_last_not_of/substr
+或者
+isspace/assign
+参考：trimming_and_reduce_str.cpp
+也可以使用boost库已经提供好的trimming算法，例如：
+trim_left   - Remove leading spaces from a string
+trim_right  - Remove tralling spaces from a string
+trim        - Remove leading and tralling spaces from a string
+参考：
+http://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
+http://www.boost.org/doc/libs/1_41_0/doc/html/string_algo/quickref.html#id1701920
+http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+
+
+
+
