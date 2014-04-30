@@ -1,0 +1,10 @@
+
+查看liboauth的编译选项
+./configure --help
+
+只编译静态库, 如果依赖的openssl库不在系统目录下，需要通过LDFLAGS/CPPFLAGS参数进行指定
+./configure --prefix="/data/home/gerryyang/LAMP/liboauth/install/liboauth-1.0.3" LDFLAGS=-L/data/home/gerryyang/LAMP/openssl/install/openssl-1.0.1g/lib CPPFLAGS=-I/data/home/gerryyang/LAMP/openssl/install/openssl-1.0.1g/include --enable-shared=no
+
+编译好liboauth后，就可以使用oauth提供的oauth_url_escape的urlencode方法等函数
+
+
