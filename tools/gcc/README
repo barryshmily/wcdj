@@ -1,10 +1,13 @@
 
+gcc主页：http://gcc.gnu.org/
 
-http://gcc.gnu.org/
 GCC 4.9.0 (changes)
 http://gcc.gnu.org/gcc-4.9/changes.html
 Status: 2014-04-22 (regression fixes and docs only).
 Serious regressions. All regressions. 
+
+http://gcc.gnu.org/onlinedocs/4.9.0/
+
 
 gcc-4.9.0安装后的注意事项
 ----------------------------------------------------------------------
