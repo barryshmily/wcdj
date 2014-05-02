@@ -34,5 +34,6 @@ COLLECT_LTO_WRAPPER=/Users/gerryyang/LAMP/gcc/install/gcc-4.9.0/libexec/gcc/x86_
 线程模型：posix
 gcc 版本 4.9.0 (GCC) 
 
-
+参考：
+http://blog.csdn.net/delphiwcdj/article/details/24837865
 
