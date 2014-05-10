@@ -1,0 +1,6 @@
+
+groupadd gerryyang
+useradd -g gerryyang -d"/data/home/gerryyang" gerryyang
+passwd gerryyang
+
+
