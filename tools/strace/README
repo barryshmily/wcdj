@@ -1,0 +1,18 @@
+
+strace command arg...
+
+(1) 默认情况下，strace会将输出写入到stderr中，可以通过-o filename的选项来修改这个行为。
+(2) 参数的长度默认上限为32个字符，可以使用-s strsize选项来更改这个限制。
+(3) 对于一个复杂的程序来说，strace的输出可能相当的长，可以使用下面的方法进行过滤：
+方法一：strace date 2>&1 | grep open
+方法二：strace -e trace=open,close date
+需要注意，系统调用的真实名称同它对应的glibc包装函数(wrapper)是有区别的。
+(4) -p pid选项通过指定进程的ID号来跟踪一个已存在的进程。
+(5) -c选项可以使strace打印出程序所执行的所有系统调用的概要。
+(6) -f选项可以使该进程的子进程也能得到跟踪。如果我们将跟踪的输出发送给一个文件(-o filename)，使用-ff选项能使每个进程将自己的跟踪输出写到filename.PID的文件中。
+
+
+使用strace, ltrace寻找故障原因的线索
+http://blog.csdn.net/delphiwcdj/article/details/7387325
+
+
