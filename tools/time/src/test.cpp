@@ -10,7 +10,7 @@ double difftimeval(const struct timeval *tv1, const struct timeval *tv2)
 	u = tv1->tv_usec - tv2->tv_usec;
 	if (u < 0)
 	{
-		u += 1000000.0
+		u += 1000000
 		--s;
 	}
 
