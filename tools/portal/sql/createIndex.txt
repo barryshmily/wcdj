@@ -1,0 +1,27 @@
+
+
+显示索引信息
+show index from t_order_content_mol_009;
+
+添加索引字段
+alter table t_order_content_mol_396 add index PaymentId_idx(FPaymentId);
+
+删除索引字段
+alter table t_order_content_mol_396 drop index PaymentId_idx;
+
+查看索引字段查询性能
+mysql> explain select * from t_order_content_mol_013 where FPaymentId='MPO109220'\G
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: t_order_content_mol_013
+         type: ref
+possible_keys: FPaymentId_idx
+          key: FPaymentId_idx
+      key_len: 152
+          ref: const
+         rows: 1
+        Extra: Using where
+1 row in set (0.00 sec)
+
+
