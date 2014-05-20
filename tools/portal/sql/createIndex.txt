@@ -1,10 +1,46 @@
 
 
-显示索引信息
-show index from t_order_content_mol_009;
-
-添加索引字段
+创建表后添加索引字段
 alter table t_order_content_mol_396 add index PaymentId_idx(FPaymentId);
+
+在创建表时指定索引字段
+CREATE TABLE t_order_content_mol_$iTable (
+    FOrderId             varchar(50)    NOT NULL COMMENT 'OrderId',
+    FPortalSerialNo      varchar(50)    NOT NULL default ''  COMMENT 'PortalSerialNo',
+    FQQUin               varchar(24)    NOT NULL default ''  COMMENT 'QQUin',
+    FPayUin              varchar(255)   NOT NULL default ''  COMMENT 'PayUin',
+    FProvideUin          varchar(255)   NOT NULL default ''  COMMENT 'ProvideUin',
+    FAppId               varchar(24)    NOT NULL default ''  COMMENT 'Appid',
+    FSpoaId              varchar(24)    NOT NULL default ''  COMMENT 'SerivceCode',
+    FType                int(11)        NOT NULL default '0' COMMENT 'Type',
+    FPayChannel          varchar(24)    NOT NULL default ''  COMMENT 'PayChannel',
+    FPayChannelSubId     varchar(24)    NOT NULL default ''  COMMENT 'PayChannelSubId',
+    FPayItem             varchar(2048)  NOT NULL default ''  COMMENT 'PayItem',
+    FUserIp              varchar(64)    NOT NULL default ''  COMMENT 'UserIp',
+    FPayAmt              int(11)        NOT NULL default '0' COMMENT 'PayAmt',
+    FOrigPayAmt          int(11)        NOT NULL default '0' COMMENT 'OrigPayAmt',
+    FUserData            MEDIUMTEXT     NOT NULL default ''  COMMENT 'UserData16M', 
+    FPayInfo             varchar(2048)  NOT NULL default ''  COMMENT 'PayInfo', 
+    FPayRemark           varchar(2048)  NOT NULL default ''  COMMENT 'PayRemark', 
+    FExtend              varchar(2048)  NOT NULL default ''  COMMENT 'Extend', 
+    FSource              varchar(24)    NOT NULL default ''  COMMENT 'Source',
+    FCurrencyAmt         varchar(16)    NOT NULL default ''  COMMENT 'CurrencyAmt',
+    FCurrencyType        varchar(16)    NOT NULL default ''  COMMENT 'CurrencyType',
+
+    FUserOrderId         varchar(50)    NOT NULL default '' COMMENT 'user order id',
+    FUserOrderMsg        varchar(2048)  NOT NULL default '' COMMENT 'user order msg',
+    FUserProvideMsg      varchar(1024)  NOT NULL default '' COMMENT 'user provide msg',
+    FPaymentId           varchar(50)    NOT NULL default '' COMMENT 'mol paymentId',
+    FPayEnv              varchar(16)    NOT NULL default '' COMMENT 'mol pay env',
+    FReserve1            varchar(1024)  NOT NULL default '' COMMENT 'reserve1',
+    FReserve2            varchar(1024)  NOT NULL default '' COMMENT 'reserve2',
+    FReserve3            varchar(1024)  NOT NULL default '' COMMENT 'reserve3',
+    FOrderTime           datetime       NOT NULL default '0000-00-00 00:00:00' COMMENT 'order time',
+    FProvideTime         datetime       NOT NULL default '0000-00-00 00:00:00' COMMENT 'provide time',
+    FUpdateTime          timestamp      NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT 'LastModifyTime',
+    PRIMARY KEY (FOrderId),
+    INDEX FPaymentId_idx (FPaymentId)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 删除索引字段
 alter table t_order_content_mol_396 drop index PaymentId_idx;
@@ -24,4 +60,12 @@ possible_keys: FPaymentId_idx
         Extra: Using where
 1 row in set (0.00 sec)
 
+显示表的索引信息
+mysql> show index from t_order_state_mol_999;
++-----------------------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+
+| Table                 | Non_unique | Key_name       | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment |
++-----------------------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+
+| t_order_state_mol_999 |          0 | PRIMARY        |            1 | FOrderId    | A         |           0 |     NULL | NULL   |      | BTREE      |         | 
+| t_order_state_mol_999 |          1 | FPaymentId_idx |            1 | FPaymentId  | A         |           0 |     NULL | NULL   |      | BTREE      |         | 
++-----------------------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+
 
