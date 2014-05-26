@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# ssh devloper@10.137.150.206 devloper
-# ls ~/portal/portal_20120514*
-
 
 # 统计2012-05-14的相关数据：
 
