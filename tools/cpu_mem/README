@@ -2,6 +2,13 @@
 查看CPU和内存信息的常用命令
 
 
+0 top
+1 dmidecode
+2 vmstat
+3 mpstat
+4 pmap (for linux)
+display information about process memory mappings
+
 
 0 top
 
@@ -122,9 +129,73 @@ dmidecode -t 11
 
 
 
-3 vmstat
+2 vmstat
 
 
-4 mpstat
+3 mpstat
+
+
+4 pmap
+
+portal@172.27.204.113:~$ps aux|grep ichannel
+portal   21798  0.0  0.0   1992   616 pts/0    S+   10:04   0:00 grep ichannel
+portal   23437  0.0  0.0  58544   768 ?        S    May27   0:00 ./ichannel_server -c /data/home/portal/portal_server/conf/ichannel_server.conf
+portal   23443  4.5  4.5 613892 375252 ?       Rl   May27  61:27 ./ichannel_server -c /data/home/portal/portal_server/conf/ichannel_server.conf
+portal@172.27.204.113:~$pmap -d 23443       
+23443: ichannel_server
+START       SIZE     RSS   DIRTY PERM OFFSET   DEVICE MAPPING
+08048000   2212K    792K      0K r-xp 00000000 08:04  /data/home/portal/portal_server/bin/ichannel_server
+08271000    184K     32K     32K rwxp 00229000 08:04  /data/home/portal/portal_server/bin/ichannel_server
+0829f000 322324K 268612K 268460K rwxp 0829f000 00:00  [heap]
+a6500000    564K    564K    564K rwxp a6500000 00:00  [anon]
+a658d000    460K      0K      0K ---p a658d000 00:00  [anon]
+a6630000 116036K   4648K   4648K rwxs 00000000 00:08  /SYSV00004b10
+ad781000   1012K     12K      8K rwxs 00000000 00:08  /SYSV0b01b541
+ad87e000 116036K  58020K  58020K rwxs 00000000 00:08  /SYSV00004b10
+b49cf000      4K      0K      0K ---p b49cf000 00:00  [anon]
+b49d0000   8188K      8K      8K rwxp b49d0000 00:00  [anon]
+b51cf000     36K     20K      0K r-xp 00000000 08:01  /lib/libnss_files-2.4.so
+b51d8000      8K      8K      8K rwxp 00008000 08:01  /lib/libnss_files-2.4.so
+b51de000     20K      0K      0K rwxs 00000000 00:08  /SYSV00089503
+b51e3000  42540K  41056K  41056K rwxp b51e3000 00:00  [anon]
+b7b6e000     12K      4K      0K r-xp 00000000 08:01  /lib/libdl-2.4.so
+b7b71000      8K      4K      4K rwxp 00002000 08:01  /lib/libdl-2.4.so
+b7b73000   1256K    448K      0K r-xp 00000000 08:01  /lib/libc-2.4.so
+b7cad000      8K      8K      8K r-xp 00139000 08:01  /lib/libc-2.4.so
+b7caf000      8K      8K      8K rwxp 0013b000 08:01  /lib/libc-2.4.so
+b7cb1000     12K     12K     12K rwxp b7cb1000 00:00  [anon]
+b7cb4000     40K     36K      0K r-xp 00000000 08:01  /lib/libgcc_s.so.1
+b7cbe000      4K      4K      4K rwxp 00009000 08:01  /lib/libgcc_s.so.1
+b7cbf000    152K     12K      0K r-xp 00000000 08:01  /lib/libm-2.4.so
+b7ce5000      8K      4K      4K rwxp 00025000 08:01  /lib/libm-2.4.so
+b7ce7000    868K    416K      0K r-xp 00000000 08:01  /usr/lib/libstdc++.so.6.0.8
+b7dc0000     12K      8K      8K r-xp 000d9000 08:01  /usr/lib/libstdc++.so.6.0.8
+b7dc3000      8K      8K      8K rwxp 000dc000 08:01  /usr/lib/libstdc++.so.6.0.8
+b7dc5000     24K      8K      8K rwxp b7dc5000 00:00  [anon]
+b7dcb000     28K      8K      0K r-xp 00000000 08:01  /lib/librt-2.4.so
+b7dd2000      8K      4K      4K rwxp 00006000 08:01  /lib/librt-2.4.so
+b7dd4000      4K      4K      4K rwxp b7dd4000 00:00  [anon]
+b7dd5000     68K      4K      0K r-xp 00000000 08:01  /lib/libz.so.1.2.3
+b7de6000      4K      4K      4K rwxp 00010000 08:01  /lib/libz.so.1.2.3
+b7de7000    116K      8K      0K r-xp 00000000 08:01  /usr/lib/libexpat.so.1.5.0
+b7e04000      8K      4K      4K rwxp 0001d000 08:01  /usr/lib/libexpat.so.1.5.0
+b7e06000   1088K    136K      0K r-xp 00000000 08:01  /usr/lib/libcrypto.so.0.9.8
+b7f16000     84K      4K      4K rwxp 0010f000 08:01  /usr/lib/libcrypto.so.0.9.8
+b7f2b000     12K      0K      0K rwxp b7f2b000 00:00  [anon]
+b7f2e000     76K     60K      0K r-xp 00000000 08:01  /lib/libpthread-2.4.so
+b7f41000      8K      8K      8K rwxp 00012000 08:01  /lib/libpthread-2.4.so
+b7f43000      8K      4K      4K rwxp b7f43000 00:00  [anon]
+b7f46000     20K      0K      0K rwxs 00000000 00:08  /SYSV00089503
+b7f4b000      4K      4K      4K rwxs 00000000 00:08  /SYSV0000271f
+b7f4c000     12K     12K     12K rwxp b7f4c000 00:00  [anon]
+b7f4f000    108K     76K      0K r-xp 00000000 08:01  /lib/ld-2.4.so
+b7f6a000      8K      8K      8K rwxp 0001a000 08:01  /lib/ld-2.4.so
+bf9d0000    184K    152K    152K rwxp bf9d0000 00:00  [stack]
+ffffe000      4K      0K      0K ---p 00000000 00:00  [vdso]
+Total:   613896K 375252K 373076K
+
+374220K writable-private, 6548K readonly-private, and 233128K shared
+
+
 
 
