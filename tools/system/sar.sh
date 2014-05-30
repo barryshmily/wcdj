@@ -15,6 +15,10 @@ rxpck/s：每秒钟接收的数据包
 txpck/s：每秒钟发送的数据包
 rxbyt/s：每秒钟接收的字节数
 txbyt/s：每秒钟发送的字节数
+
+或者：
+watch more /proc/net/dev 
+
 WCDJ
 
 sar -n DEV 1 4
