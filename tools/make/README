@@ -46,6 +46,15 @@ $@ 表示规则的目标文件名。
 $^ 表示规则的所有依赖文件列表，使用空格分隔。
 
 
+一些技巧
+
+(1) 更新所有文件时间，从而可以编译所有文件
+./configure
+find . | xargs touch
+make
+
+
+
 参考
 [1] GNU Make
 http://www.gnu.org/software/make/
