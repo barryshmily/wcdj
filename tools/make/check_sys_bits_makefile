@@ -1,0 +1,11 @@
+
+# usage: make -f check_sys_bits_makefile
+
+ifeq ($(shell getconf LONG_BIT), 32)
+    TAG=32
+else
+    TAG=64
+endif
+
+all: 
+	@echo $(TAG)
