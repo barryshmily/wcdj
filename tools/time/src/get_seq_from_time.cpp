@@ -3,7 +3,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-// »°seq, ∑÷+√Î+(Œ¢√Î/10)
+// min + sec + (msec / 10)
 unsigned int getSeq()
 {
     struct timeval tvv;
