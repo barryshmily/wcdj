@@ -27,3 +27,9 @@ RETURN VALUES
 一些测试结论：listen(listenfd, 0);
 Linux下：backlog貌似和实现有关，具体的传值并没有生效；
 OS X下：backlog是精确的，当为0时也可以建立多个连接；
+
+gerryyang@Tencent:/usr/include> find -name "socket.h" | xargs grep "SOMAXCONN"
+./bits/socket.h:#define SOMAXCONN       128
+./linux/socket.h:#define SOMAXCONN      128
+
+
