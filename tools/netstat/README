@@ -1,0 +1,6 @@
+
+
+netstat -p | grep port
+显示使用某个端口的进程名字, 需要root权限
+
+
