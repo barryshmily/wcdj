@@ -1,6 +1,28 @@
 
+查看某个端口信息的方法
 
-netstat -p | grep port
+(1) 使用netstat
+netstat -anp | grep port
 显示使用某个端口的进程名字, 需要root权限
+
+(2) 使用lsof
+lsof -i :30007
+lsof -P | grep ':30007' | awk '{print $2}' | xargs kill -9
+干掉监听某个端口的进程
+
+
+
+例子：
+Tencent:/data/home/portal/portal_server/bin # lsof -i :30007             
+COMMAND     PID   USER   FD   TYPE     DEVICE SIZE NODE NAME
+dispatch_ 10721 portal   10u  IPv4 1304661421       TCP *:30007 (LISTEN)
+Tencent:/data/home/portal/portal_server/bin # lsof -P | grep 30007                 
+dispatch_ 10721     portal   10u     IPv4 1304661421                   TCP *:30007 (LISTEN)
+Tencent:/data/home/portal/portal_server/bin # ps -efL | grep dispatch_gnp
+root      6604  7314  6604  0    1 17:23 pts/8    00:00:00 grep dispatch_gnp
+portal   10721     1 10721  0    2 16:32 ?        00:00:00 ./dispatch_gnp -config=../conf/gnp.conf.xml
+portal   10721     1 10723  0    2 16:32 ?        00:00:00 ./dispatch_gnp -config=../conf/gnp.conf.xml
+Tencent:/data/home/portal/portal_server/bin # netstat -ap | grep 30007             
+tcp        0      0 *:30007                 *:*                     LISTEN      10721/dispatch_gnp  
 
 
