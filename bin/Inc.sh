@@ -3,7 +3,7 @@
 
 # you should set yourself path
 OS_VERSION=`uname -v | grep "Darwin" |  awk -F" " '{print $1}'`
-if [ $OS_VERSION == "Darwin" ]; then
+if [ "$OS_VERSION" == "Darwin" ]; then
 	# OS X
 	PROJECT_HOME="/Users/gerryyang/github_project/wcdj"
 else
