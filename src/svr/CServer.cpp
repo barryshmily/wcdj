@@ -37,7 +37,7 @@ void CServer::init_svmq(CAppConfig &appconf_instance) throw (runtime_error)
 	/*  create and init SV-MQ
 	 *  echo 65535    > /proc/sys/kernel/msgmax, 64K
 	 *  echo 16777216 > /proc/sys/kernel/msgmnb, 16M
-	 *  so, msg_num = 256
+	 *  so, min msg_num = 256
 	 *  */
 
 #ifdef CLIENT_MODE
