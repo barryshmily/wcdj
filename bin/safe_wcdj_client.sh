@@ -47,6 +47,7 @@ function Boot()
 function Start()
 {
 :<< COMMENT_WCDJ
+	GetPid
 	# this check allow you can only create just one instance
 	if [ "$PROC_ID" == "0" ]; then
 		# need to run server
@@ -68,6 +69,7 @@ COMMENT_WCDJ
 
 function Stop()
 {
+	GetPid
 	if [ "$PROC_ID" == "0" ]; then
 		echo "$DATE $SERVER is not running"
 	else
@@ -89,8 +91,6 @@ function Reboot()
 }
 
 # run from here
-
-GetPid
 ulimit -c unlimited
 
 if [ "$1" == "start" ]; then

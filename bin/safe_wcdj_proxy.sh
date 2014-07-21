@@ -55,6 +55,7 @@ function Boot()
 function Start()
 {
 :<< COMMENT_WCDJ
+	#GetPid
 	if [ "$PROC_ID" == "0" ]; then
 		# need to run server
 		Boot
@@ -88,6 +89,7 @@ COMMENT_WCDJ
 function Stop()
 {
 :<< WCDJ_COMMENT
+	#GetPid
 	if [ "$PROC_ID" == "0" ]; then
 		echo "$DATE $SERVER is not running"
 	else
@@ -125,8 +127,6 @@ function Reboot()
 }
 
 # run from here
-
-#GetPid
 ulimit -c unlimited
 
 if [ "$1" == "start" ]; then
