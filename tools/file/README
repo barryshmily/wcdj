@@ -2,4 +2,15 @@
 Linux下文件描述符和打开文件之间的关系
 http://blog.csdn.net/delphiwcdj/article/details/37373523
 
+两种不同类型的同步I/O完成：
+(1) synchronized I/O data integrity completion (同步I/O数据完整性)
+int fdatasync(int fd);
+只刷新文件数据
+
+(2) synchronized I/O file integrity completion (同步I/O文件完整性)
+int fsync(int fd);
+强制刷新元数据
+
+因为文件数据和元数据通常驻留在磁盘的不同区域，更新这些数据需要反复在整个磁盘上执行寻道操作。
+
 
