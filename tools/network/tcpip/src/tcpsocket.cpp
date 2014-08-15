@@ -123,6 +123,7 @@ namespace RTBNet
 		}
 
 		// 不需要接收应答
+		close(iSock);
 
 #if 0
 		// waiting for response
