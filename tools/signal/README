@@ -1,0 +1,21 @@
+
+fg/bg/jobs/&/ctrl+z/kill %num
+
+
+gerryyang@mba:signals$./ouch
+0
+^Z
+[1]+  Stopped                 ./ouch
+gerryyang@mba:signals$jobs
+[1]+  Stopped                 ./ouch
+gerryyang@mba:signals$kill 1
+-bash: kill: (1) - Operation not permitted
+gerryyang@mba:signals$kill %1
+[1]+  Terminated: 15          ./ouch
+gerryyang@mba:signals$jobs
+gerryyang@mba:signals$fg
+-bash: fg: current: no such job
+gerryyang@mba:signals$
+
+
+
