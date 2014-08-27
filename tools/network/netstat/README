@@ -10,6 +10,8 @@ lsof -i :30007
 lsof -P | grep ':30007' | awk '{print $2}' | xargs kill -9
 干掉监听某个端口的进程
 
+lsof -n | grep pid
+显示某个进程使用端口的状态, 比如是否是CLOSE_WAIT
 
 
 例子：
