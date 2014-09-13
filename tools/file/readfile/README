@@ -1,0 +1,34 @@
+
+gerryyang@Tencent:~/t> time dd if=./big_file.zip of=/dev/null bs=64
+23339790+1 records in
+23339790+1 records out
+1493746561 bytes (1.5 GB) copied, 29.3791 seconds, 50.8 MB/s
+
+real    0m29.410s
+user    0m6.992s
+sys     0m22.353s
+gerryyang@Tencent:~/t> 
+gerryyang@Tencent:~/t> time dd if=./big_file.zip of=/dev/null bs=1024
+1458736+1 records in
+1458736+1 records out
+1493746561 bytes (1.5 GB) copied, 2.07624 seconds, 719 MB/s
+
+real    0m2.078s
+user    0m0.480s
+sys     0m1.596s
+gerryyang@Tencent:~/t> time dd if=./big_file.zip of=/dev/null 
+2917473+1 records in
+2917473+1 records out
+1493746561 bytes (1.5 GB) copied, 4.05431 seconds, 368 MB/s
+
+real    0m4.056s
+user    0m1.100s
+sys     0m2.956s
+gerryyang@Tencent:~/t> time dd if=./big_file.zip of=/dev/null bs=2048
+729368+1 records in
+729368+1 records out
+1493746561 bytes (1.5 GB) copied, 1.16358 seconds, 1.3 GB/s
+
+real    0m1.165s
+user    0m0.260s
+sys     0m0.904s
