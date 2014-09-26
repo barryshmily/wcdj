@@ -1,0 +1,6 @@
+
+
+bash 的远程代码执行漏洞 CVE-2014-6271，可能导致对 cgi 程序发送恶意 HTTP 请求在服务器上执行命令：http://seclists.org/oss-sec/2014/q3/649
+
+env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
+
