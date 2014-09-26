@@ -1,20 +1,20 @@
-include ../../Inc.mk
+include ../../../Inc.mk
 
-DEP_PATH = ../../dep
+DEP_PATH = ../../../dep
 OPENSSL_API_PATH = $(DEP_PATH)/openssl/osx64_gcc421/openssl-1.0.1g
 
-INCLUDE = -I../../modules/http \
+INCLUDE = -I../../../modules/http \
 		  -I$(OPENSSL_API_PATH)/include
 
-LIBPATH = -L../../../lib/ \
+LIBPATH = -L../../../../lib/ \
 		  -L$(OPENSSL_API_PATH)/lib 
 
 
 DEP_LIBS = 
 LIBS     = -lcrypto $(DEP_LIBS)
 
-OBJS    = des_ecb_demo.o
-BIN_SVR = des_ecb_demo
+OBJS    = baseutils.o tencent_des.o
+BIN_SVR = tencent_des
 
 BINS = $(BIN_SVR)
 
