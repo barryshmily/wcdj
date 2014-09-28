@@ -4,6 +4,7 @@ string 常用的操作
 
 0 字符串十六进制格式化
 比如将一些加密后不可见的字符串可视化时需要使用。
+Codes:
 encode_hex_string.cpp  
 hex_str_convert.cpp
 
@@ -13,7 +14,8 @@ hex_str_convert.cpp
 find_first_not_of/find_last_not_of/substr
 或者
 isspace/assign
-参考：trimming_and_reduce_str.cpp
+Codes:
+trimming_and_reduce_str.cpp
 也可以使用boost库已经提供好的trimming算法，例如：
 trim_left   - Remove leading spaces from a string
 trim_right  - Remove tralling spaces from a string
@@ -23,6 +25,33 @@ http://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-
 http://www.boost.org/doc/libs/1_41_0/doc/html/string_algo/quickref.html#id1701920
 http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 
+
+2 字符串大小写转换
+#include <string>
+#include <algorithm>
+std::transform(myString.begin(), myString.end(), myString.begin(), ::tolower);
+
+From: http://stackoverflow.com/questions/313970/stl-string-to-lower-case
+Or, using Boost, from http://www.boost.org/doc/libs/1_44_0/doc/html/string_algo/usage.html#id2580058
+std::string str1("HeLlO WoRld!");
+boost::to_lower(str1); // str1=="hello world!"
+Codes: string_tolower.cpp
+参考:
+http://stackoverflow.org/wiki/Make_a_STL_string_Lowercase
+
+
+3 末尾字符串拷贝
+Codes:
+endcopy.cpp
+
+
+4 字符串分隔
+Codes:
+splittwo.cpp
+
+
+5 随机固定长度字符串
+constant_len_random_order
 
 
 
