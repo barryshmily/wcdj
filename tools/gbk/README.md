@@ -11,3 +11,7 @@ iconv文件编码转换
 
 iconv -f GBK -t UTF-8 file1 > file2
 
+-f 原编码
+-t 目标编码
+-c 忽略无法转换的字符
+
