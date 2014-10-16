@@ -54,4 +54,8 @@ splittwo.cpp
 constant_len_random_order
 
 
+6 decimal2hex, hex2decimal
+decimalAndHexConversion.cpp
+
+
 
