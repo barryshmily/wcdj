@@ -2,5 +2,7 @@
 groupadd gerryyang
 useradd -g gerryyang -d"/data/home/gerryyang" gerryyang
 passwd gerryyang
+mkdir -p /data/home/gerryyang
+cd /data/home && chown -R gerryyang gerryyang && chgrp gerryyang gerryyang
 
 
