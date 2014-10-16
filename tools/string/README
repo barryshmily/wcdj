@@ -56,6 +56,7 @@ constant_len_random_order
 
 6 decimal2hex, hex2decimal
 decimalAndHexConversion.cpp
+http://stackoverflow.com/questions/20034297/decimal-to-hex-conversion-c-built-in-function
 
 
 
