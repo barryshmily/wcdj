@@ -40,6 +40,24 @@ int main()
 	hex2Decimal("7fffffff", deci);
 	hex2Decimal("80000000", deci);
 
+
+	// or use snprintf()
+
+	char tmp[16] = {0};
+	snprintf(tmp, sizeof(tmp), "%X", 255);
+	printf("%s\n", tmp);
+	snprintf(tmp, sizeof(tmp), "%X", 256);
+	printf("%s\n", tmp);
+	snprintf(tmp, sizeof(tmp), "%X", 2147483647); 
+	printf("%s\n", tmp);
+
+	snprintf(tmp, sizeof(tmp), "%d", 0xff);
+	printf("%s\n", tmp);
+	snprintf(tmp, sizeof(tmp), "%d", 0x100);
+	printf("%s\n", tmp);
+	snprintf(tmp, sizeof(tmp), "%d", 0x7fffffff); 
+	printf("%s\n", tmp);
+
 	return 0;
 }
 /*
@@ -52,4 +70,10 @@ hex[ff] -> decimal[255]
 hex[100] -> decimal[256]
 hex[7fffffff] -> decimal[2147483647]
 hex[80000000] -> decimal[2147483648]
+FF
+100
+7FFFFFFF
+255
+256
+2147483647
 */
