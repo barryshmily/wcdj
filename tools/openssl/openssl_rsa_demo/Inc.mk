@@ -6,12 +6,12 @@ AR     = ar
 AROPT  = -scurv
 CFLAGS = -Werror -g -Os -pipe -D_REENTRANT
 
-OPENSSL_PATH = /data/home/gerryyang/LAMP/openssl/install/openssl-1.0.1g
+OPENSSL_PATH = /Users/gerryyang/LAMP/OpenSSL/install/openssl-1.0.1g
 
 INCLUDE = -I$(OPENSSL_PATH)/include
 LIBPATH = -L$(OPENSSL_PATH)/lib
 
-DEP_LIBS = -lcrypto -lrt -lz -ldl
+DEP_LIBS = -lcrypto -lz -ldl
 LIBS    = $(DEP_LIBS)
 
 %.o: %.cpp

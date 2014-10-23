@@ -18,10 +18,23 @@ void str2Hex(const char * name, unsigned char* buf, int& len, string& hex)
 	for (int i = 0; i < len; ++i)
 	{
 		char szTmp[3] = {0};
-		snprintf(szTmp, sizeof(szTmp), "%02x", buf[i]);
+		snprintf(szTmp, sizeof(szTmp), "%02X", buf[i]);
 		hex += szTmp;
 	}
 	printf("%s Hex [%d:%s]\n", name, len, hex.c_str());
+}
+
+int hextoStr(std::string &src, std::string &dst)
+{
+    dst = "";
+    for (size_t i = 0; i < src.size(); i += 2)
+    {
+        int c = 0;
+        sscanf(src.c_str() + i, "%2X", &c);
+        dst += (char)c;   
+    }
+
+    return 0;
 }
 
 // use private.key to calc sign
@@ -143,7 +156,7 @@ int calcRsaSign(const char * szData, string& strSign, string& strPrivateKeyPath,
 }
 
 // use public.key to verify sign
-int verifyRsaSign(const char * szData, const char * szSign, string& strPubKeyPath, int& iResultCode, string& strResultInfo)
+int verifyRsaSign(const char * szData, const char * szSign, const char * szSignType, string& strPubKeyPath, int& iResultCode, string& strResultInfo)
 { 
 	int iRet = 0;
 
@@ -213,10 +226,23 @@ int verifyRsaSign(const char * szData, const char * szSign, string& strPubKeyPat
 	EVP_DigestFinal(&ctx, ucDigest, (unsigned int *)&iDigest);
 
 
-	// decodebase64 sign
 	unsigned char ucSign[COMM_MAX_BUFLEN] =  {0};
 	int iSign                             =  sizeof(ucSign);
-	iSign = DecodeBase64((unsigned char *)szSign, ucSign, COMM_MAX_BUFLEN, strlen(szSign));
+
+	if (string(szSignType) == "base64")
+	{
+		// decodebase64 sign
+		iSign = DecodeBase64((unsigned char *)szSign, ucSign, COMM_MAX_BUFLEN, strlen(szSign));
+	}
+	else if (string(szSignType) == "hex")
+	{
+		string strSignHex = szSign;
+		string strSign;
+		hextoStr(strSignHex, strSign);
+		iSign = strSign.length();
+		memcpy(ucSign, strSign.c_str(), iSign);
+	}
+
 
 	//------------------------------------------
 	// debug
@@ -307,12 +333,12 @@ int rsaEncrypt(const char * szData, string& strPubKeyPath, char * szCipherData, 
 		return -1;
 	}
 
-	printf("before RSA_public_encrypt: szData len[%d] szCipherData len[%d]\n", strlen(szData), iCipherDataLen);
+	printf("before RSA_public_encrypt: szData len[%lu] szCipherData len[%d]\n", strlen(szData), iCipherDataLen);
 	// RSA_PKCS1_OAEP_PADDING
 	iCipherDataLen = RSA_public_encrypt(strlen(szData), (const unsigned char *)szData, (unsigned char *)szCipherData, rsa, RSA_PKCS1_OAEP_PADDING);
 	// RSA_NO_PADDING
 	////iCipherDataLen = RSA_public_encrypt(strlen(szData), (const unsigned char *)szData, (unsigned char *)szCipherData, rsa, RSA_NO_PADDING);
-	printf("after RSA_public_encrypt: szData len[%d] szCipherData len[%d]\n", strlen(szData), iCipherDataLen);
+	printf("after RSA_public_encrypt: szData len[%lu] szCipherData len[%d]\n", strlen(szData), iCipherDataLen);
 
 	//------------------------------------------
 	// debug
@@ -417,26 +443,33 @@ int rsaDecrypt(const char * szData, string& strPrivateKeyPath, char * szClearDat
 	return 0;
 }
 
+void usage(char ** argv)
+{
+	printf("usage: %s "
+			"calcRsaSign cleardata | "
+			"verifyRsaSign cleardata sign base64 or hex | "
+			"rsaEncrypt cleardata| "
+			"rsaDecrypt cipherbase64\n", argv[0]);
+}
+
 int main(int argc, char ** argv)
 {
 
 	if (argc < 2)
 	{
-		printf("usage: %s "
-				"calcRsaSign cleardata | "
-				"verifyRsaSign cleardata sign | "
-				"rsaEncrypt cleardata| "
-				"rsaDecrypt cipherbase64\n", argv[0]);
+		usage(argv);
 		return 0;
 	}
 
 	string strCmd         =  argv[1];
 	//string strClearData =  "too many secrets";
 
-	//string strPubKeyPath     =  "./rsakey/public.pem";
-	//string strPrivateKeyPath =  "./rsakey/privatekey.pem";
-	string strPubKeyPath       =  "./oufei_rsakey/mi_public_key.pem";
-	string strPrivateKeyPath   =  "./oufei_rsakey/mi_private_key.pem";
+	string strPubKeyPath     =  "./rsakey/public.pem";
+	string strPrivateKeyPath =  "./rsakey/privatekey.pem";
+	//string strPubKeyPath       =  "./webank_ca/res_publickey.pem";
+	//string strPubKeyPath       =  "./oufei_rsakey/mi_public_key.pem";
+	//string strPrivateKeyPath   =  "./oufei_rsakey/mi_private_key.pem";
+
 
 
 	int iRet =  0;
@@ -446,11 +479,17 @@ int main(int argc, char ** argv)
 
 	if (strCmd == "calcRsaSign")
 	{
-		string strClearData;
-		if (string(argv[2]) != "")
+		string strClearData, strSign;
+		if (argc == 3)
+		{
 			strClearData = argv[2];
+		}
+		else
+		{
+			usage(argv);
+			return 0;
+		}
 
-		string strSign;
 		if ((iRet = calcRsaSign(strClearData.c_str(), strSign, strPrivateKeyPath, iResultCode, strResultInfo)) != 0)
 		{
 			printf("calcRsaSign err[%d:%d:%s]\n", iRet, iResultCode, strResultInfo.c_str());
@@ -458,13 +497,20 @@ int main(int argc, char ** argv)
 	}
 	else if (strCmd == "verifyRsaSign")
 	{
-		string strClearData, strSign;
-		if (string(argv[2]) != "")
-			strClearData = argv[2];
-		if (string(argv[3]) != "")
-			strSign = argv[3];
+		string strClearData, strSign, strSignType;
+		if (argc == 5)
+		{
+			strClearData =  argv[2];
+			strSign      =  argv[3];
+			strSignType  =  argv[4];
+		}
+		else
+		{
+			usage(argv);
+			return 0;
+		}
 
-		if ((iRet = verifyRsaSign(strClearData.c_str(), strSign.c_str(), strPubKeyPath, iResultCode, strResultInfo)) != 0)
+		if ((iRet = verifyRsaSign(strClearData.c_str(), strSign.c_str(), strSignType.c_str(), strPubKeyPath, iResultCode, strResultInfo)) != 0)
 		{
 			printf("verifyRsaSign err[%d:%d:%s]\n", iRet, iResultCode, strResultInfo.c_str());
 		}
@@ -476,8 +522,15 @@ int main(int argc, char ** argv)
 	else if (strCmd == "rsaEncrypt")
 	{
 		string strClearData;
-		if (string(argv[2]) != "")
+		if (argc == 3)
+		{
 			strClearData = argv[2];
+		}
+		else
+		{
+			usage(argv);
+			return 0;
+		}
 
 		char szCipherData[COMM_MAX_BUFLEN] =  {0};
 		int iCipherDataLen                 =  sizeof(szCipherData);
@@ -490,8 +543,15 @@ int main(int argc, char ** argv)
 	else if (strCmd == "rsaDecrypt")
 	{
 		string strCipherBase64;
-		if (string(argv[2]) != "")
+		if (argc == 3)
+		{
 			strCipherBase64 = argv[2];
+		}
+		else
+		{
+			usage(argv);
+			return 0;
+		}
 
 		char szClearData[COMM_MAX_BUFLEN] =  {0};
 		int iClearDataLen                 =  sizeof(szClearData);
