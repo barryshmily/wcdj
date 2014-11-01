@@ -21,11 +21,16 @@ enca --list languages
 -- to get a list of supported languages.
 
 Examples:
+(1) 显示当前文件的编码
 gerryyang@mba:encode$enca README.md
 Simplified Chinese National Standard; GB2312
+(2) 将当前文件转码为本地默认编码
 gerryyang@mba:encode$enconv README.md
 gerryyang@mba:encode$enca README.md
 Universal transformation format 8 bits; UTF-8
+(3) 将当前某目录的所有文件转换为本地编码
+find dir_path -type f | xargs enconv
+
 
 
 
