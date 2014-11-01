@@ -1,0 +1,31 @@
+
+Tips:
+
+1, GBK编码中防止串尾乱码的问题
+http://blog.csdn.net/delphiwcdj/article/details/7746446
+
+2, iconv文件编码转换
+例如将一个GBK 编码的文件转换成UTF-8编码
+iconv -f GBK -t UTF-8 file1 > file2
+-f 原编码 -t 目标编码 -c 忽略无法转换的字符
+
+3, enca -- detect and convert encoding of text files
+brew update
+brew install enca
+
+enca FILE
+-- will tell you which encoding file FILE uses (without changing it)
+enconv FILE
+-- will convert file FILE to your locale native encoding.  To convert the file to some other encoding use the -x option (see -x entry in section OPTIONS and sections CON-VERSION and ENCODINGS for details).
+enca --list languages
+-- to get a list of supported languages.
+
+Examples:
+gerryyang@mba:encode$enca README.md
+Simplified Chinese National Standard; GB2312
+gerryyang@mba:encode$enconv README.md
+gerryyang@mba:encode$enca README.md
+Universal transformation format 8 bits; UTF-8
+
+
+
