@@ -1,0 +1,49 @@
+
+http://www.computerhope.com/unix/usplit.htm
+
+Split a file into pieces.
+
+split [OPTION]... [INPUT [PREFIX]]
+
+
+split outputs fixed-size pieces of input INPUT to files named PREFIXaa, PREFIXab, ...
+The default size for each split file is 1000 lines, and default PREFIX is "x". With no INPUT, or when INPUT is a dash ("-"), read from standard input.
+
+
+Options
+-a N, --suffix-length=N       Use suffixes of length N (default 2)
+-b SIZE, --bytes=SIZE         Write SIZE bytes per output file.
+-C SIZE, --line-bytes=SIZE    Write at most SIZE bytes of lines per output file.
+-d, --numeric-suffixes        Use numeric suffixes instead of alphabetic.
+-e, --elide-empty-files       Do not generate empty output files with "-n"
+--filter=COMMAND              Write to shell command COMMAND; file name is $FILE
+-l NUMBER, --lines=NUMBER     Put NUMBER lines per output file.
+-n CHUNKS, --number=CHUNKS    Generate CHUNKS output files. (See below.)
+-u, --unbuffered              Immediately copy input to output with "-n r/...".
+--verbose                     Print a verbose diagnostic just before each output file is opened.
+--help                        Display a help message and exit.
+--version                     Output version information and exit.
+
+SIZE may be one of the following, or an integer optionally followed by one of following multipliers:
+
+suffix  multiplier
+KB      1000
+K       1024
+MB      1000 x 1000
+M       1024 x 1024
+
+...and so on for G (gigabytes), T (terabytes), P (petabytes), E (exabytes), Z (zettabytes), Y (yottabytes).
+
+
+
+Examples
+
+split -b 22 newfile.txt new
+
+Split the file newfile.txt into three separate files called newaa, newab and newac..., with each file containing 22 bytes of data.
+
+split -l 300 file.txt new
+
+Split the file newfile.txt into files beginning with the name new, each containing 300 lines of text.
+
+
