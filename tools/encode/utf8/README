@@ -1,0 +1,5 @@
+
+UTF8Convertor uft8Convertor("GBK");
+str = uft8Convertor.ToUTF8(str);
+
+
