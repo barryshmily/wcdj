@@ -1,6 +1,6 @@
 
-gccÖ÷Ò³£ºhttp://gcc.gnu.org/
-gccÑ¡Ïî£ºhttp://man.cx/gcc%281%29/zh_cn
+gccä¸»é¡µï¼šhttp://gcc.gnu.org/
+gccé€‰é¡¹ï¼šhttp://man.cx/gcc%281%29/zh_cn
 
 
 GCC 4.9.0 (changes)
@@ -11,7 +11,7 @@ Serious regressions. All regressions.
 http://gcc.gnu.org/onlinedocs/4.9.0/
 
 
-gcc-4.9.0°²×°ºóµÄ×¢ÒâÊÂÏî
+gcc-4.9.0å®‰è£…åçš„æ³¨æ„äº‹é¡¹
 ----------------------------------------------------------------------
 Libraries have been installed in:
    /Users/gerryyang/LAMP/gcc/install/gcc-4.9.0/lib
@@ -28,14 +28,29 @@ more information, such as the ld(1) and ld.so(8) manual pages.
 ----------------------------------------------------------------------
 
 gerryyang@mba:bin$./g++ -v
-Ê¹ÓÃÄÚ½¨ specs¡£
+ä½¿ç”¨å†…å»º specsã€‚
 COLLECT_GCC=./g++
 COLLECT_LTO_WRAPPER=/Users/gerryyang/LAMP/gcc/install/gcc-4.9.0/libexec/gcc/x86_64-apple-darwin13.1.0/4.9.0/lto-wrapper
-Ä¿±ê£ºx86_64-apple-darwin13.1.0
-ÅäÖÃÎª£º/Users/gerryyang/LAMP/gcc/objdir/../gcc-4.9.0/configure --prefix=/Users/gerryyang/LAMP/gcc/install/gcc-4.9.0
-Ïß³ÌÄ£ĞÍ£ºposix
-gcc °æ±¾ 4.9.0 (GCC) 
+ç›®æ ‡ï¼šx86_64-apple-darwin13.1.0
+é…ç½®ä¸ºï¼š/Users/gerryyang/LAMP/gcc/objdir/../gcc-4.9.0/configure --prefix=/Users/gerryyang/LAMP/gcc/install/gcc-4.9.0
+çº¿ç¨‹æ¨¡å‹ï¼šposix
+gcc ç‰ˆæœ¬ 4.9.0 (GCC) 
 
-²Î¿¼£º
+å‚è€ƒï¼š
 http://blog.csdn.net/delphiwcdj/article/details/24837865
+
+
+
+åœ¨64ä½ç¯å¢ƒä½¿ç”¨-m32/-m64é€‰é¡¹æŒ‡å®šç¼–è¯‘32ä½ç¨‹åºè¿˜æ˜¯64ä½ç¨‹åº
+gerryyang@TENCENT64;~$gcc -o 32bit_test -m32 32bit_test.c
+gerryyang@TENCENT64;~$./32bit_test                       
+sizeof(int) 4
+sizeof(long) 4
+sizeof(p) 4
+gerryyang@TENCENT64;~$gcc -o 32bit_test -m64 32bit_test.c
+gerryyang@TENCENT64;~$./32bit_test                       
+sizeof(int) 4
+sizeof(long) 8
+sizeof(p) 8
+
 
