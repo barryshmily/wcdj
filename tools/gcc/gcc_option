@@ -1,0 +1,19 @@
+
+Tips:
+
+1, -m32 / -m64
+在64位环境使用-m32/-m64选项指定编译32位程序还是64位程序
+gerryyang@TENCENT64;~$gcc -o 32bit_test -m32 32bit_test.c
+gerryyang@TENCENT64;~$./32bit_test                       
+sizeof(int) 4
+sizeof(long) 4
+sizeof(p) 4
+gerryyang@TENCENT64;~$gcc -o 32bit_test -m64 32bit_test.c
+gerryyang@TENCENT64;~$./32bit_test                       
+sizeof(int) 4
+sizeof(long) 8
+sizeof(p) 8
+
+
+
+
