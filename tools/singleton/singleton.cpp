@@ -1,5 +1,6 @@
 #include <iostream>
 #include <pthread.h>
+#include <unistd.h>
 using namespace std;
 
 class CSingleton 
@@ -61,6 +62,8 @@ void* ThreadHandle(void* tp)
 
 int main(int argc, char* argv[])
 {
+
+	//setbuf(stdout, NULL);               /* Disable buffering of stdout */
 
 	cout << "main beg" << endl;    
 
