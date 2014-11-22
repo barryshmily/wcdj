@@ -1,0 +1,68 @@
+
+0. Overview
+http://boolan.com/lecture/1000001028
+
+Prerequisites
+Unix Network Programming by late W.Richard Stevens
+(1) Know basics of TCP/IP, eg. IP addresses, ports
+(2) Know how to write an echo server with basic sockets APIs.
+Access to one or more Linux hosts. Sorry for Windows fans.
+Knows about C++, Python or Go. Sorry for C folks.
+
+What Unix Network Programming didn't teach
+W.Richard Stevens planned to write three volumes of UNP2e
+(1) Volume 1: Sockets API, published in 1998
+(2) Volume 2: IPC, published in 1999
+(3) VOlume 3: Applications
+He passed away on Sept 1, 1999, unfortunately
+Complex protocols, not just formatless echo or short lived daytime
+Modern concurrent models: Thread-per-connection, non-blocking/event-driven/epoll, thread pool, etc.
+(1) POSA2: Patterns for Concurrent and Networked Objects, pub in 2000
+
+Highlights of this course
+Focus on server-side TCP network programming
+(1) No user interaction, runs for weeks not minutes
+Measurable performance
+(1) Myths busted
+No hypothetic optimizations
+(1) How many memory (de)allocs kernel does from receiving an Ethernet frame to passing TCP payload to your application?
+
+Layered Network
+Ethernet frame 帧
+IP packet 分组
+TCP segment 分节
+Application message 消息
+
+Common pitfalss of novices
+Mix business logical with network IO, difficult to unit test
+Incomplete data received from a TCP peer
+Incorrectly determine message boundaries when using TCP
+Sending C struct to peer
+(1) Modify the global align setting causes core dump in 3rd party library
+TCP self-connection(自连接): localhost:54321 <-> localhost:54321
+Many more in non-blocking network programming
+
+TCP/IP over 1Gb Ethernet(千兆网)
+Ethernet frame
+(1) Preamble 8 Bytes
+(2) MAC      12 B
+(3) Type     2B
+(4) Payload  46~1500 B
+(5) CRC      4B
+(6) Gap      12B
+Total    84~1538 B
+Raw bandwidth 125MB/s
+Packet per second
+(1) Max 125,000,000 / 84 = 1,488,000
+(2) Min 81,274 (no jumbo)
+TCP/IP overhead
+(1) IP header  20B
+(2) TCP header 20B
+(3) TCP option 12B(Timestamp)
+Max TCP throughput
+(1) 81274 * (1500 - 52) = 117,684,752
+112MiB/s or 117MB/s
+
+
+
+
