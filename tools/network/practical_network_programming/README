@@ -1,5 +1,4 @@
 
-0. Overview
 http://boolan.com/lecture/1000001028
 
 Prerequisites
@@ -28,10 +27,10 @@ No hypothetic optimizations
 (1) How many memory (de)allocs kernel does from receiving an Ethernet frame to passing TCP payload to your application?
 
 Layered Network
-Ethernet frame 帧
-IP packet 分组
-TCP segment 分节
-Application message 消息
+Ethernet frame (帧)
+IP packet (分组)
+TCP segment (分节)
+Application message (消息)
 
 Common pitfalss of novices
 Mix business logical with network IO, difficult to unit test
@@ -62,6 +61,84 @@ TCP/IP overhead
 Max TCP throughput
 (1) 81274 * (1500 - 52) = 117,684,752
 112MiB/s or 117MB/s
+
+
+http://boolan.com/lecture/1000001030
+
+Basic, non-concurrent examples
+TTCP: classic TCP performance testing tool
+Round-trip: measure clock error between two hosts
+Netcat: a Swiss knife
+Slow sink/source
+
+Concurrent examples
+SOCKS proxy server
+(1) Relay two TCP connections
+SudoKu solver
+(1) A lot services fit in this request-response model
+Simple memcached
+Broadcasting to multiple TCP peers
+(1) How to deal with slow receiver?
+
+Data processing with multiple machines
+Parallel N-queues
+Median of numbers across machines
+Frequent queries
+Distributed sorting
+
+Advanced topics
+RPC - A basic building block for various servers
+Load balancing
+(1) Better than round-robin
+Capacity of a serving system
+(1) How many machines do I need to support X QPS?
+(2) What will be the number of replicas of each component?
+Fight fi (tail) latency
+(1) Mean and Percentiles: 95%, 99%
+
+
+http://boolan.com/lecture/1000001031
+
+Test TCP (ttcp)
+The standard old-school tool for TCP performance benchmarking
+
+What performance do we care?
+Bandwidth, MB/s (带宽，只管数据量，不管消息数)
+Throughput, messages/s, queries/s (QPS), transactions/s (TPS) (吞吐量)
+Latency, milliseconds, percentiles (延迟)
+Utilizations, percent, payload vs. carrier, goodput vs. theory BW (资源使用率)
+Overhead, eg. CPU usage, for compression and /or encryption (额外开销)
+
+Why do we re-implement TTCP?
+It uses all basic Sockets APIs: socket, listen, bind, accept, connect, read/recv, write/send, shtdown, close, etc.
+The protocol is binary, not just byte stream, so it's better than the classic echo example
+Typical behaviors, meaningful results, instead of packets/s
+Service as benchmark for programming language as well, by comparing CPU usage
+Not concurrent, at least in the very basic form
+
+The protocol
+struct SessionMessage
+{
+	int32_t number;
+	int32_t length;
+} __attribute__ ((__packed__));
+
+struct PayloadMessage
+{
+	int32_t length;
+	char data[0];
+};
+
+The Code
+Straight forward with blocking IO
+(1) muduo/examples/ace/ttcp/ttcp_blocking.cc (C with sockets API)
+(2) recipes/tpc/ttcp.cc (C++ with a thin wrapper)
+(3) muduo-examples-in-go/examples/ace/ttcp/ttcp.go (Go)
+Non-blocking IO with muduo library
+(1) muduo/examples/ace/ttcp/ttcp.cc
+
+None of above support concurrent connections
+(1) Pretty easy to enable, thread-per-connection for first three.
 
 
 
