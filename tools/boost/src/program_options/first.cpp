@@ -49,3 +49,18 @@ int main(int ac, char* av[])
 
     return 0;
 }
+/*
+g++ -o first first.cpp /Users/gerryyang/LAMP/boost_1_57_0/install/boost_1_57_0/lib/libboost_program_options.a -I/Users/gerryyang/LAMP/boost_1_57_0/install/boost_1_57_0/include 
+
+output:
+gerryyang@mba:program_options$./first
+Compression level was not set.
+gerryyang@mba:program_options$./first --help
+Allowed options:
+  --help                produce help message
+  --compression arg     set compression level
+
+gerryyang@mba:program_options$./first --compression 123
+Compression level was set to 123.
+
+ */
