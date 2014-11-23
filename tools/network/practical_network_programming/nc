@@ -1,0 +1,33 @@
+
+nc -- arbitrary TCP and UDP connections and listens
+
+SYNOPSIS
+     nc [-46AcDCdhklnrtUuvz] [-b boundif] [-i interval] [-p source_port]
+        [-s source_ip_address] [-w timeout] [-X proxy_protocol] [-x proxy_address[:port]]
+        [hostname] [port[s]]
+
+
+-l      Used to specify that nc should listen for an incoming connection rather than
+             initiate a connection to a remote host.  It is an error to use this option in
+             conjunction with the -p, -s, or -z options.  Additionally, any timeouts spec-
+             ified with the -w option are ignored.
+
+
+服务器端
+gerryyang@mba:~$nc -l 9001 > /dev/null
+
+客户端
+gerryyang@mba:~$dd if=/dev/zero bs=1MB count=1000 | nc localhost 9001
+1000+0 records in
+1000+0 records out
+1000000000 bytes (1.0 GB) copied, 9.18925 s, 109 MB/s
+gerryyang@mba:~$dd if=/dev/zero bs=1MB count=1000 | nc localhost 9001
+1000+0 records in
+1000+0 records out
+1000000000 bytes (1.0 GB) copied, 8.56599 s, 117 MB/s
+gerryyang@mba:~$dd if=/dev/zero bs=1MB count=10000 | nc localhost 9001
+10000+0 records in
+10000+0 records out
+10000000000 bytes (10 GB) copied, 88.131 s, 113 MB/s
+
+
