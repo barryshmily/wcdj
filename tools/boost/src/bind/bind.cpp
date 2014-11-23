@@ -65,6 +65,8 @@ int main()
   return 0;
 } 
 /*
+g++ -o bind bind.cpp -I/Users/gerryyang/code/public/boost_1_54_0
+
 mba:bind gerryyang$ ./bind 
 1
 3

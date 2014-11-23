@@ -1,0 +1,18 @@
+
+Introduction
+
+The program_options library allows program developers to obtain program options, that is (name, value) pairs from the user, via conventional methods such as command line and config file.
+
+Why would you use such a library, and why is it better than parsing your command line by straightforward hand-written code?
+
+    It's easier. The syntax for declaring options is simple, and the library itself is small. Things like conversion of option values to desired type and storing into program variables are handled automatically.
+
+    Error reporting is better. All the problems with the command line are reported, while hand-written code can just misparse the input. In addition, the usage message can be automatically generated, to avoid falling out of sync with the real list of options.
+
+    Options can be read from anywhere. Sooner or later the command line will be not enough for your users, and you'll want config files or maybe even environment variables. These can be added without significant effort on your part.
+
+Now let's see some examples of the library usage in the the section called “Tutorial”.
+
+
+http://www.boost.org/doc/libs/1_57_0/doc/html/program_options.html
+http://www.boost.org/doc/libs/1_57_0/doc/html/program_options/tutorial.html
