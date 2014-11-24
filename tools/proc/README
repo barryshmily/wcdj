@@ -1,0 +1,5 @@
+
+man 5 proc
+
+/proc/sys/kernel/threads-max
+
