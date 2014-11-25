@@ -13,14 +13,14 @@ struct world
 
 int main() 
 { 
-	// ¡¾×¢ÊÍ1¡¿
+	// comment 1
 	boost::function<int (const char*)> f1 = std::atoi; 
 	std::cout << f1("1609") << std::endl; 
 
 	f1 = std::strlen; 
 	std::cout << f1("1609") << std::endl; 
 
-	// ¡¾×¢ÊÍ2¡¿
+	// comment 2
 	try 
 	{ 
 		boost::function<int (const char*)> f2; 
@@ -37,7 +37,7 @@ int main()
 		std::cout << "f3 is empty object, should not use" << std::endl;
 	}
 
-	// ¡¾×¢ÊÍ3¡¿
+	// comment 3
 	boost::function<void (world*, std::ostream&)> f4 = &world::hello; 
 	world w; 
 	f4(&w, boost::ref(std::cout)); 
