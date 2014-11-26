@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 output:
 
 server:
-./ttcp_blocking -p 9001 -r
+while true; do ./ttcp_blocking -r -p9901; done
 port = 9001
 accepting...
 receive number = 8192
