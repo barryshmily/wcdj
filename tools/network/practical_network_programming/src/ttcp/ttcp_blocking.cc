@@ -15,6 +15,24 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/time.h>
+
+double now()
+{
+	double d;
+	time_t s;
+	suseconds_t u;
+
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+
+	s = tv.tv_sec;
+	u = tv.tv_usec;
+
+	d = s + (u / 1000000.0);
+
+	return d;
+}
 
 static int acceptOrDie(uint16_t port)
 {
@@ -121,7 +139,9 @@ void transmit(const Options& opt)
 	}
 
 	printf("connected\n");
-	//muduo::Timestamp start(muduo::Timestamp::now());
+
+	double start = now();
+
 	struct SessionMessage sessionMessage = { 0, 0 };
 	sessionMessage.number = htonl(opt.number);
 	sessionMessage.length = htonl(opt.length);
@@ -157,8 +177,9 @@ void transmit(const Options& opt)
 
 	::free(payload);
 	::close(sockfd);
-	//double elapsed = timeDifference(muduo::Timestamp::now(), start);
-	//printf("%.3f seconds\n%.3f MiB/s\n", elapsed, total_mb / elapsed);
+
+	double elapsed = now() - start;
+	printf("%.3f seconds\n%.3f MiB/s\n", elapsed, total_mb / elapsed);
 }
 
 void receive(const Options& opt)
