@@ -15,6 +15,9 @@ max_connections = 2000
 
 方法2：在使用mysqld命令启动时，显示指定 -O max_connections=2000 参数，缺点是重启则可能失效。
 
+方法3：set global var=xxx;
+设置全局变量，不需要重启MySQL
+
 
 2, MySQL访问授权
 用root用户登录mysql
