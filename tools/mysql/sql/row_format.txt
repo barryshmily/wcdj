@@ -1,0 +1,4 @@
+
+alter table xxx row_format=dynamic;
+
+
