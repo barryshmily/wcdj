@@ -38,6 +38,7 @@ int main(int argc, char **argv)
 }
 /*
 # del 0x00000000
-ipcs -q | grep gerryyang | awk '{print $2}' | while read f;do ./msgctl_tool 1 $f;done
- 
+ipcs -q | grep gerryyang | grep "0x00000000" | awk '{print $2}' | while read f;do ./msgctl_tool 1 $f;done 
+or
+ipcs -q | grep gerryyang | grep "0x00000000" | awk '{print $2}' | while read f;do ipcrm -q $f;done 
  */
