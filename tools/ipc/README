@@ -1,0 +1,5 @@
+
+可移植性
+POSIX IPC工具（消息队列、信号量以及共享内存）的普及程度远远不如System V IPC，特别是在较早的UNIX系统上。只有版本为2.6.x的Linux内核系列才提供了一个POSIX消息队列的实现以及对POSIX信号量的完全支持。因此，从可移植性的角度来看，System V IPC要优于POSIX IPC。
+
+
