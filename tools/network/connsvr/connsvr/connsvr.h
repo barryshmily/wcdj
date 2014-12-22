@@ -14,26 +14,26 @@
 #include "anet.h"
 #include "Log.h"
 
-#define MAX_CLIENT_COUNT 50000          //Ã¿¸ö½ø³Ì×î¶à´¦Àí¿Í»§ÊıÁ¿
+#define MAX_CLIENT_COUNT 50000          //æ¯ä¸ªè¿›ç¨‹æœ€å¤šå¤„ç†å®¢æˆ·æ•°é‡
 #define MAX_BUF_SIZE     4096
-#define MAX_TIMEOUT      60000          //×î´ó³¬Ê±Ê±¼ä
+#define MAX_TIMEOUT      60000          //æœ€å¤§è¶…æ—¶æ—¶é—´
 
 typedef struct conn
 {
     struct event_base* base;
-    struct time_event* tevent;      /*¶ÔÓ¦³¬Ê±ÊÂ¼ş*/
+    struct time_event* tevent;      /*å¯¹åº”è¶…æ—¶äº‹ä»¶*/
 
     int fd;
-    int plen;                       /*°ü³¤¶È*/
+    int plen;                       /*åŒ…é•¿åº¦*/
 
-    char* rbuf;                     /*´æ´¢½ÓÊÕÊı¾İ*/
-    int   rtotal;                   /*½ÓÊÕBuffer×Ü³¤¶È*/
-    int   rlen;                     /*½ÓÊÕÊı¾İ³¤¶È*/
+    char* rbuf;                     /*å­˜å‚¨æ¥æ”¶æ•°æ®*/
+    int   rtotal;                   /*æ¥æ”¶Bufferæ€»é•¿åº¦*/
+    int   rlen;                     /*æ¥æ”¶æ•°æ®é•¿åº¦*/
 
-    char* sbuf;                     /*´æ´¢·¢ËÍÊı¾İ*/
-    int   stotal;                   /*·¢ËÍBuffer×Ü³¤¶È*/
-    int   slen;                     /*·¢ËÍÊı¾İ³¤¶È*/
-    int   spos;                     /*ÒÑ·¢ËÍÊı¾İÎ»ÖÃ*/
+    char* sbuf;                     /*å­˜å‚¨å‘é€æ•°æ®*/
+    int   stotal;                   /*å‘é€Bufferæ€»é•¿åº¦*/
+    int   slen;                     /*å‘é€æ•°æ®é•¿åº¦*/
+    int   spos;                     /*å·²å‘é€æ•°æ®ä½ç½®*/
 
     char ip[64];
     int port;

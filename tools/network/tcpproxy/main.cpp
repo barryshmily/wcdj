@@ -15,7 +15,7 @@
 char G_ProxyIP[64] = {0};
 int G_ProxyPort = 0;
 
-//ºóÌ¨Ö´ĞĞ
+//åå°æ‰§è¡Œ
 void init_daemon()
 {
     rlimit rlim,rlim_new;
@@ -96,10 +96,10 @@ int main(int argc, char* argv[])
     snprintf(G_ProxyIP, sizeof(G_ProxyIP) - 1, "%s", argv[3]);
     G_ProxyPort = atoi(argv[4]);
 
-    //ÉèÖÃÎªºóÌ¨Æô¶¯
+    //è®¾ç½®ä¸ºåå°å¯åŠ¨
     init_daemon();
 
-    //³õÊ¼»¯´´½¨ÈÕÖ¾¾ä±ú
+    //åˆå§‹åŒ–åˆ›å»ºæ—¥å¿—å¥æŸ„
     G_pLog = CreateLog("tcpproxy.log", 5, 1024 * 10240, 5);
 
     if ( NULL == G_pLog )
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    //´´½¨¼àÌı·şÎñÆ÷
+    //åˆ›å»ºç›‘å¬æœåŠ¡å™¨
     int fd = create_server(szServerIP, iServerPort);
 
     if( fd < 0 )
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    //³õÊ¼»¯ÊÂ¼ş¿ò¼Ü£¬²¢½«listenfd×¢²áµ½ÊÂ¼ş¿ò¼ÜÖĞ
+    //åˆå§‹åŒ–äº‹ä»¶æ¡†æ¶ï¼Œå¹¶å°†listenfdæ³¨å†Œåˆ°äº‹ä»¶æ¡†æ¶ä¸­
     struct event_base* base = event_base_init(fd);
 
     if( NULL == base )
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    //ÊÂ¼şÇı¶¯Ñ­»·
+    //äº‹ä»¶é©±åŠ¨å¾ªç¯
     event_dispatch(base);
 
     return 0;

@@ -27,17 +27,17 @@ bool GetLocalIP(char * pszIPBuf)
 		ifc.ifc_buf = (caddr_t) buf; 
 		if (!ioctl (fd, SIOCGIFCONF, (char *) &ifc)) 
 		{ 
-			//获取接口信息
+			//鑾峰彇鎺ュ彛淇℃伅
 			intrface = ifc.ifc_len / sizeof (struct ifreq); 
-			//根据借口信息循环获取设备IP和MAC地址
+			//鏍规嵁鍊熷彛淇℃伅寰幆鑾峰彇璁惧IP鍜孧AC鍦板潃
 			while (intrface-- > 0) 
 			{     
-				//获取设备名称
+				//鑾峰彇璁惧鍚嶇О
 				//printf ("net device %s\n", buf[intrface].ifr_name); 
 
 				if ( strstr(buf[intrface].ifr_name,"eth") != NULL )
 				{
-					//获取当前网卡的IP地址 
+					//鑾峰彇褰撳墠缃戝崱鐨処P鍦板潃 
 					if (!(ioctl (fd, SIOCGIFADDR, (char *) &buf[intrface]))) 
 					{ 
 						if ( inet_ntop(AF_INET,

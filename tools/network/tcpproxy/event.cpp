@@ -2,7 +2,7 @@
 * File name:    event.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	ÊÂ¼ş´¦Àí¿ò¼Ü
+* Description: 	äº‹ä»¶å¤„ç†æ¡†æ¶
 * Log:
 */
 
@@ -76,7 +76,7 @@ int event_add(event_base *base, int fd, int mask, event_proc *proc, void *arg)
 
     struct file_event* fe = &base->fevents[fd];
 
-    //ÒÑ¾­×¢²á£¬Ö±½Ó·µ»Ø
+    //å·²ç»æ³¨å†Œï¼Œç›´æ¥è¿”å›
     if( fe->mask & mask )
     {
         return AE_OK;
@@ -130,7 +130,7 @@ int event_del(event_base *base, int fd, int mask)
         return AE_OK;
     }
 
-    //ÒÑ¾­É¾³ı£¬Ö±½Ó·µ»Ø
+    //å·²ç»åˆ é™¤ï¼Œç›´æ¥è¿”å›
     if( !(fe->mask & mask) )
     {
         return AE_OK;

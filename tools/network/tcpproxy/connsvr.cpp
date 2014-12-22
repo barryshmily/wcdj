@@ -2,7 +2,7 @@
 * File name:    tcpsvr.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	socket´¦Àí¿ò¼Ü
+* Description: 	socketå¤„ç†æ¡†æ¶
 * Log:
 */
 
@@ -143,14 +143,14 @@ conn *create_conn(struct event_base* base, int fd, char* ip, int port)
     return c;
 }
 
-//Êı¾İ½ÓÊÕÊÂ¼ş´¦Àíº¯Êı
+//æ•°æ®æ¥æ”¶äº‹ä»¶å¤„ç†å‡½æ•°
 static void process_recv(event_base *base, int fd, void *privdata)
 {
     struct conn *c = (conn*)privdata;
     struct conn *r = c->remote;
     int ret = 0;
 
-    //»º³åÒÑÂú£¬µÈ´ı·¢ËÍ
+    //ç¼“å†²å·²æ»¡ï¼Œç­‰å¾…å‘é€
     if( r->total - r->wpos <= 0 )
     {
         event_del(c->base, c->fd, AE_READABLE);
@@ -158,7 +158,7 @@ static void process_recv(event_base *base, int fd, void *privdata)
         return;
     }
 
-    //½«½ÓÊÕµÄÊı¾İ·Åµ½¶Ô¶ËµÄBUF
+    //å°†æ¥æ”¶çš„æ•°æ®æ”¾åˆ°å¯¹ç«¯çš„BUF
     ret = anetRead(c->fd, r->buf + r->wpos, r->total- r->wpos);
 
     if( ret <= 0 )
@@ -203,7 +203,7 @@ static void process_send(event_base *base, int fd, void *privdata)
         return;
     }
 
-    //Êı¾İÈ«²¿·¢ËÍÍê³É
+    //æ•°æ®å…¨éƒ¨å‘é€å®Œæˆ
     if( c->wpos == c->rpos )
     {
         if( event_del(base, c->fd, AE_WRITABLE) != AE_OK)
@@ -230,7 +230,7 @@ static void process_send(event_base *base, int fd, void *privdata)
     return;
 }
 
-//¿Í»§¶ËÁ¬½ÓÊÂ¼ş´¦Àíº¯Êı
+//å®¢æˆ·ç«¯è¿æ¥äº‹ä»¶å¤„ç†å‡½æ•°
 static void process_accept(event_base *base, int fd, void *privdata)
 {
     int cport, cfd;
@@ -241,7 +241,7 @@ static void process_accept(event_base *base, int fd, void *privdata)
 
     if( cfd == AE_ERR )
     {
-        //²»ÊÇ±»ÆäËü½ø³ÌÇÀÕ¼ÁË£¬Ôò±¨´í£¬ÍË³ö½ø³ÌÖØÆô
+        //ä¸æ˜¯è¢«å…¶å®ƒè¿›ç¨‹æŠ¢å äº†ï¼Œåˆ™æŠ¥é”™ï¼Œé€€å‡ºè¿›ç¨‹é‡å¯
         if( errno != EAGAIN && errno != EWOULDBLOCK )
         {
             Err("[%d] anetTcpAccept failed: %s", getpid(), strerror(errno) );

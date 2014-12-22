@@ -9,10 +9,10 @@ void send_client(struct conn* c, struct pbpack* pkt);
 void write_stat(const char* reqIp, const char* userIp, unsigned int ulQQ,
                 const char* domain, const char* pszData);
 
-/* 统计服务器fd */
+/* 缁熻鏈嶅姟鍣╢d */
 extern int G_stat_fd;
 
-/* 统计服务器sa */
+/* 缁熻鏈嶅姟鍣╯a */
 extern struct sockaddr_in G_stat_sa;
 
 #endif

@@ -14,7 +14,7 @@
 #include "anet.h"
 #include "Log.h"
 
-#define MAX_CLIENT_COUNT 80000          //Ã¿¸ö½ø³Ì×î¶à´¦Àí¿Í»§ÊıÁ¿
+#define MAX_CLIENT_COUNT 80000          //æ¯ä¸ªè¿›ç¨‹æœ€å¤šå¤„ç†å®¢æˆ·æ•°é‡
 #define MAX_BUF_SIZE     2048
 
 typedef struct conn

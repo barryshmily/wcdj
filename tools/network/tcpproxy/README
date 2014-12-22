@@ -1,9 +1,9 @@
-±àÒë£º
+ç¼–è¯‘ï¼š
 make
 
-ÔËĞĞ:
+è¿è¡Œ:
 ./tcpproxy listenip listenport proxyip proxyport
-lstenip: ±¾»ú¼àÌıµÄIP
-lstenport: ±¾»ú¼àÌıµÄ¶Ë¿Ú
-proxyip£ºĞèÒª´úÀí·şÎñÆ÷µÄIP
-proxyport:ĞèÒª´úÀí·şÎñÆ÷µÄ¶Ë¿Ú
+lstenip: æœ¬æœºç›‘å¬çš„IP
+lstenport: æœ¬æœºç›‘å¬çš„ç«¯å£
+proxyipï¼šéœ€è¦ä»£ç†æœåŠ¡å™¨çš„IP
+proxyport:éœ€è¦ä»£ç†æœåŠ¡å™¨çš„ç«¯å£

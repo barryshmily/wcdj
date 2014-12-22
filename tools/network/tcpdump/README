@@ -2,70 +2,70 @@
 
 tcpdump - dump traffic on a network
 
-ʹ��tcpdump�����ǰ�᣺����rootȨ��
+使用tcpdump命令的前提：具有root权限
 
-ʹ�ô�������Ҫע��ļ����ؼ���
+使用此命令需要注意的几个关键字
 
-1, ���͵Ĺؼ���
-��Ҫ������host, net, port��
-2, ȷ�����䷽��Ĺؼ���
-��Ҫ������src, dst, dst or src, dst and src��
-3, Э��Ĺؼ���
-��Ҫ������fddi, ip, arp, rarp, tcp, udp�ȣ����û��ָ���κ�Э�飬��tcpdump�Ჶ������Э������ݰ���
-4, �����߼�����
-������not, and, or
+1, 类型的关键字
+主要包括：host, net, port；
+2, 确定传输方向的关键字
+主要包括：src, dst, dst or src, dst and src；
+3, 协议的关键字
+主要包括：fddi, ip, arp, rarp, tcp, udp等，如果没有指定任何协议，则tcpdump会捕获所有协议的数据包；
+4, 三种逻辑运算
+包括：not, and, or
 
-����ѡ��
+常用选项
 
--i ��  ָ������������ӿڣ�����ָ��Ϊ: lo, any, eth0, eth1�ȣ���-i lo��ʾֻ�������lo�豸��Ĭ���Ǽ�ص�һ�������豸����
--n     ʹ��������ʽ��IP���֣���ʹ������
--s     ָ��ץ���ĳ��ȣ�-s0 ץ�������ݰ�
--X     ��hex��ASCII����ʽ��ӡÿһ����
--c     ��ץ��ָ�������İ����˳�
--w     ֱ�ӽ���д���ļ��в��������ʹ�ӡ���������������� tcpdump -r file ���з�����
--r     ��ָ�����ļ��ж�ȡץ������Ϣ���ļ��������ͨ��-wѡ�������
--e     ������д�ӡ��������·���ͷ����Ϣ
--t     ��ӡʱÿ�в���ʾʱ���
--tt    ��ӡʱÿ����ʾUNIXʱ���
--v     ��ϸ��ʾָ��ִ�й���
--vv    ����ϸ��ʾָ��ִ�й���
+-i 　  指定监听的网络接口，可以指定为: lo, any, eth0, eth1等，（-i lo表示只监控网卡lo设备，默认是监控第一个网络设备。）
+-n     使用数字形式的IP名字，不使用域名
+-s     指定抓包的长度，-s0 抓整个数据包
+-X     以hex和ASCII的形式打印每一个包
+-c     在抓到指定个数的包后退出
+-w     直接将包写入文件中并不分析和打印出来（后续可以用 tcpdump -r file 进行分析）
+-r     从指定的文件中读取抓包的信息（文件里的数据通过-w选项产生）
+-e     在输出行打印出数据链路层的头部信息
+-t     打印时每行不显示时间戳
+-tt    打印时每行显示UNIX时间戳
+-v     详细显示指令执行过程
+-vv    更详细显示指令执行过程
 
-���õ��������
+常用的组合命令
 
-(1) ����ָ��Դ��ַ��Ŀ�ĵ�ַ���˿�
+(1) 捕获指定源地址和目的地址及端口
 tcpdump -Xns0 -i eth1 src 172.27.198.179 and dst 10.130.73.95 and dst port 30007 -c10
-(2) ��������Դ��ַ��Ŀ�ĵ�ַ
+(2) 捕获不区分源地址和目的地址
 tcpdump -Xns0 -i eth1 host 172.27.198.179 and 10.130.73.95 and  port 30007 -c10
-(3) ֻ���񱾻�ָ���˿ڵ����ݰ�
+(3) 只捕获本机指定端口的数据包
 tcpdump -Xns0 -i eth1 port 30007
-(4) ��������172.27.198.179�������յ��ĺͷ��������е����ݰ�
+(4) 捕获所有172.27.198.179的主机收到的和发出的所有的数据包
 tcpdump host 172.27.198.179
-(5) ����������������ָ����ַ�Ͷ˿ڵ����ݰ�
+(5) 捕获（在任意网卡）指定地址和端口的数据包
 tcpdump -i any -Xns0  host 172.27.198.179 and port 30007 -c 10
-(6) ��������172.27.198.179������172.27.198.169��10.130.73.95�����ݰ���ע��������������������ʱ��һ��Ҫת��
+(6) 捕获主机172.27.198.179和主机172.27.198.169或10.130.73.95的数据包，注意在命令行中适用括号时，一定要转义
 tcpdump host 172.27.198.179 and \ (172.27.198.169 or 10.130.73.95\) and port 30007 -c10
-(7) ��������172.27.198.179���˺�����10.130.73.95֮����������ͨ�ŵ�IP���ݰ���ע��!����Ҫ��һ���ո�
+(7) 捕获主机172.27.198.179除了和主机10.130.73.95之外所有主机通信的IP数据包，注意!后面要有一个空格
 tcpdump ip host 172.27.198.179 and ! 10.130.73.95
-(8) ��������172.27.198.179���ջ򷢳���telnet���ݰ�
+(8) 捕获主机172.27.198.179接收或发出的telnet数据包
 tcpdump tcp port 23 and host 172.27.198.179
-(9) ����������ݰ��������ļ��У����к�������
+(9) 将捕获的数据包保存在文件中，进行后续分析
 tcpdump -Xns0 host 172.27.198.179 -w 179.cap
 tcpdump -r 179.cap
-(10) ֻ��ʾ�����Э�飬����ʾ��������
+(10) 只显示具体的协议，不显示包体内容
 tcpdump -S -nn -vvv -i lo port 6888
--S ��ӡTCP ���ݰ���˳���ʱ, ʹ�þ��Ե�˳���, ��������Ե�˳���
--nn ��ʾ�����ж˿ڵ����Ƶ�ת��
--vvv ��ʾ������������ϸ��Э�����
--i lo��ʾֻ�������lo�豸��Ĭ���Ǽ�ص�һ�������豸��
-port 6888��ʾֻ��ض˿�6888����ؼ�����ݣ�������6888�˿ڽ��պʹ�6888�˿ڷ��͵ı��ġ�
-��ع���
+-S 打印TCP 数据包的顺序号时, 使用绝对的顺序号, 而不是相对的顺序号
+-nn 表示不进行端口到名称的转换
+-vvv 表示产生尽可能详细的协议输出
+-i lo表示只监控网卡lo设备，默认是监控第一个网络设备。
+port 6888表示只监控端口6888的相关监控数据，包括从6888端口接收和从6888端口发送的报文。
+相关工具
 
-tcpreplay���ط�tcpdump�����ݰ����ܹ����١��޸ķ��͵�ַ�ȡ�
-tcprewrite���ܹ��޸�tcpdump�����ݰ��е�ԴĿ��mac��ַ��ip��ַ�ȡ�
+tcpreplay：回放tcpdump的数据包，能够限速、修改发送地址等。
+tcprewrite：能够修改tcpdump的数据包中的源目的mac地址及ip地址等。
 
-�ο�
+参考
 http://www.tcpdump.org/
 http://tcpreplay.synfin.net/
-������� man tcpdump
+更多帮助 man tcpdump
 
 

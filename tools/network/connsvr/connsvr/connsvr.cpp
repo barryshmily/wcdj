@@ -2,7 +2,7 @@
 * File name:    tcpsvr.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	socket´¦Àí¿ò¼Ü
+* Description: 	socketå¤„ç†æ¡†æ¶
 * Log:
 */
 
@@ -11,7 +11,7 @@
 
 static void process_accept(event_base *base, int fd, void *privdata);
 
-//À©´ó½ÓÊÕ»º³åÇø
+//æ‰©å¤§æ¥æ”¶ç¼“å†²åŒº
 char* resize_rbuf(struct conn* c, int len)
 {
     if( c->rtotal - c->rlen >= len )
@@ -33,7 +33,7 @@ char* resize_rbuf(struct conn* c, int len)
     return c->rbuf + c->rlen;
 }
 
-//À©´ó·¢ËÍ»º³åÇø
+//æ‰©å¤§å‘é€ç¼“å†²åŒº
 char* resize_sbuf(struct conn* c, int len)
 {
     if( c->stotal - c->slen >= len )
@@ -68,7 +68,7 @@ char* resize_sbuf(struct conn* c, int len)
     return c->sbuf + c->slen;
 }
 
-//´´½¨ĞÂµÄÁ¬½Ó
+//åˆ›å»ºæ–°çš„è¿æ¥
 static struct conn* create_conn(event_base* base, int fd, char* ip, int port)
 {
     struct conn* c = (struct conn*)malloc(sizeof(struct conn) );
@@ -93,17 +93,17 @@ static struct conn* create_conn(event_base* base, int fd, char* ip, int port)
     c->port = port;
     memcpy(c->ip, ip, sizeof(c->ip) );
 
-	//³õÊ¼»¯Ê±¼äÊÂ¼şµÄ½á¹¹Ìå
+	//åˆå§‹åŒ–æ—¶é—´äº‹ä»¶çš„ç»“æ„ä½“
     c->tevent = (struct time_event*)malloc(sizeof(struct time_event));
     time_event_init(c->tevent, NULL, NULL);
 
-    //³õÊ¼»¯file_event
+    //åˆå§‹åŒ–file_event
     file_event_init(base, c->fd);
 
     return c;
 }
 
-//Ïú»ÙÁ¬½Ó
+//é”€æ¯è¿æ¥
 void destroy_conn(struct conn* c)
 {
     struct event_base* base = c->base;
@@ -144,7 +144,7 @@ void conn_timeout(void* arg)
     return;
 }
 
-//Êı¾İ½ÓÊÕÊÂ¼ş´¦Àíº¯Êı,ÎªÌá¸ßĞÔÄÜ´Ëº¯ÊıÒ²Ğ­ÒéÍêÈ«ñîºÏ£¬ÏÈ½ÓÊÕÊı¾İ°üÍ·£¬ÔÙ½ÓÊÕBODY
+//æ•°æ®æ¥æ”¶äº‹ä»¶å¤„ç†å‡½æ•°,ä¸ºæé«˜æ€§èƒ½æ­¤å‡½æ•°ä¹Ÿåè®®å®Œå…¨è€¦åˆï¼Œå…ˆæ¥æ”¶æ•°æ®åŒ…å¤´ï¼Œå†æ¥æ”¶BODY
 static void process_recv(event_base *base, int fd, void *privdata)
 {
     struct conn *c = (conn*)privdata;
@@ -152,7 +152,7 @@ static void process_recv(event_base *base, int fd, void *privdata)
     int remain_len;
     int len;
 
-    //½ÓÊÕÊı¾İĞ¡ÓÚHEAD³¤¶ÈÊ±£¬¼ÌĞø½ÓÊÕHEAD£¬·ñÔò½ÓÊÕBODY
+    //æ¥æ”¶æ•°æ®å°äºHEADé•¿åº¦æ—¶ï¼Œç»§ç»­æ¥æ”¶HEADï¼Œå¦åˆ™æ¥æ”¶BODY
     if ( c->rlen < PKG_HEAD_SIZE )
     {
         ret = anetRead(c->fd, c->rbuf + c->rlen, PKG_HEAD_SIZE - c->rlen);
@@ -169,7 +169,7 @@ static void process_recv(event_base *base, int fd, void *privdata)
             return;
         }
 
-        //¸ù¾İĞ­Òé¼ÆËãÕû¸ö°üµÄ³¤¶È
+        //æ ¹æ®åè®®è®¡ç®—æ•´ä¸ªåŒ…çš„é•¿åº¦
         c->plen = *((__u32 *) (c->rbuf + PACKAGE_LEN));
         c->plen = (int) ntohl(c->plen);
 
@@ -190,7 +190,7 @@ static void process_recv(event_base *base, int fd, void *privdata)
         resize_rbuf(c, c->plen - PKG_HEAD_SIZE);
     }
 
-    //Îª·ÀÖ¹ÆäËüfd¶öËÀ,Èç¹û°ü³¤Ğ¡ÓÚ4096,Ôò½ÓÊÕÕû¸ö°ü£¬·ñÔòÒ»´ÎÖ»½ÓÊÕ4096¸ö×Ö½Ú
+    //ä¸ºé˜²æ­¢å…¶å®ƒfdé¥¿æ­»,å¦‚æœåŒ…é•¿å°äº4096,åˆ™æ¥æ”¶æ•´ä¸ªåŒ…ï¼Œå¦åˆ™ä¸€æ¬¡åªæ¥æ”¶4096ä¸ªå­—èŠ‚
     remain_len = c->plen - c->rlen;
     len = remain_len > 4096 ? 4096 : remain_len;
 
@@ -203,19 +203,19 @@ static void process_recv(event_base *base, int fd, void *privdata)
 
     c->rlen += ret;
 
-    //Îª´ïµ½Ò»¸ö°üµÄ³¤¶ÈÊ±£¬¼ÌĞø½ÓÊÕ
+    //ä¸ºè¾¾åˆ°ä¸€ä¸ªåŒ…çš„é•¿åº¦æ—¶ï¼Œç»§ç»­æ¥æ”¶
     if( c->rlen < c->plen )
     {
         return;
     }
 
-    //µ÷ÓÃ´¦Àíº¯Êı½øĞĞ´¦Àí
+    //è°ƒç”¨å¤„ç†å‡½æ•°è¿›è¡Œå¤„ç†
     process_packet(c, c->rbuf, c->rlen);
 
-    //ÖØĞÂ×¢²áÁ¬½Ó³¬Ê±¶¨Ê±Æ÷
+    //é‡æ–°æ³¨å†Œè¿æ¥è¶…æ—¶å®šæ—¶å™¨
     register_timer(base, c->tevent, MAX_TIMEOUT);
 
-    //´¦ÀíÍêÒ»¸öÊı¾İ°üºó£¬»º³åÇøÓÖ¿ÉÒÔÖØ¸´Ê¹ÓÃÁË
+    //å¤„ç†å®Œä¸€ä¸ªæ•°æ®åŒ…åï¼Œç¼“å†²åŒºåˆå¯ä»¥é‡å¤ä½¿ç”¨äº†
     c->rlen = 0;
     c->plen = 0;
 
@@ -246,7 +246,7 @@ static void process_send(event_base *base, int fd, void *privdata)
         return;
     }
 
-    //Êı¾İÈ«²¿·¢ËÍÍê³É
+    //æ•°æ®å…¨éƒ¨å‘é€å®Œæˆ
     if( c->spos == c->slen )
     {
         if( event_del(base, c->fd, AE_WRITABLE) != AE_OK)
@@ -263,15 +263,15 @@ static void process_send(event_base *base, int fd, void *privdata)
     return;
 }
 
-//¿Í»§¶ËÁ¬½ÓÊÂ¼ş»Øµ÷º¯Êı
-//ÎªÁË·ÀÖ¹Í¬Ê±²¢·¢´óÁ¿µÄĞÂÁ¬½Ó£¬¿ÉÒÔ½«ÏµÍ³²ÎÊı/proc/sys/net/core/somaxconnÉèÖÃ´óµã
+//å®¢æˆ·ç«¯è¿æ¥äº‹ä»¶å›è°ƒå‡½æ•°
+//ä¸ºäº†é˜²æ­¢åŒæ—¶å¹¶å‘å¤§é‡çš„æ–°è¿æ¥ï¼Œå¯ä»¥å°†ç³»ç»Ÿå‚æ•°/proc/sys/net/core/somaxconnè®¾ç½®å¤§ç‚¹
 static void process_accept(event_base *base, int fd, void *privdata)
 {
     int cport, cfd;
     char cip[128];
     char error_[1024];
 
-    //½ÓÊÕĞÂµÄ¿Í»§¶Ë
+    //æ¥æ”¶æ–°çš„å®¢æˆ·ç«¯
     cfd = anetTcpAccept(error_, fd, cip, &cport);
 
     if( cfd == AE_ERR )
@@ -288,7 +288,7 @@ static void process_accept(event_base *base, int fd, void *privdata)
 
     base->count++;
 
-    //ÉèÖÃÎª·Ç×èÈûÄ£Ê½
+    //è®¾ç½®ä¸ºéé˜»å¡æ¨¡å¼
     if( anetNonBlock(error_, cfd) == AE_ERR )
     {
         Err("anetNonBlock failed: %s", error_);
@@ -300,11 +300,11 @@ static void process_accept(event_base *base, int fd, void *privdata)
 
     struct conn *c = create_conn(base, cfd, cip, cport);
 
-    //×¢²áÁ¬½Ó³¬Ê±¶¨Ê±Æ÷
+    //æ³¨å†Œè¿æ¥è¶…æ—¶å®šæ—¶å™¨
     time_event_init(c->tevent, conn_timeout, c);
     register_timer(base, c->tevent, MAX_TIMEOUT);
 
-    //×¢²áĞÂÁ¬½Ó¶ÁIOÊÂ¼şµ½ÊÂ¼ş¿ò¼Ü
+    //æ³¨å†Œæ–°è¿æ¥è¯»IOäº‹ä»¶åˆ°äº‹ä»¶æ¡†æ¶
     if( event_add(base, cfd, AE_READABLE, process_recv, c) == AE_ERR)
     {
         Err("[%d] %s:%d event_add failed, %s", getpid(), cip, cport, strerror(errno) );
@@ -315,7 +315,7 @@ static void process_accept(event_base *base, int fd, void *privdata)
     return;
 }
 
-//ÏòconnÔö¼ÓĞèÒª·¢ËÍµÄ°ü,²¢×¢²áĞ´µÄIOÊÂ¼ş
+//å‘connå¢åŠ éœ€è¦å‘é€çš„åŒ…,å¹¶æ³¨å†Œå†™çš„IOäº‹ä»¶
 void append_pkt(struct conn* c, int len, char* buf)
 {
     if( buf )
@@ -335,7 +335,7 @@ void append_pkt(struct conn* c, int len, char* buf)
     return;
 }
 
-//³õÊ¼»¯ÊÂ¼şÇı¶¯£¬²¢½«listenfdµÄ¶ÁIOÊÂ¼şÌí¼Óµ½ÊÂ¼şÇı¶¯ÖĞ£¬ÉèÖÃ»Øµ÷º¯ÊıÎªprocess_accept
+//åˆå§‹åŒ–äº‹ä»¶é©±åŠ¨ï¼Œå¹¶å°†listenfdçš„è¯»IOäº‹ä»¶æ·»åŠ åˆ°äº‹ä»¶é©±åŠ¨ä¸­ï¼Œè®¾ç½®å›è°ƒå‡½æ•°ä¸ºprocess_accept
 struct event_base* event_base_init(int fd)
 {
     struct event_base* base = event_base_new(MAX_CLIENT_COUNT);
@@ -359,7 +359,7 @@ struct event_base* event_base_init(int fd)
     return base;
 }
 
-//µÇÂ½¼à¿Ø·şÎñÆ÷
+//ç™»é™†ç›‘æ§æœåŠ¡å™¨
 int create_server(const char* ip, int port)
 {
     char error[1024] = {0};

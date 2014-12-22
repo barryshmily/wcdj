@@ -1,20 +1,20 @@
 
-�鿴ĳ���˿���Ϣ�ķ���
+查看某个端口信息的方法
 
-(1) ʹ��netstat
+(1) 使用netstat
 netstat -anp | grep port
-��ʾʹ��ĳ���˿ڵĽ�������, ��ҪrootȨ��
+显示使用某个端口的进程名字, 需要root权限
 
-(2) ʹ��lsof
+(2) 使用lsof
 lsof -i :30007
 lsof -P | grep ':30007' | awk '{print $2}' | xargs kill -9
-�ɵ�����ĳ���˿ڵĽ���
+干掉监听某个端口的进程
 
 lsof -n | grep pid
-��ʾĳ������ʹ�ö˿ڵ�״̬, �����Ƿ���CLOSE_WAIT
+显示某个进程使用端口的状态, 比如是否是CLOSE_WAIT
 
 
-���ӣ�
+例子：
 Tencent:/data/home/portal/portal_server/bin # lsof -i :30007             
 COMMAND     PID   USER   FD   TYPE     DEVICE SIZE NODE NAME
 dispatch_ 10721 portal   10u  IPv4 1304661421       TCP *:30007 (LISTEN)

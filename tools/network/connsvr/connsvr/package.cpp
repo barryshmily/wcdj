@@ -2,7 +2,7 @@
 * File name:    package.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	longpackage协议操作函数
+* Description: 	longpackage鍗忚鎿嶄綔鍑芥暟
 * Log:
 */
 

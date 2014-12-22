@@ -12,19 +12,19 @@
 #include <sys/file.h>
 #include "Log.h"
 
-/*Ò»ÌõĞÅÏ¢µÄ×î´ó³¤¶È*/
+/*ä¸€æ¡ä¿¡æ¯çš„æœ€å¤§é•¿åº¦*/
 #define ERROR_MAXMSGLEN 8192
 
-/*ÈÕÖ¾½á¹¹Ö¸ÕëµÄÈ«¾Ö±äÁ¿*/
+/*æ—¥å¿—ç»“æ„æŒ‡é’ˆçš„å…¨å±€å˜é‡*/
 struct LOG* G_pLog = NULL;
 char curfile[PATH_LEN];
 
 char szLogOut[][8] = {"Error", "Warn-", "Info-", "Debug"};
 
 /**
- * RollFile         Ñ­»·ÈÕÖ¾ÎÄ¼ş, pLog->log_nameÓÀÔ¶ÊÇµ±Ç°ÈÕÖ¾ÎÄ¼ş,
- * pLog->log_name.1, pLog->log_name.1, ...pLog->log_name.pLog->log_filecountÒÀ´Î°´ĞÂ¾ÉµÄÅÅÁĞ
- * @param pLog       ÈÕÖ¾½á¹¹µÄÖ¸Õë
+ * RollFile         å¾ªç¯æ—¥å¿—æ–‡ä»¶, pLog->log_nameæ°¸è¿œæ˜¯å½“å‰æ—¥å¿—æ–‡ä»¶,
+ * pLog->log_name.1, pLog->log_name.1, ...pLog->log_name.pLog->log_filecountä¾æ¬¡æŒ‰æ–°æ—§çš„æ’åˆ—
+ * @param pLog       æ—¥å¿—ç»“æ„çš„æŒ‡é’ˆ
  */
 static void RollFile(struct LOG* pLog)
 {
@@ -42,7 +42,7 @@ static void RollFile(struct LOG* pLog)
         remove(fileOld);
     }
 
-    /* Ñ­»·µÄ½«pLog->log_name.pLog->log_filecount - 1  -> pLog->log_name.pLog->log_filecount
+    /* å¾ªç¯çš„å°†pLog->log_name.pLog->log_filecount - 1  -> pLog->log_name.pLog->log_filecount
      ...
      pLog->log_name.2 -> pLog->log_name.3
      pLog->log_name.1 -> pLog->log_name.2*/
@@ -58,7 +58,7 @@ static void RollFile(struct LOG* pLog)
         }
     }
 
-    /* ½«pLog->log_name ->¡¡pLog->log_name.1 */
+    /* å°†pLog->log_name ->ã€€pLog->log_name.1 */
     snprintf(fileNew, sizeof(fileNew) - 1, "%s.1", pLog->log_name);
     if (stat(pLog->log_name, &statfile) == 0)
     {
@@ -76,8 +76,8 @@ static void RollFile(struct LOG* pLog)
 }
 
 /**
- * Is_File_OverSize  ÈÕÖ¾ÎÄ¼şÊÇ·ñ³¬¹ıÁË×î´óÏŞ¶î
- * @param pLog       ÈÕÖ¾½á¹¹µÄÖ¸Õë
+ * Is_File_OverSize  æ—¥å¿—æ–‡ä»¶æ˜¯å¦è¶…è¿‡äº†æœ€å¤§é™é¢
+ * @param pLog       æ—¥å¿—ç»“æ„çš„æŒ‡é’ˆ
  */
 static int Is_File_OverSize(struct LOG *pLog)
 {
@@ -94,9 +94,9 @@ static int Is_File_OverSize(struct LOG *pLog)
 
 /**
  * _Error_Out
- * @param pLog       ÈÕÖ¾½á¹¹µÄÖ¸Õë
- * @param loglevel  ÈÕÖ¾¼¶±ğ
- * @param msg       ÈÕÖ¾ÏûÏ¢
+ * @param pLog       æ—¥å¿—ç»“æ„çš„æŒ‡é’ˆ
+ * @param loglevel  æ—¥å¿—çº§åˆ«
+ * @param msg       æ—¥å¿—æ¶ˆæ¯
  */
 static void _Error_Out(struct LOG *pLog, int loglevel, const char *msg)
 {
@@ -133,11 +133,11 @@ static void _Error_Out(struct LOG *pLog, int loglevel, const char *msg)
 }
 
 /*
- CreatLog : ³õÊ¼»¯ÈÕÖ¾½á¹¹Ö¸Õë
- * @param fileName  ÈÕÖ¾ÎÄ¼şÃû
- * @param maxSpace  ÈÕÖ¾ÎÄ¼ş´óĞ¡
- * @param logLevel  ÈÕÖ¾¼¶±ğ
- * @param rollCount ÈÕÖ¾ÎÄ¼şÑ­»·µÄ¸öÊı
+ CreatLog : åˆå§‹åŒ–æ—¥å¿—ç»“æ„æŒ‡é’ˆ
+ * @param fileName  æ—¥å¿—æ–‡ä»¶å
+ * @param maxSpace  æ—¥å¿—æ–‡ä»¶å¤§å°
+ * @param logLevel  æ—¥å¿—çº§åˆ«
+ * @param rollCount æ—¥å¿—æ–‡ä»¶å¾ªç¯çš„ä¸ªæ•°
  * @return ptr
  */
 struct LOG * CreateLog(const char *fileName, int logLevel, int maxSpace,
@@ -190,8 +190,8 @@ struct LOG * CreateLog(const char *fileName, int logLevel, int maxSpace,
 }
 
 /**
- * DestroyLog Ïú»ÙÈÕÖ¾½á¹¹Ö¸Õë
- * @param pLog ÈÕÖ¾½á¹¹µÄÖ¸Õë
+ * DestroyLog é”€æ¯æ—¥å¿—ç»“æ„æŒ‡é’ˆ
+ * @param pLog æ—¥å¿—ç»“æ„çš„æŒ‡é’ˆ
  */
 void DestroyLog(struct LOG *pLog)
 {
@@ -205,10 +205,10 @@ void DestroyLog(struct LOG *pLog)
 }
 
 /**
- * LogRecord Ğ´´íÎóÈÕÖ¾
- * @param pLog ÈÕÖ¾½á¹¹µÄÖ¸Õë
- * @param fmt  ÈÕÖ¾µÄ¸ñÊ½
- * @param ...  ¿É±ä²ÎÊı
+ * LogRecord å†™é”™è¯¯æ—¥å¿—
+ * @param pLog æ—¥å¿—ç»“æ„çš„æŒ‡é’ˆ
+ * @param fmt  æ—¥å¿—çš„æ ¼å¼
+ * @param ...  å¯å˜å‚æ•°
  */
 void LogRecord(struct LOG *pLog, const char *file, int line, int log_level,
         const char *fmt, ...)

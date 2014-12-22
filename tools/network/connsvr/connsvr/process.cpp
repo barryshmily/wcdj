@@ -2,7 +2,7 @@
 * File name:    process.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	¾ßÌåµÄĞ­Òé´¦Àí
+* Description: 	å…·ä½“çš„åè®®å¤„ç†
 * Log:
 */
 
@@ -10,10 +10,10 @@
 
 enum CMD_TYPE
 {
-    CMD_TEST                      = 0x2900, //²âÊÔĞ­Òé
+    CMD_TEST                      = 0x2900, //æµ‹è¯•åè®®
 };
 
-//½«°üÌí¼Óµ½connÖĞ
+//å°†åŒ…æ·»åŠ åˆ°connä¸­
 void send_client(struct conn* c, struct pbpack* pkt)
 {
     PackToStr(pkt);
@@ -28,10 +28,10 @@ int process_test(struct conn* c, struct pbpack* pkt)
     const char* rcvbuf = GetDataPos(pkt);
     int size = GetDataSize(pkt);
 
-    //´Ó·¢ËÍ»º´æ·ÖÅäÄÚ´æ
+    //ä»å‘é€ç¼“å­˜åˆ†é…å†…å­˜
     int length = size + 128;
 
-    //Ö±½Ó»ñÈ¡conn·¢ËÍ»º³åµÄÖ¸Õë£¬½«·¢ËÍÊı¾İÖ±½ÓÌîĞ´µ½Õâ¸ö»º³å£¬¼õÉÙÊı¾İ¿½±´
+    //ç›´æ¥è·å–connå‘é€ç¼“å†²çš„æŒ‡é’ˆï¼Œå°†å‘é€æ•°æ®ç›´æ¥å¡«å†™åˆ°è¿™ä¸ªç¼“å†²ï¼Œå‡å°‘æ•°æ®æ‹·è´
     char* sndbuf = resize_sbuf(c, length);
 
     struct pbpack* rpkt = CreatePack(sndbuf, length);
@@ -39,7 +39,7 @@ int process_test(struct conn* c, struct pbpack* pkt)
     SetCmd(rpkt, GetCmd(pkt));
     SetSeq(rpkt, GetSeq(pkt) );
 
-    //Ìí¼ÓÊı¾İ
+    //æ·»åŠ æ•°æ®
     AddAllData(rpkt, rcvbuf, size);
 
     send_client(c, rpkt);
@@ -49,7 +49,7 @@ int process_test(struct conn* c, struct pbpack* pkt)
     return 0;
 }
 
-//´¦ÀíÃ¿ÖÖÃüÁîÀàĞÍµÄÊı¾İ°ü
+//å¤„ç†æ¯ç§å‘½ä»¤ç±»å‹çš„æ•°æ®åŒ…
 int process_packet(struct conn* c, char* buf, int len)
 {
     int iret = 0;
@@ -62,7 +62,7 @@ int process_packet(struct conn* c, char* buf, int len)
         return -1;
     }
 
-    //»ñÈ¡µ½ÃüÁî×Ö
+    //è·å–åˆ°å‘½ä»¤å­—
     unsigned int ulCmd = GetCmd(pkt);
 
     switch(ulCmd)

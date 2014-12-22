@@ -29,8 +29,8 @@ typedef struct file_event
 {
     int mask;            /* one of AE_(READABLE|WRITABLE) */
 
-    event_proc *rproc;   //¶ÁÊÂ¼ş»Øµ÷º¯Êı
-    event_proc *wproc;   //Ğ´ÊÂ¼ş»Øµ÷º¯Êı
+    event_proc *rproc;   //è¯»äº‹ä»¶å›è°ƒå‡½æ•°
+    event_proc *wproc;   //å†™äº‹ä»¶å›è°ƒå‡½æ•°
     void *arg;
 } file_event;
 
@@ -41,14 +41,14 @@ typedef struct event_base
     int stop;
     int epfd;
 
-    int count;                      /*¿Í»§¶ËÊıÁ¿*/
+    int count;                      /*å®¢æˆ·ç«¯æ•°é‡*/
 
-    int fd;                         /*¼àÌıµÄfd*/
-    struct epoll_event *eevents;    /*EPOLLÊÂ¼ş*/
-    struct file_event  *fevents;    /*fd´¦ÀíÊÂ¼ş,Ã¿¸öfd¶ÔÓ¦Ò»¸ö*/
+    int fd;                         /*ç›‘å¬çš„fd*/
+    struct epoll_event *eevents;    /*EPOLLäº‹ä»¶*/
+    struct file_event  *fevents;    /*fdå¤„ç†äº‹ä»¶,æ¯ä¸ªfdå¯¹åº”ä¸€ä¸ª*/
 
-    struct min_heap* heap;           /*³¬Ê±ÊÂ¼şĞ¡¸ù¶Ñ*/
-    struct timeval* tv_cache;        /*»º´æµ±Ç°Ê±¼ä£¬·ÀÖ¹Ã¿´Îµ÷ÓÃÌ«¶àÏµÍ³º¯Êı*/
+    struct min_heap* heap;           /*è¶…æ—¶äº‹ä»¶å°æ ¹å †*/
+    struct timeval* tv_cache;        /*ç¼“å­˜å½“å‰æ—¶é—´ï¼Œé˜²æ­¢æ¯æ¬¡è°ƒç”¨å¤ªå¤šç³»ç»Ÿå‡½æ•°*/
 } event_base;
 
 struct event_base *event_base_new(int size);

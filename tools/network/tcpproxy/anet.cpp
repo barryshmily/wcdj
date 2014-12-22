@@ -2,7 +2,7 @@
 * File name:    tcpsvr.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	socket²Ù×÷·â×°£¬¸ù¾İredis¿ªÔ´°æ±¾ĞŞ¸Ä
+* Description: 	socketæ“ä½œå°è£…ï¼Œæ ¹æ®rediså¼€æºç‰ˆæœ¬ä¿®æ”¹
 * Log:
 */
 

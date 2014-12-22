@@ -2,7 +2,7 @@
 * File name:    event.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	ÊÂ¼þ´¦Àí¿ò¼Ü
+* Description: 	äº‹ä»¶å¤„ç†æ¡†æž¶
 * Log:
 */
 
@@ -95,7 +95,7 @@ int event_add(event_base *base, int fd, int mask, event_proc *proc, void *arg)
 
     struct file_event* fe = &base->fevents[fd];
 
-    //ÒÑ¾­×¢²á£¬Ö±½Ó·µ»Ø
+    //å·²ç»æ³¨å†Œï¼Œç›´æŽ¥è¿”å›ž
     if( fe->mask & mask )
     {
         return AE_OK;
@@ -149,7 +149,7 @@ int event_del(event_base *base, int fd, int mask)
         return AE_OK;
     }
 
-    //ÒÑ¾­É¾³ý£¬Ö±½Ó·µ»Ø
+    //å·²ç»åˆ é™¤ï¼Œç›´æŽ¥è¿”å›ž
     if( !(fe->mask & mask) )
     {
         return AE_OK;
@@ -182,7 +182,7 @@ int event_del(event_base *base, int fd, int mask)
     return AE_OK;
 }
 
-//×¢²á¼ÆÊ±Æ÷
+//æ³¨å†Œè®¡æ—¶å™¨
 void register_timer(struct event_base* base, struct time_event* ev, int usec)
 {
     ev->interval.tv_sec  = usec / 1000;
@@ -196,7 +196,7 @@ void register_timer(struct event_base* base, struct time_event* ev, int usec)
     return;
 }
 
-//É¾³ýÒÑ¾­×¢²áµÄ¼ÆÊ±Æ÷
+//åˆ é™¤å·²ç»æ³¨å†Œçš„è®¡æ—¶å™¨
 void unregister_timer(struct event_base* base, struct time_event* ev)
 {
     min_heap_erase(base->heap, ev);
@@ -204,7 +204,7 @@ void unregister_timer(struct event_base* base, struct time_event* ev)
     return;
 }
 
-//»ñÈ¡ÏÂÒ»¸ö³¬Ê±ÊÂ¼þµÄÊ±¼ä
+//èŽ·å–ä¸‹ä¸€ä¸ªè¶…æ—¶äº‹ä»¶çš„æ—¶é—´
 int timeout_next(struct event_base *base, struct timeval *tv)
 {
     struct timeval* now = base->tv_cache;
@@ -222,7 +222,7 @@ int timeout_next(struct event_base *base, struct timeval *tv)
         gettimeofday(base->tv_cache, NULL);
     }
 
-    //³¬Ê±Ê±¼äÒÑ¾­³¬¹ýµ±Ç°Ê±¼ä,²»ÐèÒªµÈ´ý
+    //è¶…æ—¶æ—¶é—´å·²ç»è¶…è¿‡å½“å‰æ—¶é—´,ä¸éœ€è¦ç­‰å¾…
     if (evutil_timercmp(&ev->timeout, now, <=))
     {
         tv->tv_sec = tv->tv_usec = 0;
@@ -237,7 +237,7 @@ int timeout_next(struct event_base *base, struct timeval *tv)
     return 0;
 }
 
-//´¦Àí³¬Ê±ÊÂ¼þ
+//å¤„ç†è¶…æ—¶äº‹ä»¶
 int process_timeout(struct event_base* base)
 {
     struct timeval* now = base->tv_cache;
@@ -250,10 +250,10 @@ int process_timeout(struct event_base* base)
             break;
         }
 
-        //É¾³ý¶¨Ê±Æ÷
+        //åˆ é™¤å®šæ—¶å™¨
         min_heap_pop(base->heap);
 
-        //µ÷ÓÃ¶ÔÓ¦³¬Ê±ÊÂ¼þµÄ´¦Àíº¯Êý
+        //è°ƒç”¨å¯¹åº”è¶…æ—¶äº‹ä»¶çš„å¤„ç†å‡½æ•°
         if( ev->proc )
         {
             ev->proc(ev->arg);

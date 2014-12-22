@@ -14,33 +14,33 @@ typedef unsigned short __u16;
 #define MAX_PKT_SIZE   (1024 * 1024)
 
 /*
- ******   Ğ­Òé¸ñÊ½    *********
- * unsigned char  SOH;     °üÍ·
- * unsigned int   len;     °ü³¤
- * unsigned int   cmd;     ÃüÁîºÅ
- * unsigned int   seq;     ĞòÁĞºÅ
- * unsigned char  body[n]; ±ä³¤µÄ°üÌå
- * unsigned char  EOT;     °üÎ²
+ ******   åè®®æ ¼å¼    *********
+ * unsigned char  SOH;     åŒ…å¤´
+ * unsigned int   len;     åŒ…é•¿
+ * unsigned int   cmd;     å‘½ä»¤å·
+ * unsigned int   seq;     åºåˆ—å·
+ * unsigned char  body[n]; å˜é•¿çš„åŒ…ä½“
+ * unsigned char  EOT;     åŒ…å°¾
 
    1     4    4    4    n      1
    SOH  len  cmd  seq  body    EOT
 */
 
-//°üÍ·ºÍ°üÎ²
+//åŒ…å¤´å’ŒåŒ…å°¾
 #define SOH              0x28
 #define EOT              0x29
 
-//°üÖĞ¸÷¸ö×Ö¶ÎµÄÎ»ÖÃ
+//åŒ…ä¸­å„ä¸ªå­—æ®µçš„ä½ç½®
 #define PACKAGE_SOH      0
 #define PACKAGE_LEN      1
 #define PACKAGE_CMD      5
 #define PACKAGE_SEQ      9
 #define PACKAGE_BODY     13
 
-//°üµÄÄ¬ÈÏsize
+//åŒ…çš„é»˜è®¤size
 #define PACKAGE_DEFAULT_SIZE   1024
 
-//°üµÄ×îĞ¡³¤¶È
+//åŒ…çš„æœ€å°é•¿åº¦
 #define PACKAGE_MIN_LEN  18
 
 struct pbpack

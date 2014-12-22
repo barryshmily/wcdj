@@ -202,7 +202,7 @@ int Open(const char* addr, int port)
     return -1;
 }
 
-//´Ófd½ÓÊÕremain_len³¤¶ÈµÄÊı¾İ£¬²¢´æÈëprcv_bufÖĞ
+//ä»fdæ¥æ”¶remain_lené•¿åº¦çš„æ•°æ®ï¼Œå¹¶å­˜å…¥prcv_bufä¸­
 int Receive(int fd, char* buf, int remain_len )
 {
     unsigned long data_len = 0;
@@ -220,7 +220,7 @@ int Receive(int fd, char* buf, int remain_len )
         }
         else if( recv_len < 0)
         {
-            //±»ÖĞ¶Ï£¬»òÕßÃ»ÓĞÊı¾İ·¢ËÍÔò¼ÌĞø
+            //è¢«ä¸­æ–­ï¼Œæˆ–è€…æ²¡æœ‰æ•°æ®å‘é€åˆ™ç»§ç»­
             if( errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EINPROGRESS)
             {
                 continue;
@@ -245,7 +245,7 @@ int Send(int fd, const char* buf, int remain_len)
     int ilen = 0;
     int send_len = 0;
 
-    //ÔÚ10ÃëÄÚ·¢ËÍremain_len³¤¶ÈµÄÊı¾İ
+    //åœ¨10ç§’å†…å‘é€remain_lené•¿åº¦çš„æ•°æ®
     while( remain_len > 0 )
     {
         send_len = send(fd, buf + ilen, remain_len, 0);
@@ -306,7 +306,7 @@ void start(const char* addr, int port, const char* info)
 
     struct pbpack* rpkt = CreatePack(buf, sizeof(buf) );
 
-    //´´½¨·¢ËÍµÄ°ü
+    //åˆ›å»ºå‘é€çš„åŒ…
     SetCmd(rpkt, 0x2900);
     AddAllData(rpkt, info, strlen(info) );
     PackToStr(rpkt);
@@ -353,7 +353,7 @@ void start(const char* addr, int port, const char* info)
 
 int main(int argc, char* argv[])
 {
-    //connsvrµÄIP connsvrµÄ¶Ë¿Ú ·¢ËÍµÄÄÚÈİ
+    //connsvrçš„IP connsvrçš„ç«¯å£ å‘é€çš„å†…å®¹
     if( argc < 4 )
     {
         printf("./conntest ip port info\n");

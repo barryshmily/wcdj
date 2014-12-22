@@ -2,7 +2,7 @@
 * File name:    main.cpp
 * @author:      jiwubu
 * @version:     V1.0   2014/09/14
-* Description: 	socket¶à½ø³ÌÊµÏÖ,¼à¿Ø×Ó½ø³Ì
+* Description: 	socketå¤šè¿›ç¨‹å®ç°,ç›‘æ§å­è¿›ç¨‹
 * Log:
 */
 
@@ -13,7 +13,7 @@
 #include "process.h"
 #include "connsvr.h"
 
-//ºóÌ¨Ö´ĞĞ
+//åå°æ‰§è¡Œ
 void init_daemon()
 {
     rlimit rlim,rlim_new;
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
 
     int fd = create_server(szServerIP, iServerPort);
 
-    //´´½¨server
+    //åˆ›å»ºserver
     if( fd < 0 )
     {
         Err("Can server [%s:%d] failed", szServerIP, iServerPort );
@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
 
     snprintf(szLogName, sizeof(szLogName) - 1, "connsvr-%d", getpid() );
 
-    //ÔÚ×Ó½ø³ÌÖĞÖØĞÂ´´½¨ÈÕÖ¾¾ä±ú,·ÀÖ¹¶à½ø³ÌÍ¬Ê±Ğ´Í¬Ò»ÈÕÖ¾Óë¹ö¶¯
+    //åœ¨å­è¿›ç¨‹ä¸­é‡æ–°åˆ›å»ºæ—¥å¿—å¥æŸ„,é˜²æ­¢å¤šè¿›ç¨‹åŒæ—¶å†™åŒä¸€æ—¥å¿—ä¸æ»šåŠ¨
     G_pLog = CreateLog(szLogName, 5, 1024 * 1024 * 10, 5);
 
     if ( NULL == G_pLog )
@@ -206,7 +206,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    //×¢²áSIGTERMĞÅºÅµÄ»Øµ÷º¯Êı,ÒÔ±ã½ÓÊÕ¸¸½ø³ÌÍË³öÊ±µÄĞÅºÅ
+    //æ³¨å†ŒSIGTERMä¿¡å·çš„å›è°ƒå‡½æ•°,ä»¥ä¾¿æ¥æ”¶çˆ¶è¿›ç¨‹é€€å‡ºæ—¶çš„ä¿¡å·
     signal(SIGTERM, child_handler);
 
     Info("create child process pid=%d", getpid());

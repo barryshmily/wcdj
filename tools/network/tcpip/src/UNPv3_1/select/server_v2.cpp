@@ -1,5 +1,5 @@
 // server_v2.cpp  
-// Ê¹ÓÃµ¥½ø³ÌºÍselectµÄTCP·şÎñÆ÷  
+// ä½¿ç”¨å•è¿›ç¨‹å’Œselectçš„TCPæœåŠ¡å™¨  
   
 #include <stdio.h>  
 #include <stdlib.h>  

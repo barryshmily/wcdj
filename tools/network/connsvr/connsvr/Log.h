@@ -9,23 +9,23 @@ extern "C"
 #include <sys/types.h>
 #include <pthread.h>
 
-    /* ¶¨ÒåÈÕÖ¾¼¶±ğ */
+    /* å®šä¹‰æ—¥å¿—çº§åˆ« */
 #define ERROR_LOG 0
 #define WARN_LOG  1
 #define INFO_LOG  2
 #define DEBUG_LOG 3
 #define LARGERNUM_LOG 4
 
-    /* Ä¬ÈÏlogµÄ×î´óÈÕÖ¾ÎÄ¼şÎª1M */
+    /* é»˜è®¤logçš„æœ€å¤§æ—¥å¿—æ–‡ä»¶ä¸º1M */
 #define MIN_LOGFILE_SIZE 1024*1024
 
-    /* ÎÄ¼şÃûµÄ×î´ó³¤¶ÈÎª512 */
+    /* æ–‡ä»¶åçš„æœ€å¤§é•¿åº¦ä¸º512 */
 #define PATH_LEN      512
 
     /**
-     * ÏòÈ«¾ÖG_pLogÖĞĞ´ÈÕÖ¾
-     * @param fmt ÈÕÖ¾µÄ¸ñÊ½
-     * @param ... ¿É±ä²ÎÊı
+     * å‘å…¨å±€G_pLogä¸­å†™æ—¥å¿—
+     * @param fmt æ—¥å¿—çš„æ ¼å¼
+     * @param ... å¯å˜å‚æ•°
      */
 #define Err(fmt, ...)\
 {    \
@@ -52,28 +52,28 @@ extern "C"
     LogRecord(G_pLog, __FILE__, __LINE__, LARGERNUM_LOG, fmt, ##__VA_ARGS__); \
 }
 
-    /*½á¹¹LOG ·â×°¶ÔÈÕÖ¾µÄ²Ù×÷*/
+    /*ç»“æ„LOG å°è£…å¯¹æ—¥å¿—çš„æ“ä½œ*/
     typedef struct LOG
     {
-        int log_fd; /*ÈÕÖ¾ÎÄ¼şÃèÊö·û*/
-        int log_size; /*ÈÕÖ¾ÎÄ¼ş´óĞ¡*/
-        int log_level; /*ÈÕÖ¾ÎÄ¼ş´óĞ¡*/
-        int log_filecount; /*ÈÕÖ¾ÎÄ¼şÑ­»·¸öÊı*/
-        int log_std; /*ÊÇ·ñÎª±ê×¼Êä³ö*/
-        char log_name[PATH_LEN]; /*ÈÕÖ¾ÎÄ¼şÃû*/
-        time_t log_date; /*ÈÕÖ¾Ê±¼ä*/
+        int log_fd; /*æ—¥å¿—æ–‡ä»¶æè¿°ç¬¦*/
+        int log_size; /*æ—¥å¿—æ–‡ä»¶å¤§å°*/
+        int log_level; /*æ—¥å¿—æ–‡ä»¶å¤§å°*/
+        int log_filecount; /*æ—¥å¿—æ–‡ä»¶å¾ªç¯ä¸ªæ•°*/
+        int log_std; /*æ˜¯å¦ä¸ºæ ‡å‡†è¾“å‡º*/
+        char log_name[PATH_LEN]; /*æ—¥å¿—æ–‡ä»¶å*/
+        time_t log_date; /*æ—¥å¿—æ—¶é—´*/
         pthread_mutex_t log_mutex;
     }LOG;
 
     extern struct LOG *G_pLog;
 
     /**
-     * ³õÊ¼»¯
-     * @param fileName  ÈÕÖ¾ÎÄ¼şÃû
-     * @param logLevel  ÈÕÖ¾¼¶±ğ
-     * @param maxSpace  ÈÕÖ¾ÎÄ¼ş´óĞ¡
-     * @param rollCount ÈÕÖ¾ÎÄ¼şÑ­»·µÄ¸öÊı
-     * @return   ptr    ÈÕÖ¾Ö¸Õë
+     * åˆå§‹åŒ–
+     * @param fileName  æ—¥å¿—æ–‡ä»¶å
+     * @param logLevel  æ—¥å¿—çº§åˆ«
+     * @param maxSpace  æ—¥å¿—æ–‡ä»¶å¤§å°
+     * @param rollCount æ—¥å¿—æ–‡ä»¶å¾ªç¯çš„ä¸ªæ•°
+     * @return   ptr    æ—¥å¿—æŒ‡é’ˆ
      */
     struct LOG *CreateLog(const char *fileName, int logLevel, int maxSpace,
             int rollCount);
@@ -82,7 +82,7 @@ extern "C"
             const char *fmt, ...);
 
     /**
-     * Ïú»ÙÖ¸Õë
+     * é”€æ¯æŒ‡é’ˆ
      */
     void DestroyLog(struct LOG *pLog);
 

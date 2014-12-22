@@ -56,7 +56,7 @@ int main()
 
 				// simulate to consume it
 				sleep(1);
-				// 如果clear后下次select还需要set, 否则无法监听
+				// 濡傛灉clear鍚庝笅娆elect杩橀渶瑕乻et, 鍚﹀垯鏃犳硶鐩戝惉
 				//FD_CLR(STDIN, &rset);
 			}
 		}

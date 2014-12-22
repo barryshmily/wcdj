@@ -1,48 +1,48 @@
 
 
-TCPЭ��ļ���Ҫ�㣺
+TCP协议的几个要点：
 
-(1) ����TCP��11��״̬�Ͷ�Ӧ��ÿ���׶ε�socket������
-�ɲο�����[1]
+(1) 理解TCP中11个状态和对应的每个阶段的socket函数；
+可参考连接[1]
 
-(2) TCP���ĸ�Ҫ�㣺
-(a) �����ӣ�
-(b) �ɿ����䣻
-(c) ���ݰ��򵽴
-(d) �˵����������ƣ�(�������ƺ�ӵ�����Ƶ�����һ���Ǿֲ��ģ�һ����ȫ�ֵ�)��
-IP�Ļ������ܵ㣺
-(a) ��ַ������
-(b) ·��ѡ��
+(2) TCP的四个要点：
+(a) 有连接；
+(b) 可靠传输；
+(c) 数据按序到达；
+(d) 端到端流量控制；(流量控制和拥塞控制的区别，一个是局部的，一个是全局的)；
+IP的基本功能点：
+(a) 地址管理；
+(b) 路由选择；
 
-(3) ͨ��SYN�ֽڲ�Я�����ݣ�������IP���ݱ�ֻ������һ��IP�ײ���һ��TCP�ײ������ܵ�TCPѡ�����TCPѡ�������
-(a) MSSѡ�Maximum Segment Size��ͨ��Զ����ܽ��յ����ֽڴ�С��
-(b) ���ڹ�ģѡ�ռ16bit = 2^16 = 65535����󴰿ڵĴ�С��������кŵ�һ�룻
-(c) ʱ���ѡ����ж����кŻ��Ƶ�����ʱ���ܻ��õ���
+(3) 通常SYN分节不携带数据，其所在IP数据报只包含有一个IP首部、一个TCP首部及可能的TCP选项。其中TCP选项包括：
+(a) MSS选项，Maximum Segment Size，通告对端它能接收的最大分节大小；
+(b) 窗口规模选项，占16bit = 2^16 = 65535，最大窗口的大小是最大序列号的一半；
+(c) 时间戳选项，在判断序列号回绕的问题时可能会用到；
 
-(4) TIME_WAIT״̬��Ҳ��Ϊ2MSL�ȴ�״̬����״̬��Ŀ���ǿ�����TCP�ٴη�������ACK���Է�ֹ���ACK��ʧ�������رն˳�ʱ���ط����һ��FIN��2MSL(��ֽ������ڵ�������Maximum Segment Lifetime, MSL)��MSL�ķ�Χ��[30s, 2min]����2MSL�ķ�Χ��[1min, 4min]��
-ÿ��TCP���Ķ�����һ��TTL��ռ8bit = 2^8 = 255����TCPЭ����Ա�֤������޵ķ����������д��ڵ�ʱ�� <= MSL�룻
-TIME_WAIT���ڵ����ɣ�
-(a) �ɿ���ʵ��TCPȫ˫�����ӵ���ֹ��
-(b) �����ϵ��ظ��ֽ�����������ʧ��
+(4) TIME_WAIT状态，也称为2MSL等待状态。此状态的目的是可以让TCP再次发送最后的ACK，以防止这个ACK丢失，被动关闭端超时并重发最后一个FIN。2MSL(最长分节生命期的两倍，Maximum Segment Lifetime, MSL)，MSL的范围是[30s, 2min]，即2MSL的范围是[1min, 4min]；
+每个TCP报文都包含一个TTL，占8bit = 2^8 = 255跳，TCP协议可以保证最大跳限的分组在网络中存在的时间 <= MSL秒；
+TIME_WAIT存在的理由：
+(a) 可靠地实现TCP全双工连接的终止；
+(b) 允许老的重复分节在网络中消失；
 
-���ں�Э���ͨ�����������������������TIME_WAIT���⣺ 
-(a) TIME_WAIT״̬�������ã�������ʹTIME_WAITռ�������ж˿ڣ�Ҳ����ܾ��µ�����
+在内核协议层通过设置以下两个参数来解决TIME_WAIT问题： 
+(a) TIME_WAIT状态可以重用，这样即使TIME_WAIT占满了所有端口，也不会拒绝新的请求
 echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse 
-(b) TIME_WAIT�������
+(b) TIME_WAIT尽快回收
 echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle
-��ʵֻ�޸�tcp_tw_recycle�Ϳ��Խ�����⣬TIME_WAIT����TCPЭ�鱾���ǲ�����򿪵ġ�tcp_tw_recycle�򿪺����ں̵ܶ�ʱ���ܽ�TIME_WAIT�Ķ˿ڻ��գ����Ǿ���ʱ�䲢δ�ҵ���Ӧ�����ϣ����Թ۲���1�����ң���ͬʱ���򿪼��ٻ��ջ����������ã�����һ�������⣬���磬����(client)�ڷ������һ��ACK�����������գ���ACK��ʧ�����ܷ���ʱ�ط�FIN��ǡ�ô�ʱ����ʹ�øղŵĶ˿ڽ������µ����ӣ��������յ�һ��FIN���Ӷ����������쳣�����رա�
-��TIME_WAIT���Ӧ����CLOSE_WAIT���⣬�����رյ�����£��Ѿ����յ�FIN�����ǻ�û�з����Լ���FIN��ʱ�̣����Ӵ���CLOSE_WAIT״̬�����������CLOSE_WAIT״̬ʱ��̡ܶ�������ִ�����CLOSE_WAIT����ĳ������¶Է��ر������ӣ����ǽ��շ�æ�������д��û�йر����ӵ��¡��ڴ���ʵ�ֵ�ʱ����Ҫ�ж�socket��һ��read����0���Ͽ����ӣ�read���ظ������һ��errno���������AGAIN��Ҳ�Ͽ����ӡ�
+其实只修改tcp_tw_recycle就可以解决问题，TIME_WAIT重用TCP协议本身是不建议打开的。tcp_tw_recycle打开后能在很短的时间能将TIME_WAIT的端口回收（但是具体时间并未找到相应的资料，测试观察在1秒左右）。同时，打开加速回收或者允许重用，存在一定的问题，例如，发起方(client)在发出最后一个ACK后立即被回收，而ACK丢失，接受方超时重发FIN，恰好此时发起方使用刚才的端口建立起新的连接，那它将收到一个FIN，从而可能引发异常被动关闭。
+与TIME_WAIT相对应的是CLOSE_WAIT问题，被动关闭的情况下，已经接收到FIN，但是还没有发送自己的FIN的时刻，连接处于CLOSE_WAIT状态。正常情况下CLOSE_WAIT状态时间很短。如果出现大量的CLOSE_WAIT，是某种情况下对方关闭了连接，但是接收方忙与读或者写，没有关闭连接导致。在代码实现的时候需要判断socket，一旦read返回0，断开连接，read返回负，检查一下errno，如果不是AGAIN，也断开连接。
 
-(5) Ϊʲô����һ��������Ҫ��������(������Դ����ʼ�����к�)������ֹһ��������Ҫ�Ĵλ���(��ֹ���ݴ��䣬������Դ)��
-(a) ��������ʱʹ���������֣�����Ϊͨ�ŵ�˫����ҪЭ�̺ã����ݿɿ��Ժ�����˳���Եı�Ҫ��Ϣ�������ֵĵ�����ʵ���ϲ�������Ҫ��������ģ���ȫ���Ժ������Ӵ�(piggybacking)һ���䣻
-(b) ��ֹ������Ҫ�Ĵλ��֣�������TCP�İ�ر�(half-close)��ɵģ���Ȼһ��TCP������ȫ˫���ģ�������������������ͬʱ���ݣ����ÿ��������뵥���ؽ��йرգ�
-TCP�İ�رգ�TCP�ṩ�����ӵ�һ���ڽ������ķ��ͺ��ܽ���������һ�����ݵ��������������ν�İ�رա�
+(5) 为什么建立一个连接需要三次握手(分配资源，初始化序列号)，而终止一个连接需要四次挥手(终止数据传输，回收资源)？
+(a) 建立连接时使用三次握手，是因为通信的双方需要协商好，数据可靠性和数据顺序性的必要信息，该握手的第三次实际上并不是需要单独传输的，完全可以和数据捎带(piggybacking)一起传输；
+(b) 终止连接需要四次挥手，这是由TCP的半关闭(half-close)造成的，既然一个TCP连接是全双工的，即数据在两个方向能同时传递，因此每个方向必须单独地进行关闭；
+TCP的半关闭：TCP提供了连接的一端在结束它的发送后还能接收来自另一端数据的能力，这就是所谓的半关闭。
 
 
-�ο���
-[1] TCP���ӽ�������ֹ��TCP״̬ת��
+参考：
+[1] TCP连接建立和终止及TCP状态转换
 http://blog.csdn.net/delphiwcdj/article/details/8194354
-[2] TCPЭ��������֢ȫ������
+[2] TCP协议疑难杂症全景解析
 http://blog.csdn.net/dog250/article/details/6612496
 
 
