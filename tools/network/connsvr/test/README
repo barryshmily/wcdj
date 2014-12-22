@@ -1,0 +1,3 @@
+测试connsvr，目前connsvr中只实现TEST协议，完全可以进行扩展,BODY中支持各种协议
+
+./test connsvr的IP connsvr的端口 发送的内容

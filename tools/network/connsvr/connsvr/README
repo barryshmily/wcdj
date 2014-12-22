@@ -1,0 +1,11 @@
+多进程框架，数据接收与发送无任何拷贝与上下文切换.目前只实现TEST协议。在BODY中可以实现自定义协议
+
+编译：
+make
+
+运行:
+./connsvr listenip listenport process num
+lstenip: 本机监听的IP
+lstenport: 本机监听的端口
+proxyip：需要代理服务器的IP
+proxyport:需要代理服务器的端口

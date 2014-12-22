@@ -1,0 +1,9 @@
+编译：
+make
+
+运行:
+./tcpproxy listenip listenport proxyip proxyport
+lstenip: 本机监听的IP
+lstenport: 本机监听的端口
+proxyip：需要代理服务器的IP
+proxyport:需要代理服务器的端口
