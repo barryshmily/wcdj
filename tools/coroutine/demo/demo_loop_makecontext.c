@@ -94,7 +94,7 @@ int main(void)
 }
 
 /*
- gcc -o demo_wiki demo_wiki.c -D_XOPEN_SOURCE -Wno-deprecated-declarations
+ gcc -o demo_loop_makecontext demo_loop_makecontext.c -D_XOPEN_SOURCE -Wno-deprecated-declarations
 
 output:
 gerryyang@mba:demo$./demo_wiki
