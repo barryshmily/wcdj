@@ -1,4 +1,9 @@
-// http://en.wikipedia.org/wiki/Setcontext
+/* http://en.wikipedia.org/wiki/Setcontext
+
+NOTE: this example is not consistent with the manual page or the specification.[1] The function makecontext requires additional parameters to be type int, but the example passes pointers. Thus, the example may fail on 64-bit machines (specifically LP64-architectures, where sizeof(void*) > sizeof(int)). This problem can be worked around by breaking up and reconstructing 64-bit values, but that introduces a performance penalty.
+
+"On architectures where int and pointer types are the same size (e.g., x86-32, where both types are 32 bits), you may be able to get away with passing pointers as arguments to makecontext() following argc. However, doing this is not guaranteed to be portable, is undefined according to the standards, and won't work on architectures where pointers are larger than ints. Nevertheless, starting with version 2.8, glibc makes some changes to makecontext(3), to permit this on some 64-bit architectures (e.g., x86-64)."
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
