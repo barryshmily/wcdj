@@ -39,4 +39,27 @@ main() {
 	
 	return 0;
 }
+/*
+output:
+
+MAC OSX:
+ggerryyang@mba:coroutine_cloudwu$./main
+main start
+mainfunc: coroutine id[0]
+coroutine 0 : 0
+COROUTINE_READY: coroutine id[-1] return
+break switch: coroutine id[-1] return
+mainfunc: coroutine id[1]
+coroutine 1 : 100
+COROUTINE_READY: coroutine id[-1] return
+break switch: coroutine id[-1] return
+
+COROUTINE_SUSPEND: coroutine id[-1] return
+break switch: coroutine id[-1] return
+COROUTINE_SUSPEND: coroutine id[-1] return
+break switch: coroutine id[-1] return
+^C
+
+
+*/
 

@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #define STACK_SIZE (1024*1024)
 #define DEFAULT_COROUTINE 16
@@ -107,6 +108,10 @@ mainfunc(uint32_t low32, uint32_t hi32) {
 	uintptr_t ptr = (uintptr_t)low32 | ((uintptr_t)hi32 << 32);
 	struct schedule *S = (struct schedule *)ptr;
 	int id = S->running;
+
+	// debug
+	printf("mainfunc: coroutine id[%d]\n", S->running);
+
 	struct coroutine *C = S->co[id];
 	C->func(S,C->ud);
 	_co_delete(C);
@@ -117,13 +122,17 @@ mainfunc(uint32_t low32, uint32_t hi32) {
 
 void 
 coroutine_resume(struct schedule * S, int id) {
+
 	assert(S->running == -1);
 	assert(id >=0 && id < S->cap);
+
 	struct coroutine *C = S->co[id];
 	if (C == NULL)
 		return;
+
 	int status = C->status;
 	switch(status) {
+
 	case COROUTINE_READY:
 		getcontext(&C->ctx);
 		C->ctx.uc_stack.ss_sp = S->stack;
@@ -134,16 +143,25 @@ coroutine_resume(struct schedule * S, int id) {
 		uintptr_t ptr = (uintptr_t)S;
 		makecontext(&C->ctx, (void (*)(void)) mainfunc, 2, (uint32_t)ptr, (uint32_t)(ptr>>32));
 		swapcontext(&S->main, &C->ctx);
+		// debug
+		printf("COROUTINE_READY: coroutine id[%d] return\n", S->running);
 		break;
+
 	case COROUTINE_SUSPEND:
 		memcpy(S->stack + STACK_SIZE - C->size, C->stack, C->size);
 		S->running = id;
 		C->status = COROUTINE_RUNNING;
 		swapcontext(&S->main, &C->ctx);
+		// debug
+		sleep(2);
+		printf("COROUTINE_SUSPEND: coroutine id[%d] return\n", S->running);
 		break;
+
 	default:
 		assert(0);
 	}
+
+	printf("break switch: coroutine id[%d] return\n", S->running);
 }
 
 static void
