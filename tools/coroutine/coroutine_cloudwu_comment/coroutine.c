@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <unistd.h>
 
-#define STACK_SIZE (1024*1024)
+#define STACK_SIZE (1024 * 1024)
 #define DEFAULT_COROUTINE 16
 
 struct coroutine;
@@ -135,7 +135,7 @@ void
 coroutine_resume(struct schedule * S, int id) {
 
 	assert(S->running == -1);
-	assert(id >=0 && id < S->cap);
+	assert(id >= 0 && id < S->cap);
 
 	struct coroutine *C = S->co[id];
 	if (C == NULL)
@@ -146,20 +146,23 @@ coroutine_resume(struct schedule * S, int id) {
 
 	case COROUTINE_READY:
 		getcontext(&C->ctx);
-		C->ctx.uc_stack.ss_sp = S->stack;       // 栈顶起始位置(SP)
-		C->ctx.uc_stack.ss_size = STACK_SIZE;   // 用于计算栈底
+		C->ctx.uc_stack.ss_sp = S->stack;       // stack top起始位置(SP)
+		C->ctx.uc_stack.ss_size = STACK_SIZE;   // 用于计算stack bottom(数据从stack bottom开始存放)
 		C->ctx.uc_link = &S->main;              // 协程执行完切回的context
-		S->running = id;
-		C->status = COROUTINE_RUNNING;
+		S->running = id;                        // 调度器记录当前准备调度的协程id
+		C->status = COROUTINE_RUNNING;          // 将准备调度的协程状态置为"待运行状态"
+
 		uintptr_t ptr = (uintptr_t)S;
 		// 需要考虑跨平台指针大小不同的问题
 		makecontext(&C->ctx, (void (*)(void)) mainfunc, 2, (uint32_t)ptr, (uint32_t)(ptr>>32));
-		swapcontext(&S->main, &C->ctx);         // 开始执行mainfunc回调, 执行完继续fall through, 即执行下一个协程
+		// 开始执行mainfunc回调, 执行完继续fall through, 即执行下一个协程
+		swapcontext(&S->main, &C->ctx);
 		// debug
 		printf("COROUTINE_READY: coroutine id[%d] return\n", S->running);
 		break;
 
 	case COROUTINE_SUSPEND:
+		// stack从高地址向低地址生长, 即从stack bottom向stack top存储数据
 		memcpy(S->stack + STACK_SIZE - C->size, C->stack, C->size);
 		S->running = id;
 		C->status = COROUTINE_RUNNING;
@@ -206,7 +209,7 @@ coroutine_yield(struct schedule * S) {
 	printf("coroutine_yield: coroutine id[%d] into\n", S->running);
 	assert(id >= 0);
 
-    // 注意makecontext()时指定ss_sp为S->stack, 当C->ctx执行时, 协程的栈是存储在S->stack上的, 即把堆上分配的一块空间当作栈来使用
+    // 注意makecontext()时指定ss_sp为S->stack, 当C->ctx执行时, 协程的栈是存储在S->stack上的, 即把堆上分配的一块空间虚拟成栈来使用
 	struct coroutine * C = S->co[id];
 
 	// 与栈顶S->stack的位置进行比较
@@ -224,7 +227,7 @@ coroutine_yield(struct schedule * S) {
 
 int 
 coroutine_status(struct schedule * S, int id) {
-	assert(id>=0 && id < S->cap);
+	assert(id >= 0 && id < S->cap);
 	if (S->co[id] == NULL) {
 		return COROUTINE_DEAD;
 	}
