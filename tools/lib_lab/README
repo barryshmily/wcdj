@@ -1,5 +1,9 @@
 
 
+http://www.dwheeler.com/program-library/Program-Library-HOWTO/index.html
+
+Tips:
+
 (1) 使用LD_DEBUG环境变量查看某程序加载so的过程
 LD_DEBUG=help ./bin
 LD_DEBUG=libs ./bin
