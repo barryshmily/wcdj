@@ -1,6 +1,9 @@
 
-
+Refer:
 http://www.dwheeler.com/program-library/Program-Library-HOWTO/index.html
+http://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
+http://www.akkadia.org/drepper/dsohowto.pdf
+
 
 This HOWTO for programmers discusses how to create and use program libraries on Linux using the GNU toolset. A ``program library'' is simply a file containing compiled code (and data) that is to be incorporated later into a program; program libraries allow programs to be more modular, faster to recompile, and easier to update. Program libraries can be divided into three types: static libraries, shared libraries, and dynamically loaded (DL) libraries.
 
