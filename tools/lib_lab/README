@@ -95,6 +95,19 @@ Dynamically loaded (DL) libraries are libraries that are loaded at times other t
 
 In Linux, DL libraries aren't actually special from the point-of-view of their format; they are built as standard object files or standard shared libraries as discussed above. The main difference is that the libraries aren't automatically loaded at program link time or start-up; instead, there is an API for opening a library, looking up symbols, handling errors, and closing the library. C users will need to include the header file <dlfcn.h> to use this API.
 
+(7) nm command
+The nm(1) command can report the list of symbols in a given library. It works on both static and shared libraries. For a given library nm(1) can list the symbol names defined, each symbol's value, and the symbol's type. It can also identify where the symbol was defined in the source code (by filename and line number), if that information is available in the library (see the -l option).
+
+The symbol type requires a little more explanation. The type is displayed as a letter; lowercase means that the symbol is local, while uppercase means that the symbol is global (external). Typical symbol types include T (a normal definition in the code section), D (initialized data section), B (uninitialized data section), U (undefined; the symbol is used by the library but not defined by the library), and W (weak; if another library also defines this symbol, that definition overrides this one).
+
+If you know the name of a function, but you truly can't remember what library it was defined in, you can use nm's ``-o'' option (which prefixes the filename in each line) along with grep to find the library name. From a Bourne shell, you can search all the libraries in /lib, /usr/lib, direct subdirectories of /usr/lib, and /usr/local/lib for ``cos'' as follows:
+
+nm -o /lib/* /usr/lib/* /usr/lib/*/* \
+      /usr/local/lib/* 2> /dev/null | grep 'cos$' 
+
+Much more information about nm can be found in the nm ``info'' documentation locally installed at info:binutils#nm.
+
+
 
 
 
