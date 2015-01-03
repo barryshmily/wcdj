@@ -107,6 +107,17 @@ nm -o /lib/* /usr/lib/* /usr/lib/*/* \
 
 Much more information about nm can be found in the nm ``info'' documentation locally installed at info:binutils#nm.
 
+(8) Merging Libraries into Larger Shared Libraries
+What if you want to first create smaller libraries, then later merge them into larger libraries? In this case, you may find ld's "--whole-archive" option useful, which can be used to forcibly bring .a files and link them into an .so file.
+
+Here's an example of how to use --whole-archive:
+
+ gcc -shared -Wl,-soname,libmylib.$(VER) -o libmylib.so $(OBJECTS) \
+ -Wl,--whole-archive $(LIBS_TO_LINK) -Wl,--no-whole-archive \
+ $(REGULAR_LIBS)
+
+As the ld documentation notes, be sure to use --no-whole-archive option at the end, or gcc will try to merge in the standard libraries as well. My thanks to Kendall Bennett for both suggesting this recipe, as well as providing it.
+
 
 
 
