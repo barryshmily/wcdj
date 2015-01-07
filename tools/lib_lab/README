@@ -123,7 +123,16 @@ Here's an example of how to use --whole-archive:
 
 As the ld documentation notes, be sure to use --no-whole-archive option at the end, or gcc will try to merge in the standard libraries as well. My thanks to Kendall Bennett for both suggesting this recipe, as well as providing it.
 
+(9) -fPIC
 
+检查目标文件在编译时是否使用了 –fPIC 选项，即检查目标文件符号表中是否存在名称_GLOBAL_OFFSET_TABLE_。
+gerryyang@TENCENT64;~/src/tdf_proj/src/app/src/portal_frame/obj$nm portal_frame.o |grep _GLOBAL 
+                 U _GLOBAL_OFFSET_TABLE_
+gerryyang@TENCENT64;~/src/tdf_proj/src/app/src/portal_frame/obj$readelf -s portal_frame.o | grep _GLOBAL
+   219: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _GLOBAL_OFFSET_TABLE_
+
+
+ 
 
 
 
