@@ -31,3 +31,12 @@ int main(void) {
 	puts("should nothappen");   
 	exit(EXIT_FAILURE);   
 } 
+/*
+linux:
+root@gerryyang:~/code# ./test 
+notvulnerable
+root@gerryyang:~/code# ldd test 
+	linux-vdso.so.1 =>  (0x00007fff24cfd000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb5cae43000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fb5cb211000)
+ */
