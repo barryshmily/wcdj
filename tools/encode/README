@@ -9,6 +9,15 @@ http://blog.csdn.net/delphiwcdj/article/details/7746446
 iconv -f GBK -t UTF-8 file1 > file2
 -f 原编码 -t 目标编码 -c 忽略无法转换的字符
 
+file -i filename 
+查看文件编码
+
+递归转换(包括子文件夹)
+find default -type d -exec mkdir -p utf/{} \;
+find default -type f -exec iconv -f GBK -t UTF-8 {} -o utf/{} \;
+这两行命令将default目录下的文件由GBK编码转换为UTF-8编码，目录结构不变，转码后的文件保存在utf/default目录下。
+
+
 3, enca -- detect and convert encoding of text files
 brew update
 brew install enca
@@ -30,6 +39,10 @@ gerryyang@mba:encode$enca README.md
 Universal transformation format 8 bits; UTF-8
 (3) 将当前某目录的所有文件转换为本地编码
 find dir_path -type f | xargs enconv
+
+enca -L 当前语言 -x 目标编码 文件名
+例如要把当前目录下的所有文件都转成utf-8
+enca -L zh_CN -x utf-8 *
 
 
 
