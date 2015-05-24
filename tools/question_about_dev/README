@@ -30,6 +30,8 @@ int * const p2 = &i;
 (1) 关键字explicit只对一个实参的构造函数有效；
 (2) 需要多个实参的构造函数不能用于执行隐士转换，所以无须将这些构造函数指定为explicit的；
 (3) 只能在类内声明构造函数时使用explicit关键字，在类外部定义时不应重复；
+12，extern "C"的作用
+http://blog.csdn.net/delphiwcdj/article/details/7173387
 
 
 
