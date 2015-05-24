@@ -1,28 +1,24 @@
-# Makefile, wcdj
+CC     =  gcc
+CXX    =  g++
+CFLAGS =  -g -Wall -Os
 
-CC = gcc
-CXX = g++
-CFLAGS= -g -Wall -ansi
+INCLUDE =  .
+LIBPATH =
+PUBLIBS =
+LIBS    =  $(PUBLIBS)
 
-INCLUDE = . 
-LIBPATH = 
-PUBLIBS = 
-LIBS = $(PUBLIBS)
+BIN  =  demo
+OBJS =  cppFile.o cFile.o
 
-BIN_SERVER = myapp
-OBJS_SERVER = cppFile.o cFile.o
+all: $(BIN) 
 
-BINS = $(BIN_SERVER)
-OBJS = $(OBJS_SERVER)
-
-all: $(BIN_SERVER) 
-
-$(BIN_SERVER):$(OBJS_SERVER)	
+$(BIN): $(OBJS)
 	$(CXX) -o $@ $^ $(LIBPATH) $(LIBS)
 
 install:
 	@echo "nothing to install"
 
 clean:
-	@-rm -f $(OBJS) $(BINS)
+	@-rm -f $(OBJS) $(BIN)
 	@echo "clean over"
+

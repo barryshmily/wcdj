@@ -1,13 +1,5 @@
-// cppFile.cpp
-
-#include "cppFile.h"
 #include <stdio.h>
-/*
-extern "C"
-{
-	#include "cFile.h"
-}
-*/
+#include "cppFile.h"
 
 int main(int argc, char* argv[])
 {
