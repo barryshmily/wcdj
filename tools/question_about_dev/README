@@ -34,6 +34,11 @@ int * const p2 = &i;
 (3) 只能在类内声明构造函数时使用explicit关键字，在类外部定义时不应重复；
 12，extern "C"的作用
 http://blog.csdn.net/delphiwcdj/article/details/7173387
+13，使用表达式new失败如何处理？
+默认情况下，如果new不能分配所要求的内存空间，它会抛出一个类型为bad_alloc的异常。我们可以改变使用new的方式来阻止它抛出异常：
+int *p1 = new int;           // 如果分配失败，new抛出std::bad_alloc
+int *p2 = new (nothrow) int; // 如果分配失败，new返回一个空指针
+bad_alloc和nothrow都定义在头文件new中。
 
 -----------------
 网络部分
