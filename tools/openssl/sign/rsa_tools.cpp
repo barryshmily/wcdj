@@ -165,9 +165,7 @@ namespace RSATOOLS
 		BIO *bio       =  NULL;
 		EVP_PKEY *pKey =  NULL;
 
-
-		int keyLen = strPrivateKey.size();
-		for(int i = 64; i < keyLen; i += 64)
+		for (int i = 64; i < strPrivateKey.size(); i += 64)
 		{
 			if (strPrivateKey[i] != '\n')
 			{
@@ -430,8 +428,7 @@ namespace RSATOOLS
 		BIO *bio       =  NULL;
 		EVP_PKEY *pKey =  NULL;
 
-		int keyLen = strPubKey.size();
-		for(int i = 64; i < keyLen; i += 64)
+		for (int i = 64; i < strPubKey.size(); i += 64)
 		{
 			if (strPubKey[i] != '\n')
 			{
