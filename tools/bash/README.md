@@ -21,7 +21,7 @@ CTRL-r |  Search history
 **(2) Bash Variables**
 
 环境变量 | 含义
-:-|:-
+:----|:----
 env | Show environment variables
 echo $NAME | Output value of $NAME variable
 export NAME=value | Set $NAME to value
@@ -32,7 +32,7 @@ $SHELL | Current shell
 **(3) IO Redirection**
 
 命令 | 作用
-:-|:-
+:----|:----
 cmd < file | Input of cmd from file
 cmd1 < cmd2 | Output of cmd2 as file input to cmd1
 cmd > file | Standard output (stdout) of cmd to file
@@ -46,7 +46,7 @@ cmd &>file | every output of cmd to file
 **(4) Search Files**
 
 命令 | 作用
-:-|:-
+:----|:----
 grep pattern files | Search for pattern in files
 grep -i | Case insensitive search
 grep -r | Recursive search
@@ -61,7 +61,7 @@ locate file | Find file (quick search of system index)
 **(5) File Operations**
 
 命令 | 作用
-:-|:-
+:----|:----
 touch file1 | Create file1
 cat file1 file2 | Concatenate files and output
 less file1 | View and paginate file1
@@ -76,14 +76,14 @@ tail -f file1 | Output last lines of file1 as it changes
 **(6) Pipes**
 
 命令 | 作用
-:-|:-
+:----|:----
 cmd1 \| cmd2 | stdout of cmd1 to cmd2
 cmd1 \|& cmd2 | stderr of cmd1 to cmd2
 
 **(7) Command Lists**
 
 命令 | 作用
-:-|:-
+:----|:----
 cmd1;cmd2 | Run cmd1 then cmd2
 cmd1 && cmd2 | Run cmd2 if cmd1 is successful
 cmd1 \|\| cmd2 | Run cmd2 if cmd1 is not successful
