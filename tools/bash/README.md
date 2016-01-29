@@ -3,7 +3,7 @@
 **(1) Bash shortcuts**
 
 命令 | 作用
-:-|:-
+:----|:----
 CTRL-c |  Stop current command
 CTRL-z |  Sleep program
 CTRL-a |  Go to start of line
