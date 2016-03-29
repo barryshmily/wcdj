@@ -4,8 +4,12 @@
 #include <vector>
 #include <string>
 
+/* 支持解析每个元素的最大长度为128字节
+ * */
 void split_str(const char* orig, const char* splitor, std::vector<std::string>& result)
 {
+	const int element_max_len = 128;
+
 	size_t head = strspn(orig, splitor);
 	size_t end = 0;
 
@@ -14,7 +18,7 @@ void split_str(const char* orig, const char* splitor, std::vector<std::string>& 
 
 	while ('\0' != *head_var) {
 
-		char element[128] = {0};
+		char element[element_max_len] = {0};
 		end = strcspn(head_var, splitor);
 		end_var = head_var + end;
 		if ('\0' == *end_var ) {
