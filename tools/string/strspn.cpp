@@ -45,3 +45,10 @@ int main()
 
 	return 0;
 }
+/*
+output:
+123
+456
+78
+9
+ */
