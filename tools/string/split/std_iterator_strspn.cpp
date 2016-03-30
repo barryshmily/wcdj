@@ -94,12 +94,10 @@ int main() {
 		cout << *itr << endl;
 	cout << endl;
 
-#if 0
 	// 例2: C++11 的 range-for
 	for (auto s : SplitStr(test, deliminators))
 		cout << s << endl;
 	cout << endl;
-#endif
 
 	// 例3: 储存至 vector
 	vector<string> v;
@@ -114,6 +112,10 @@ int main() {
 
 	return 0;
 }
+/*
+output:
+g++ -std=c++11 -o std_iterator_strspn std_iterator_strspn.cpp 
+ */
 
 
 
