@@ -1,0 +1,2 @@
+sudo grep -a 'CchannelProvideDecrpt' -A4000 -B4000 /dev/sda4 > refile 
+
