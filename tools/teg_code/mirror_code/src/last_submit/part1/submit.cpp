@@ -216,7 +216,7 @@ std::string TrimSplash(const std::string &text)
 		if (cur >= sp && *cur == '\\') {
 			if (!((cur - 1) >= sp && *(cur - 1) == '\\')) {
 				splah_new_line = true;
-				if (cur - 1 > sp) {
+				if (cur > sp) {
 					res.append(std::string(sp, cur));
 				}
 			}
