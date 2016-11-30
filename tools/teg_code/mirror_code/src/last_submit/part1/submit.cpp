@@ -102,29 +102,29 @@ static std::ostream& operator << (std::ostream& os, const TokenType &type)
 static const int MAX_STATE = 32;
 static int ParseTable[MAX_STATE][256];
 static bool ParseTableInited = false;
-static const int STATE_NUMBER = 1;	//ok
-static const int STATE_FLOAT_NUMBER_DOT_START = 2;
-static const int STATE_FLOAT_NUMBER = 3;	//ok
-static const int STATE_FLOAT_NUMBER_E_START = 4;
-static const int STATE_FLOAT_NUMBER_E_SIGN_START = 5;
-static const int STATE_FLOAT_NUMBER_E_SIGNED = 6; //ok
-static const int STATE_ID = 7;
-static const int STATE_ASSIGN = 8;
-static const int STATE_OPERATOR = 9;
-static const int STATE_LOPERATOR = 10;
-static const int STATE_BRACKET = 11;
-static const int STATE_ARROW = 12;
-static const int STATE_COLON = 13;
-static const int STATE_USING = 14;
-static const int STATE_SPACE = 15;
 
-static const int STATE_CHAR_START = 16;
-static const int STATE_CHAR_ESCAPE = 17;
-static const int STATE_CHAR = 18;
-static const int STATE_CHAR_END = 19;
-static const int STATE_STRING = 20;
-static const int STATE_STRING_ESCAPE = 21;
-static const int STATE_STRING_END = 22;
+static const int STATE_NUMBER                    =  1;
+static const int STATE_FLOAT_NUMBER_DOT_START    =  2;
+static const int STATE_FLOAT_NUMBER              =  3;
+static const int STATE_FLOAT_NUMBER_E_START      =  4;
+static const int STATE_FLOAT_NUMBER_E_SIGN_START =  5;
+static const int STATE_FLOAT_NUMBER_E_SIGNED     =  6;
+static const int STATE_ID                        =  7;
+static const int STATE_ASSIGN                    =  8;
+static const int STATE_OPERATOR                  =  9;
+static const int STATE_LOPERATOR                 =  10;
+static const int STATE_BRACKET                   =  11;
+static const int STATE_ARROW                     =  12;
+static const int STATE_COLON                     =  13;
+static const int STATE_USING                     =  14;
+static const int STATE_SPACE                     =  15;
+static const int STATE_CHAR_START                =  16;
+static const int STATE_CHAR_ESCAPE               =  17;
+static const int STATE_CHAR                      =  18;
+static const int STATE_CHAR_END                  =  19;
+static const int STATE_STRING                    =  20;
+static const int STATE_STRING_ESCAPE             =  21;
+static const int STATE_STRING_END                =  22;
 
 
 void InitParseTable()	/*特殊处理 \ */
@@ -160,8 +160,8 @@ void InitParseTable()	/*特殊处理 \ */
 		ParseTable[STATE_ID][i + 'a' - 'A'] = STATE_ID;
 	}
 
-	ParseTable[0]['_'] = STATE_ID;
-	ParseTable[STATE_ID]['_'] = STATE_ID;
+	ParseTable[0]['_']        =  STATE_ID;
+	ParseTable[STATE_ID]['_'] =  STATE_ID;
 
 	ParseTable[0]['='] = STATE_ASSIGN;
 
@@ -359,9 +359,7 @@ vector<Token> SplitString(const vector<Token> &tokens)
 		if (tokens[i].Type == TOKEN_STRING && tokens[i].Content.length() > 4 && tokens[i].Content[1] !='\\') {
 			string val = tokens[i].Content.substr(0, 2) + "\"\"" + tokens[i].Content.substr(2);
 			res.push_back(Token(val, TOKEN_STRING));
-		}
-		else
-		{
+		} else {
 			res.push_back(tokens[i]);
 		}
 	}
@@ -682,7 +680,7 @@ std::string proc(const std::string &content)
 	TokenParse(str, tokens);
 
 	for (size_t i = 0; i < tokens.size(); ++i) {
-		//std::cout << tokens[i].Type << " : " << tokens[i].Content << endl;;
+		//std::cout << tokens[i].Type << " : " << tokens[i].Content << endl;
 	}
 
 	tokens = SplitString(tokens);
