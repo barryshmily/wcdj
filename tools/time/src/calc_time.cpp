@@ -49,6 +49,29 @@ char * getstimeval(char *buf)
 	return buf;
 }
 
+time_t strptimeval(const std::string& buf)
+{
+	struct tm tm;
+	memset(&tm, 0x0, sizeof(struct tm));
+	// char *strptime(const char *s, const char *format, struct tm *tm);
+	// "2001-11-12 18:31:01"
+	strptime(buf.c_str(), "%Y-%m-%d %H:%M:%S", &tm);
+	return mktime(&tm);
+}
 
+int check_expire(std::string& begin_time, std::string& end_time, std::string& checktime)
+{
+	time_t bt = strptimeval(begin_time);
+	time_t et = strptimeval(end_time);
+
+	if (checktime.empty()) {
+		checktime = time(NULL);
+	}
+
+	if (bt <= checktime && checktime < et) {
+		return 0;
+	}
+	return -1;
+}
 
 
