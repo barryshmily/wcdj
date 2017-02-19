@@ -43,7 +43,7 @@ public:
 	int remove();
 	int control(int cmd, struct msqid_ds* ds = 0);
 	int get_id() const {return this->_msgid;}
-	void set_id(int msgid){this->_msgid = msgid;}
+	void set_id(int msgid) {this->_msgid = msgid;}
 
 private:
 	key_t _key;

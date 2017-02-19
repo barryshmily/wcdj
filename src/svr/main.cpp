@@ -17,31 +17,31 @@ unsigned char SIG_STAT       =  0;
 
 void usage(const string& progname)
 {
-    cout << "Welcome to use WCDJ-svr, the version is:\n" << VERSION << " \n"
-        << "Usage: " << progname << " [OPTION]..." << "\n"
-        << "       " << progname << " -config=configfile [OPTION]..." << "\n"
-        << "       OPTION format: -name=value" << "\n" << endl;
+	cout << "Welcome to use WCDJ-svr, the version is:\n" << VERSION << " \n"
+	     << "Usage: " << progname << " [OPTION]..." << "\n"
+	     << "       " << progname << " -config=configfile [OPTION]..." << "\n"
+	     << "       OPTION format: -name=value" << "\n" << endl;
 }
 
 void sigusr1_handle(int iSigVal)
 {
-    SIG_STAT = SIG_SHOW;
-    signal(SIGUSR1, sigusr1_handle);
+	SIG_STAT = SIG_SHOW;
+	signal(SIGUSR1, sigusr1_handle);
 }
 
 void sigusr2_handle(int iSigVal)
 {
-    SIG_STAT = SIG_QUIT;
-    signal(SIGUSR2, sigusr2_handle);
+	SIG_STAT = SIG_QUIT;
+	signal(SIGUSR2, sigusr2_handle);
 }
 
 void daemon()
 {
 	pid_t pid;
 
-	if ((pid = fork()) != 0) 
+	if ((pid = fork()) != 0)
 	{
-		exit(0); 
+		exit(0);
 	}
 
 	setsid();
@@ -61,8 +61,8 @@ void daemon()
 	sigemptyset(&sig.sa_mask);
 	sigaction(SIGPIPE, &sig, NULL);
 
-	if ((pid = fork()) != 0) 
-	{ 
+	if ((pid = fork()) != 0)
+	{
 		exit(0);
 	}
 
@@ -71,17 +71,17 @@ void daemon()
 	umask(0);
 
 #ifdef NOPRINT_TERMINAL
-	for (int i = 0; i < 64; ++i) 
+	for (int i = 0; i < 64; ++i)
 		close(i);
 #else
-	for (int i = 3; i < 64; ++i) 
+	for (int i = 3; i < 64; ++i)
 		close(i);
 #endif
 
 }
 
 int create_pid_file(const char *sPIDFile)
-{    
+{
 	FILE *pstFile;
 
 	pstFile = fopen(sPIDFile, "w");
@@ -91,7 +91,7 @@ int create_pid_file(const char *sPIDFile)
 		return E_FAIL;
 	}
 	else
-	{  
+	{
 		fprintf(pstFile, "%d", getpid());
 		fclose(pstFile);
 	}
@@ -128,10 +128,10 @@ void read_conf(COption &opt, CAppConfig &appconf_instance)
 int main(int argc, char **argv)
 {
 	// check input
-    if (argc < 2) {
-        usage(argv[0]);
-        return E_FAIL;
-    } 
+	if (argc < 2) {
+		usage(argv[0]);
+		return E_FAIL;
+	}
 
 	// parse input paras
 	COption opt;
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 
 	// check paras
 	appconf_instance.check_conf();
-	
+
 	// set to daemon process
 	daemon();
 

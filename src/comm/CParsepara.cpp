@@ -2,8 +2,8 @@
 
 using namespace std;
 
-/* 
- * CSpacePara 
+/*
+ * CSpacePara
  * */
 void wcdj::util::CSpacePara::decode(const string& s)
 {
@@ -14,10 +14,10 @@ void wcdj::util::CSpacePara::decode(const string& s)
 
 	while (*p != 0) {
 		if (is_split((unsigned char)*p)) {
-			p++; 
+			p++;
 			continue;
 		}
-		
+
 		p1 = p;
 		while (*p1 != 0) {
 			if (is_split((unsigned char)*p1)) {

@@ -1,7 +1,7 @@
 #include "CSV_message_queue.h"
 
 CSVMessageQueue::CSVMessageQueue()
-:  _key(-1), _oflag(0), _msgid(-1), _is_init(false)
+	:  _key(-1), _oflag(0), _msgid(-1), _is_init(false)
 {
 	memset(_error_text, 0x0, sizeof(_error_text));
 }
@@ -30,21 +30,21 @@ CSVMessageQueue::~CSVMessageQueue()
 int
 CSVMessageQueue::create()
 {
-	if (!_is_init) 
+	if (!_is_init)
 	{
 		snprintf(_error_text, sizeof(_error_text), "%s", "CSVMessageQueue not init");
 		return -1;
 	}
 
 	_msgid = msgget(_key, _oflag | IPC_CREAT | IPC_EXCL);
-	if (_msgid < 0) 
+	if (_msgid < 0)
 	{
-		if (errno != EEXIST) 
+		if (errno != EEXIST)
 		{
 			snprintf(_error_text, sizeof(_error_text), "msgget: msgid[%d] err[%d:%s]", _msgid, errno, strerror(errno));
 			return -1;
 		}
-		else 
+		else
 		{
 			// MQ has existed
 			return 1;
@@ -57,14 +57,14 @@ CSVMessageQueue::create()
 int
 CSVMessageQueue::open()
 {
-	if (!_is_init) 
+	if (!_is_init)
 	{
 		snprintf(_error_text, sizeof(_error_text), "%s", "CSVMessageQueue not init");
 		return -1;
 	}
 
 	_msgid = msgget(_key, _oflag);
-	if (_msgid < 0) 
+	if (_msgid < 0)
 	{
 		snprintf(_error_text, sizeof(_error_text), "msgget: msgid[%d] err[%d:%s]", _msgid, errno, strerror(errno));
 		return -1;
@@ -82,7 +82,7 @@ CSVMessageQueue::close()
 int
 CSVMessageQueue::send(ur_msgbuf& msg, size_t msgsize, int mflags)
 {
-	if (msgsnd(_msgid, (struct msgbuf *) &msg, msgsize, mflags) < 0) 
+	if (msgsnd(_msgid, (struct msgbuf *) &msg, msgsize, mflags) < 0)
 	{
 		snprintf(_error_text, sizeof(_error_text), "msgsnd: msgid[%d] err[%d:%s]", _msgid, errno, strerror(errno));
 		return -1;
@@ -94,7 +94,7 @@ CSVMessageQueue::send(ur_msgbuf& msg, size_t msgsize, int mflags)
 int
 CSVMessageQueue::recv(ur_msgbuf& msg, size_t msgsize, long mtype, int mflags)
 {
-	if (msgrcv(_msgid, (struct msgbuf *) &msg, msgsize, mtype, mflags) < 0) 
+	if (msgrcv(_msgid, (struct msgbuf *) &msg, msgsize, mtype, mflags) < 0)
 	{
 		snprintf(_error_text, sizeof(_error_text), "msgrcv: msgid[%d] err[%d:%s]", _msgid, errno, strerror(errno));
 		return -1;
@@ -112,7 +112,7 @@ CSVMessageQueue::remove()
 int
 CSVMessageQueue::control(int cmd, struct msqid_ds *ds /*= 0*/)
 {
-	if (msgctl(_msgid, cmd, (struct msqid_ds *) ds) < 0) 
+	if (msgctl(_msgid, cmd, (struct msqid_ds *) ds) < 0)
 	{
 		snprintf(_error_text, sizeof(_error_text), "msgctl: msgid[%d] err[%d:%s]", _msgid, errno, strerror(errno));
 		return -1;

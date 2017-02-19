@@ -14,7 +14,7 @@ extern const unsigned char SIG_QUIT;
 extern unsigned char SIG_STAT;
 
 
-class CServer 
+class CServer
 {
 public:
 	CServer();
