@@ -13,7 +13,7 @@ CAppConfig& CAppConfig::getapp_config_instance()
 
 void CAppConfig::check_conf() throw (runtime_error)
 {
-	if (m_strprojecthome == "") throw runtime_error("please check option projecthome");
+	if (m_strprojecthome.empty()) throw runtime_error("please check option projecthome");
 	if (m_iclient_svmqkey == 0) throw runtime_error("please check option clientsvmqkey");
 	if (m_iserver_svmqkey == 0) throw runtime_error("please check option serversvmqkey");
 

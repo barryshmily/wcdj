@@ -1,5 +1,5 @@
-#ifndef __WCDJ_SERVER_H__
-#define __WCDJ_SERVER_H__
+#ifndef __SERVER_H__
+#define __SERVER_H__
 
 #include <unistd.h>
 #include <stdexcept>
@@ -23,6 +23,7 @@ public:
 	void init(CAppConfig &appconf_instance) throw(runtime_error, logic_error);
 	void run();
 
+private:
 	// SV-MQ operations
 	void init_svmq(CAppConfig &appconf_instance) throw (runtime_error);
 	void create_svmq(CSVMessageQueue * &pCSVMessageQueue, int iSvMqKey) throw (runtime_error);
@@ -30,7 +31,6 @@ public:
 	int dequeue(CSVMessageQueue * &pCSVMessageQueue, void *vData, int iDataLen, int flag = IPC_NOWAIT);
 
 	void clean_up();
-
 
 private:
 	CSVMessageQueue *m_pCSVMessageQueueClient;

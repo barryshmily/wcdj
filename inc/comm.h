@@ -1,5 +1,5 @@
-#ifndef __WCDJ_COMM_H__
-#define __WCDJ_COMM_H__
+#ifndef __COMM_H__
+#define __COMM_H__
 
 #include <signal.h>
 #include <stdio.h>
@@ -8,10 +8,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-
 #define E_FAIL -1
 #define E_OK 0
-
 
 // print log to tmp file
 #define __LOG(format, ...) \

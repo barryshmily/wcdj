@@ -1,4 +1,4 @@
-#include "comm.h"
+#include "Comm.h"
 #include "COption.h"
 #include "CServer.h"
 #include "CAppConfig.h"
@@ -96,25 +96,26 @@ int create_pid_file(const char *sPIDFile)
 		fclose(pstFile);
 	}
 
-	return 0;
+	return E_OK;
 }
 
 void read_conf(COption &opt, CAppConfig &appconf_instance)
 {
 	// if find config file, then read firstly
-	if (opt["config"] != "")
-	{
+	if (!opt["config"].empty()) {
 		// TODO
 	}
 
 	// after reading config from file then read terminal para
-	if (opt["projecthome"] != "") {
+	if (!opt["projecthome"].empty()) {
 		appconf_instance.set_projecthome(opt["projecthome"].c_str());
 	}
-	if (opt["clientsvmqkey"] != "") {
+
+	if (!opt["clientsvmqkey"].empty()) {
 		appconf_instance.set_clientsvmqkey(atoi(opt["clientsvmqkey"].c_str()));
 	}
-	if (opt["serversvmqkey"] != "") {
+
+	if (!opt["serversvmqkey"].empty()) {
 		appconf_instance.set_serversvmqkey(atoi(opt["serversvmqkey"].c_str()));
 	}
 
@@ -122,14 +123,12 @@ void read_conf(COption &opt, CAppConfig &appconf_instance)
 }
 
 /*
- * prog entry
+ * program entry
  * */
 int main(int argc, char **argv)
 {
-
 	// check input
-    if (argc < 2)
-    {
+    if (argc < 2) {
         usage(argv[0]);
         return E_FAIL;
     } 
@@ -152,32 +151,28 @@ int main(int argc, char **argv)
 	string strHome    =  opt["projecthome"];
 	string strProg    =  argv[0];
 	string strPidFile =  strHome + "/bin/" + strProg + ".pid";
-	if (create_pid_file(strPidFile.c_str()) != 0)
-	{
-		cerr << "CreatePIDFile err, so quit!" << endl;
+	if (create_pid_file(strPidFile.c_str()) != 0) {
+		cerr << "create_pid_file err, so quit!" << endl;
 		return E_FAIL;
 	}
 
 	// start server
-	try 
-	{
+	try {
 		signal(SIGUSR1, sigusr1_handle);
 		signal(SIGUSR2, sigusr2_handle);
 
 		CServer* server = new CServer();
 		server->init(appconf_instance);
 		server->run();
-	}
-	catch (runtime_error& e)
-	{
+
+	} catch (runtime_error& e) {
 		cerr << "catch runtime_error:" << e.what() << "\n" << endl;
 		return E_FAIL;
-	}
-	catch (logic_error& e)
-	{
+
+	} catch (logic_error& e) {
 		cerr << "catch logic_error:" << e.what() << "\n" << endl;
 		return E_FAIL;
 	}
 
-	return 0;
+	return E_OK;
 }

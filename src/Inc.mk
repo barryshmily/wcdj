@@ -52,10 +52,10 @@ export os_date
 #
 #==============================================================================
 
-BUILD = BUILD_COMMON
+#BUILD = BUILD_COMMON
 
 #BUILD = BUILD_DEBUG_CLIENT
-#BUILD = BUILD_DEBUG_SERVER
+BUILD = BUILD_DEBUG_SERVER
 #BUILD = BUILD_DEBUG_PROXY
 
 export BUILD

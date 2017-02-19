@@ -1,6 +1,5 @@
 #include "CSV_message_queue.h"
 
-
 CSVMessageQueue::CSVMessageQueue()
 :  _key(-1), _oflag(0), _msgid(-1), _is_init(false)
 {

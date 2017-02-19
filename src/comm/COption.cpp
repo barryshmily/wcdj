@@ -1,14 +1,8 @@
 #include "COption.h"
 #include "CParsepara.h"
 
-//using namespace wcdj::util;
-
 void COption::read_arg(int argc, char **argv) throw(runtime_error)
 {
-	_option.clear();
-	_dest   =  "";
-	_escape =  "";
-
 	for (int i = 1; i < argc; ++i) 
 	{
 		// ./prog -para1=value1 -para2=value2 ... dest

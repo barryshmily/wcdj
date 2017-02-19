@@ -1,5 +1,5 @@
-#ifndef __WCDJ_CONFIG_H_
-#define __WCDJ_CONFIG_H_
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
 
 #include <cstdio>
 #include <iostream>

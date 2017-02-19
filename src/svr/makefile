@@ -8,7 +8,7 @@ DEPS = $(patsubst %.o, .%.d, $(OBJS))
 
 LIBS = -lsvqueue -lcommtools
 
-OBJS = CServer.o main.o
+OBJS = CServer.o Main.o
 
 
 ifeq ($(BUILD), BUILD_DEBUG_CLIENT)

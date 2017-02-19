@@ -1,5 +1,5 @@
-#ifndef __WCDJ_SV_MQ_H
-#define __WCDJ_SV_MQ_H
+#ifndef __SV_MQ_H__
+#define __SV_MQ_H__
 
 #include <sys/types.h>
 #include <sys/ipc.h>

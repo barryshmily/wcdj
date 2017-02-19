@@ -1,5 +1,5 @@
-#ifndef __WCDJ_PARSEPARA_H__
-#define __WCDJ_PARSEPARA_H__
+#ifndef __PARSEPARA_H__
+#define __PARSEPARA_H__
 
 #include <vector>
 #include <string>

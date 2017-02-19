@@ -1,5 +1,5 @@
-#ifndef __WCDJ_OPTION_H__
-#define __WCDJ_OPTION_H__
+#ifndef __OPTION_H__
+#define __OPTION_H__
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -12,9 +12,16 @@
 using namespace std;
 
 /*
- * usage: ./prog -para1=value1 -para2=value2 ... dest
+ * usage: ./program -para1=value1 -para2=value2 ... dest
  */
 class COption {
+
+public:
+	COption()
+	{
+
+	}
+
 public:
 
 	void read_arg(int argc, char **argv) throw (runtime_error);
