@@ -17,7 +17,7 @@ std::string operator()() const
 }
 
 myclass obj;
-std::string str = obj; 
+std::string str = obj(); 
 
 ```
 2, 函数是否占用对象的空间
