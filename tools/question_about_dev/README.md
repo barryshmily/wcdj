@@ -179,6 +179,10 @@ ps -o majflt,minflt -p <pid>
 1, mysql_use_result和mysql_store_result的区别
 
 
+-----------------
+## 算法部分
+
+10亿数据中取最大的100个数据 http://www.jianshu.com/p/4427db9337d7
 
 
 
