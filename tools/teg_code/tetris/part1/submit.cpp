@@ -23,7 +23,7 @@
 // iphone X
 using namespace ipx;
 
-int top_row1 = 26;
+int top_row1 = 18;
 int game_board1[GAME_ROW][GAME_COL] =
 {
 	{ 0 },
@@ -44,18 +44,18 @@ int game_board1[GAME_ROW][GAME_COL] =
 	{ 0 },
 	{ 0 },
 	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+	{ 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+	{ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
 };
 
 static int g_eliminate_score[] = { 0, 100, 200, 400, 800, 0, 0, 0, 0 };
@@ -66,6 +66,7 @@ int g_cur_score = 0;
 int g_cur_piece, g_next_piece;
 int g_cur_game_board[GAME_ROW][GAME_COL] = { {0} };
 int g_cur_top_row = GAME_ROW;
+std::string g_path;
 
 static void print_cur_info() {
 	std::cout << "g_cur_score: " << g_cur_score
@@ -516,6 +517,96 @@ std::string calc_move_path(piece_shape_t *best_ps, evaluate_result_t best_r)
 	return path;
 }
 
+std::string calc_buy_next_piece(russia_game_t *game)
+{
+	std::string empty_piece;
+	std::string next_piece;
+
+	int row = 0;
+	int col = 0; int pre_col = -1;
+	bool is_buy = false;
+	int satisfy_line_cnt = 0;
+	int satisfy_beg = 0;
+	int satisfy_end = 0;
+
+	for (int i = BOARD_ROW - 2/*last row*/; i > 0; --i) {
+		int null_piece_cnt = 0;
+		for (int j = 1; j < BOARD_COL - 1; ++j) {
+			//std::cout << shape_char[game->board[i][j]] << ' ';
+			if (game->board[i][j] == S_UNOCCUPIED) {
+				++null_piece_cnt;
+				row = i;
+				col = j;
+			}
+		}
+		//std::cout << "row: " << row << ", col: " << col << ", null_piece_cnt: " << null_piece_cnt << std::endl;
+
+		// 只考虑等于1的情况购买
+		if (null_piece_cnt == 1) {
+
+			if (pre_col == -1) {
+				//std::cout << "first **: satisfy_line_cnt" << satisfy_line_cnt << ", row: " << row << ", col: " << col << ", null_piece_cnt: " << null_piece_cnt << std::endl;
+				++satisfy_line_cnt;
+				satisfy_beg = i;
+				pre_col = col;  // 记录第一个空格位置
+
+			} else {
+				if (col != pre_col) {
+					pre_col = col; // 只要不一样就更新，始终记录最上面的空格位置
+					satisfy_beg = i;
+					satisfy_line_cnt = 1; // 重新计数
+				} else {
+					//std::cout << "old **: satisfy_line_cnt" << satisfy_line_cnt << ", row: " << row << ", col: " << col << ", null_piece_cnt: " << null_piece_cnt << std::endl;
+					++satisfy_line_cnt;
+					satisfy_end = i;
+				}
+			}
+		}
+	}
+
+	//std::cout << "end satisfy_line_cnt:" << satisfy_line_cnt << "\n";
+	//std::cout << "end satisfy_beg:" << satisfy_beg << "\n";
+	//std::cout << "end satisfy_end:" << satisfy_end << "\n";
+	// 消除1行，获得10分
+	// 消除2行，获得30分
+	// 消除3行，获得60分
+	// 消除4行，获得100分
+	// 购买方块，扣掉20分
+
+	// 四行的情况很难存在，三行大概有10次左右
+	if (satisfy_line_cnt >= 3) {
+
+		//__LOG("satisfy_line_cnt: %d\n", satisfy_line_cnt);
+		//print_game(game);
+
+		// 判断是否连续
+		if (satisfy_beg - satisfy_end + 1 == satisfy_line_cnt) {
+
+			__LOG("satisfy_line_cnt: %d satisfy_beg: %d satisfy_end: %d pre_col: %d\n", \
+				satisfy_line_cnt, satisfy_beg, satisfy_end, pre_col);
+			print_game(game);
+
+			// 这个空格上面没有被遮盖
+			bool is_covered = false;
+#if 1
+			for (int i = satisfy_end - 1; i > 0; --i) {
+				if (game->board[i][pre_col] == S_OCCUPIED) {
+					is_covered = true;
+				}
+			}
+#endif
+
+			if (!is_covered) {
+				// 购买一个I
+				next_piece = "BI";
+				return next_piece;
+			}
+		}
+
+	}
+	return empty_piece;
+}
+
 bool ai_player(russia_game_t *game, shape_t shape)
 {
 	bool find = false;
@@ -540,7 +631,7 @@ bool ai_player(russia_game_t *game, shape_t shape)
 	if (find) {
 		put_shape_in_place(game, &as->r_shape[best_r.r_index], best_r.row, best_r.col);
 
-#ifdef MACRO_LOG
+#if 0
 		__LOG("find: r_index: %d, row: %d, col: %d, value: %d, top_row: %d\n",
 		      best_r.r_index, best_r.row, best_r.col, best_r.value, game->top_row);
 		print_game(game);
@@ -554,8 +645,8 @@ bool ai_player(russia_game_t *game, shape_t shape)
 #endif
 
 		// 根据最终位置计算移动序列
-		std::string path = calc_move_path(best_ps, best_r);
-		std::cout << path << std::endl;
+		g_path += calc_move_path(best_ps, best_r);
+		std::cout << g_path << std::endl;
 
 	} else {
 #ifndef MACRO_LOG
@@ -827,6 +918,7 @@ int main(int argc, char **argv)
 		for (;;) {
 			setbuf(stdout, NULL);
 			setbuf(stdin, NULL);
+			g_path.clear();
 
 			create_board_from_std(argc, argv);
 			if (is_first) {
@@ -834,6 +926,15 @@ int main(int argc, char **argv)
 				test_board(&game, g_cur_top_row, g_cur_game_board);
 			} else {
 				test_board(&game, game.top_row, g_cur_game_board);
+			}
+			// 计算是否购买替换当前方块，目前只替换I
+			// 三行或四行的状态不多，效果不明显
+			if ((shape_t)g_cur_piece != S_I) {
+				std::string next_piece = calc_buy_next_piece(&game);
+				if (!next_piece.empty()) {
+					g_path = next_piece + std::string(",");
+					g_cur_piece = S_I;
+				}
 			}
 			proc(&game, (shape_t)g_cur_piece);
 		}
@@ -846,7 +947,12 @@ int main(int argc, char **argv)
 
 	case 2:
 		test_board(&game, top_row1, game_board1);
-		proc(&game, S_L);
+		proc(&game, S_O);
+		break;
+
+	case 3:
+		test_board(&game, top_row1, game_board1);
+		std::cout << "buy_next_piece: " << calc_buy_next_piece(&game) << "\n";
 		break;
 
 	default:

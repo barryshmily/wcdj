@@ -801,8 +801,21 @@ static std::string get_random_piece()
 
 static std::string get_s_z()
 {
-	std::string piece = "S";
-	//int i = rand() % SHAPE_COUNT + 1;
+	std::string piece;
+	static int i = 1;
+
+	if (i % 2) {
+		piece = "S";
+	} else {
+		piece = "Z";
+	}
+	++i;
+	return piece;
+}
+
+static std::string get_z_s()
+{
+	std::string piece;
 	static int i = 0;
 
 	if (i % 2) {
@@ -863,8 +876,9 @@ int main(int argc, char **argv)
 			create_board_from_std(argc, argv);
 			//test_board(&game, g_cur_top_row, g_cur_game_board);
 			//proc(&game, (shape_t)g_cur_piece);
-			std::string piece = get_random_piece();
+			//std::string piece = get_random_piece();
 			//std::string piece = get_s_z();
+			std::string piece = get_z_s();
 			//std::string piece = get_2z_3s();
 			std::cout << piece + "\n";
 		}

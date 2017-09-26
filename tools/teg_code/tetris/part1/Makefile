@@ -3,9 +3,10 @@
 #CXXFLAGS = -g -O2 -Wall -fPIC -pipe -DMACRO_PROC 
 #CXXFLAGS = -g -O2 -Wall -fPIC -pipe -DMACRO_LOG
 #CXXFLAGS = -g -O2 -Wall -fPIC -pipe -DMACRO_RELEASE -DMACRO_MORE
+#CXXFLAGS = -g -O2 -Wall -fPIC -pipe -DMACRO_RELEASE -DMACRO_LOG
 CXXFLAGS = -g -O2 -Wall -fPIC -pipe -DMACRO_RELEASE
 
-CXXFLAGS += -Wno-unused-variable -Wno-unused-function -fno-strict-aliasing
+CXXFLAGS += -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable
 
 OBJ_DIR = obj
 

@@ -21,7 +21,7 @@ const int SENTINEL = -999999999;
 	do{ \
 		char __log_buff__[1024] = {0}; \
 		snprintf(__log_buff__, sizeof(__log_buff__), format, ##__VA_ARGS__); \
-		FILE* __fp=fopen("gerry.log","a+"); \
+		FILE* __fp=fopen("gerry.log","w+"); \
 		fwrite(__log_buff__, strlen(__log_buff__), 1 ,__fp ); \
 		fclose(__fp); \
 	} while(0)
@@ -30,7 +30,7 @@ const int SENTINEL = -999999999;
 	do{ \
 		char __log_buff__[2048] = {0}; \
 		snprintf(__log_buff__, sizeof(__log_buff__), "[%s %d]" format, __FILE__, __LINE__, ##__VA_ARGS__); \
-		FILE* __fp=fopen("gerry.log","a+"); \
+		FILE* __fp=fopen("gerry.log","w+"); \
 		fwrite(__log_buff__, strlen(__log_buff__), 1 ,__fp ); \
 		fclose(__fp); \
 	} while(0)
