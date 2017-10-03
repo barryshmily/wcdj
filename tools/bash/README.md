@@ -1,6 +1,7 @@
-#Tips
 
-**(1) Bash shortcuts**
+# 1 交互命令
+
+## 1.1 Bash shortcuts
 
 命令 | 作用
 :----|:----
@@ -18,7 +19,7 @@ CTRL-r |  Search history
 !*     |  All arguments of previous command
 ^abc^123 | Run previous command, replacing abc with 123
 
-**(2) Bash Variables**
+## 1.2 Bash Variables
 
 环境变量 | 含义
 :----|:----
@@ -29,7 +30,7 @@ $PATH | Executable search path
 $HOME | Home directory
 $SHELL | Current shell
 
-**(3) IO Redirection**
+## 1.3 IO Redirection
 
 命令 | 作用
 :----|:----
@@ -43,7 +44,7 @@ cmd 1>&2 | stdout to same place as stderr
 cmd 2>&1 | stderr to same place as stdout
 cmd &>file | every output of cmd to file
 
-**(4) Search Files**
+## 1.4 Search Files
 
 命令 | 作用
 :----|:----
@@ -58,7 +59,7 @@ find /dir/ -mmin num | Find files modified less than num minutes ago in dir
 whereis command | Find binary/source/manual for command
 locate file | Find file (quick search of system index)
 
-**(5) File Operations**
+## 1.5 File Operations
 
 命令 | 作用
 :----|:----
@@ -73,14 +74,14 @@ head file1 | Show first 10 lines of file1
 tail file1 | Show last 10 lines of file1
 tail -f file1 | Output last lines of file1 as it changes
 
-**(6) Pipes**
+## 1.6 Pipes
 
 命令 | 作用
 :----|:----
 cmd1 \| cmd2 | stdout of cmd1 to cmd2
 cmd1 \|& cmd2 | stderr of cmd1 to cmd2
 
-**(7) Command Lists**
+## 1.7 Command Lists
 
 命令 | 作用
 :----|:----
@@ -93,6 +94,62 @@ cmd& | Run cmd in a subshell
 *Refer*
 
 [http://cheatography.com/davechild/cheat-sheets/linux-command-line/](http://cheatography.com/davechild/cheat-sheets/linux-command-line/)
+
+
+
+# 2 必备技巧
+
+作为Linux开发人员，经常需要和bash打交道，把经常执行的命令写成bash脚本可以极大地提高工作效率。下面总结一些常用的使用方法，方便使用的时候查阅。
+
+## 2.1 如何对bash脚本进行传参
+
+Arguments are accessed inside a script using the variables $1, $2, $3, etc., where $1 refers to the first argument, $2 to the second argument, and so on.
+
+If you have a variable number of arguments, you can use the "$@" variable, which is an array of all the input parameters. This means you can use a for-loop to iteratively process each one.
+
+``` bash
+#!/bin/bash
+
+for args in "$@"
+do
+   echo $args
+done
+
+echo "end"
+```
+
+If an argument has spaces, you need to enclose it with single quotes.
+
+Frequently a script is written such that the user can pass in arguments in any order using flags. With the flags method, you can also make some of the arguments optional.
+
+``` bash
+#!/bin/bash
+
+while getopts u:d:p:f: option
+do
+ case "${option}"
+ in
+ u) USER=${OPTARG}; echo $USER;;
+ d) DATE=${OPTARG}; echo $DATE;;
+ p) PRODUCT=${OPTARG}; echo $PRODUCT;;
+ f) FORMAT=$OPTARG; echo $FORMAT;;
+ esac
+done
+
+echo "end"
+```
+
+*Refer*
+
+[How to Pass Arguments to a Bash-Script](https://www.lifewire.com/pass-arguments-to-bash-script-2200571)
+
+
+
+
+
+
+
+
 
 
 
