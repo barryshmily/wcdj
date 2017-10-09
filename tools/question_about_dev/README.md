@@ -149,7 +149,9 @@ strace -pxxx -s1024
 ls -l /proc/pid/fd
 
 6, 一个进程core了如何定位
-gdb
+gdb program core.xxx
+bt
+f 0
 
 7, 多进程和多线程的区别
 
@@ -172,6 +174,22 @@ ps -o majflt,minflt -p <pid>
 12, 如何查看堆内内存的碎片情况？
 
 13, 除了glibc的malloc/free ，还有其他第三方实现吗？
+
+14, The difference among VIRT, RES, and SHR in top output
+
+`VIRT` stands for the virtual size of a process, which is the sum of memory it is actually using, memory it has mapped into itself (for instance the video card’s RAM for the X server), files on disk that have been mapped into it (most notably shared libraries), and memory shared with other processes. VIRT represents how much memory the program is able to access at the present moment.
+
+`RES` stands for the resident size, which is an accurate representation of how much actual physical memory a process is consuming. (This also corresponds directly to the %MEM column.) This will virtually always be less than the VIRT size, since most programs depend on the C library.
+
+`SHR` indicates how much of the VIRT size is actually sharable (memory or libraries). In the case of libraries, it does not necessarily mean that the entire library is resident. For example, if a program only uses a few functions in a library, the whole library is mapped and will be counted in VIRT and SHR, but only the parts of the library file containing the functions being used will actually be loaded in and be counted under RES.
+
+More:
+
+http://mugurel.sumanariu.ro/linux/the-difference-among-virt-res-and-shr-in-top-output/
+
+https://serverfault.com/questions/138427/top-what-does-virtual-memory-size-mean-linux-ubuntu
+
+https://events.linuxfoundation.org/sites/events/files/slides/elc_2016_mem.pdf
 
 -----------------
 ## 数据库部分
