@@ -204,21 +204,21 @@ shmget, shmat, shmdt
 注意：每次shmat使用共享内存之后要shmdt，否则会导致打开句柄泄露（Too many open files in system(23)），通过ipcs -m可以看到nattch列有多少次attach。
 ``` cpp
 // 如果已存在就使用之前的共享内存，如果不存在则创建共享内存并初始化
-	int shmid = shmget(MY_SHM_ID, sizeof(int), IPC_CREAT | 0666);
-	if (shmid == -1) {
-		printf("shmget failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
-		return FAIL;
-	}
-	unsigned int * p_sn = (unsigned int *)shmat(shmid, NULL, 0);
-	if (p_sn == (unsigned int *) - 1) {
-		printf("shmat failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
-		return FAIL;
-	}
-	unsigned old_sn = __sync_fetch_and_add(p_sn, 1);
-	if (shmdt(p_sn) == -1) {
-		printf("shmdt failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
-		return FAIL;
-	}
+int shmid = shmget(MY_SHM_ID, sizeof(int), IPC_CREAT | 0666);
+if (shmid == -1) {
+	printf("shmget failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
+unsigned int * p_sn = (unsigned int *)shmat(shmid, NULL, 0);
+if (p_sn == (unsigned int *) - 1) {
+	printf("shmat failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
+unsigned old_sn = __sync_fetch_and_add(p_sn, 1);
+if (shmdt(p_sn) == -1) {
+	printf("shmdt failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
 ```
 http://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/shm/shmget.html
 
