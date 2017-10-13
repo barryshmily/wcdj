@@ -7,7 +7,7 @@
 
 ### C++
 
-1, Function Object
+1. Function Object
 如何实现下面的转换
 ``` cpp
 // operator()
@@ -20,32 +20,32 @@ myclass obj;
 std::string str = obj(); 
 
 ```
-2, 函数是否占用对象的空间
+2. 函数是否占用对象的空间
 
-3, 什么情况下迭代器会失效
+3. 什么情况下迭代器会失效
 
-4, 构造函数的初始值什么情况下必不可少？成员初始化顺序和什么有关？
+4. 构造函数的初始值什么情况下必不可少？成员初始化顺序和什么有关？
 (1) 如果成员是const，引用，或者属于某种未提供默认构造函数的类类型，我们必须通过构造函数初始值列表为这些成员提供初值。
 (2) 构造函数初始值列表只说明用于初始化成员的值，而不限定初始化的具体执行顺序。成员的初始化顺序与它们在类定义中的出现顺序一致：第一个成员先被初始化，然后第二个，以此类推。构造函数初始值列表中初始值的前后位置关系不会影响实际的初始化顺序。
 解决方法：最好构造函数初始值的顺序与成员声明的顺序保持一致，而且如果可能的话，尽量避免使用某些成员初始化其他成员。
 
-5, 隐士的类类型转换，如何抑制构造函数定义的隐士转换？为什么可以将const char *赋值给string对象？
+5. 隐士的类类型转换，如何抑制构造函数定义的隐士转换？为什么可以将const char *赋值给string对象？
 因为接受一个单参数的const char *的string构造函数不是explicit的。
 通过将构造函数声明为explicit来阻止隐士转换。其中，
 (1) 关键字explicit只对一个实参的构造函数有效；
 (2) 需要多个实参的构造函数不能用于执行隐士转换，所以无须将这些构造函数指定为explicit的；
 (3) 只能在类内声明构造函数时使用explicit关键字，在类外部定义时不应重复；
 
-6, extern "C" 的作用
+6. extern "C" 的作用
 http://blog.csdn.net/delphiwcdj/article/details/7173387
 
-7, 使用表达式new失败如何处理？
+7. 使用表达式new失败如何处理？
 默认情况下，如果new不能分配所要求的内存空间，它会抛出一个类型为bad_alloc的异常。我们可以改变使用new的方式来阻止它抛出异常：
 int *p1 = new int;           // 如果分配失败，new抛出std::bad_alloc
 int *p2 = new (nothrow) int; // 如果分配失败，new返回一个空指针
 bad_alloc和nothrow都定义在头文件new中。
 
-8, 拷贝构造函数时什么？什么时候使用它？
+8. 拷贝构造函数时什么？什么时候使用它？
 如果构造函数的第一个参数是自身类类型的引用，且所有其他参数（如果有的话）都有默认值，则此构造函数是拷贝构造函数。拷贝构造函数在以下几种情况下会被使用：
 (1) 拷贝初始化(用＝定义变量)；
 (2) 将一个对象作为实参传递给非引用类型的行参；
@@ -53,39 +53,39 @@ bad_alloc和nothrow都定义在头文件new中。
 (4) 用花括号列表初始化一个数组中的元素或一个聚合类中的成员；
 (5) 初始化标准库容器或调用其insert/push操作时，容器会对其元素进行拷贝初始化； 
 
-9, 拷贝赋值运算符是什么？什么时候使用它？合成拷贝赋值运算符完成什么工作？什么时候会生成合成拷贝赋值运算符？
+9. 拷贝赋值运算符是什么？什么时候使用它？合成拷贝赋值运算符完成什么工作？什么时候会生成合成拷贝赋值运算符？
 (1) 拷贝赋值运算符本身是一个重载的赋值运算符，定义为类的成员函数，左侧运算对象绑定到隐含的this参数，而右侧运算对象是所属类类型的，作为函数的参数，函数返回指向其左侧运算对象的引用。
 (2) 当对类对象进行赋值时，会使用拷贝赋值运算符。
 (3) 通常情况下，合成拷贝赋值运算符会将右侧对象的非static成员逐个赋予左侧对象的对应成员，这些赋值操作时由成员类型的拷贝赋值运算符来完成的。
 (4) 若一个类未定义自己的拷贝赋值运算符，编译器就会为其合成拷贝赋值运算符，完成赋值操作，但对于某些类，还会起到禁止该类型对象赋值的效果。
 
-10, 重载运算符
+10. 重载运算符
 重载运算符是具有特殊名字的函数，由关键字operator和其后要定义的运算符号共同组成。和其他函数一样，重载的运算符也包含返回类型，参数列表以及函数体。
 对于一个运算符函数来说，它或者是类的成员，或者至少含有一个类类型的参数。例如，不能为int重新定义内置的运算符。
 我们只能重载已有的运算符，而无权发明新的运算符号。
 不能被重载的运算符：
 :: .* . ?:
 
-11, 虚函数的优缺点
+11. 虚函数的优缺点
 
-12, 深拷贝和浅拷贝的区别
+12. 深拷贝和浅拷贝的区别
 
 ### C
 
-1, 无符号和有符号是否可以比较
+1. 无符号和有符号是否可以比较
 不可以，如果有符号的是负数，将类型提升为一个很大的无符号数
 
-2, 可以定义一个引用的指针吗
+2. 可以定义一个引用的指针吗
 不可以，引用不是对象。
 
-3, 堆和栈的区别，在进程虚拟地址空间的位置
+3. 堆和栈的区别，在进程虚拟地址空间的位置
 
-4, 指向常量的指针，和常量指针分别如何定义
+4. 指向常量的指针，和常量指针分别如何定义
 const int * p1 = 1;
 int i;
 int * const p2 = &i;
 
-5, 知道一个递增的区间段，如何计算这个区间段的中位数
+5. 知道一个递增的区间段，如何计算这个区间段的中位数
 比如，3,4,5,6,7
 则中位数为：
 方法1：(3 + 7) / 2 = 5 溢出问题
@@ -95,23 +95,23 @@ int * const p2 = &i;
 -----------------
 ## 网络部分
 
-1, IP首部和TCP首部分别是多少个字节
+1. IP首部和TCP首部分别是多少个字节
 20字节，8字节
 
-2, tcp为什么要四次挥手
+2. tcp为什么要四次挥手
 全双工的协议
 
-3, 非阻塞网络编程有哪些方法，select和epoll的区别
+3. 非阻塞网络编程有哪些方法，select和epoll的区别
 
-4, 大小端的定义和判别方法
+4. 大小端的定义和判别方法
 
-5, 什么情况下socket可读，可写
+5. 什么情况下socket可读，可写
 
-6, UDP协议和TCP协议的区别
+6. UDP协议和TCP协议的区别
 
-7, TCP协议的粘包问题如何解决
+7. TCP协议的粘包问题如何解决
 
-8, UDP相关
+8. UDP相关
 UDP数据包的接收
 client发送两次UDP数据，第一次 500字节，第二次300字节，server端阻塞模式下接包，第一次recvfrom( 1000 )，收到是 1000，还是500，还是300，还是其他？
 由于UDP通信的有界性，接收到只能是500或300，又由于UDP的无序性和非可靠性，接收到可能是300，也可能是500，也可能一直阻塞在recvfrom调用上，直到超时返回(也就是什么也收不到)。
@@ -135,34 +135,40 @@ UDP的丢包信息可以从cat /proc/net/udp 的最后一列drops中得到，而
 -----------------
 ## Linux系统编程部分
 
-1, 如何创建一个守护进程
+1. 如何创建一个守护进程
 
-2, 一个动态库可以多次dlopen吗
+2. 一个动态库可以多次dlopen吗
 
-3, 如何查看ipc的一些资源
+3. 如何查看ipc的一些资源
 ipcs -a
 
-4, 如何查看进程执行的系统调用
+4. 如何查看进程执行的系统调用
 strace -pxxx -s1024
 
-5, 如何查看进程打开的fd
+5. 如何查看进程打开的fd
 ls -l /proc/pid/fd
 
-6, 一个进程core了如何定位
+6. 一个进程core了如何定位
 gdb program core.xxx
 bt
 f 0
 
-7, 多进程和多线程的区别
+7. 多进程和多线程的区别
 
-8, Linux虚拟地址空间如何分布？32位和64位有何不同？32/64位操作系统一个进程的虚拟地址空间分别是多少
+8. Linux虚拟地址空间如何分布？32位和64位有何不同？32/64位操作系统一个进程的虚拟地址空间分别是多少
 4G/128T
 
-9, malloc是如何分配内存的？malloc分配多大的内存，就占用多大的物理内存空间吗？free 的内存真的释放了吗（还给 OS ）? 既然堆内内存不能直接释放，为什么不全部使用 mmap 来分配？
+9. malloc是如何分配内存的？malloc分配多大的内存，就占用多大的物理内存空间吗？free 的内存真的释放了吗（还给 OS ）? 既然堆内内存不能直接释放，为什么不全部使用 mmap 来分配？
+malloc,calloc,realloc函数之间的区别？
+```cpp
+void * malloc(int n);
+void * calloc(int n, int size);
+void * realloc(void * p, int n);
+```
 
-10, 如何查看进程虚拟地址空间的使用情况？
+10. 如何查看进程虚拟地址空间的使用情况？
 
-11, 如何查看进程的缺页中断信息？
+11. 如何查看进程的缺页中断信息？
 可通过以下命令查看缺页中断信息
 ps -o majflt,minflt -C <program_name>
 ps -o majflt,minflt -p <pid>
@@ -171,11 +177,11 @@ ps -o majflt,minflt -p <pid>
 如果 MAJFLT 过大，很可能是内存不足。
 如果 MINFLT 过大，很可能是频繁分配 / 释放大块内存 (128k) ， malloc 使用 mmap 来分配。对于这种情况，可通过 mallopt(M_MMAP_THRESHOLD, <SIZE>) 增大临界值，或程序实现内存池。
 
-12, 如何查看堆内内存的碎片情况？
+12. 如何查看堆内内存的碎片情况？
 
-13, 除了glibc的malloc/free ，还有其他第三方实现吗？
+13. 除了glibc的malloc/free ，还有其他第三方实现吗？
 
-14, The difference among VIRT, RES, and SHR in top output
+14. The difference among VIRT, RES, and SHR in `top` output
 
 `VIRT` stands for the virtual size of a process, which is the sum of memory it is actually using, memory it has mapped into itself (for instance the video card’s RAM for the X server), files on disk that have been mapped into it (most notably shared libraries), and memory shared with other processes. VIRT represents how much memory the program is able to access at the present moment.
 
@@ -190,6 +196,73 @@ http://mugurel.sumanariu.ro/linux/the-difference-among-virt-res-and-shr-in-top-o
 https://serverfault.com/questions/138427/top-what-does-virtual-memory-size-mean-linux-ubuntu
 
 https://events.linuxfoundation.org/sites/events/files/slides/elc_2016_mem.pdf
+
+15. IPC
+
+sysv共享内存
+shmget, shmat, shmdt
+注意：每次shmat使用共享内存之后要shmdt，否则会导致打开句柄泄露（Too many open files in system(23)），通过ipcs -m可以看到nattch列有多少次attach。
+``` cpp
+// 如果已存在就使用之前的共享内存，如果不存在则创建共享内存并初始化
+int shmid=shmget(MY_SHM_ID, sizeof(int), IPC_CREAT|0666);
+if (shmid == -1) {
+	printf("shmget failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
+unsigned int * pSerialNo = (unsigned int *)shmat(shmid, NULL, 0);
+if (pSerialNo == (unsigned int *)-1) {
+	printf("shmat failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
+unsigned serialNo = __sync_fetch_and_add(pSerialNo, 1);
+if (shmdt(pSerialNo) == -1) {
+	printf("shmdt failed, %s(%d,id=%x)", strerror(errno), errno, MY_SHM_ID);
+	return FAIL;
+}
+
+```
+http://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/shm/shmget.html
+
+16. wait命令
+
+wait命令一个很重要用途就是在Bash shell的并行编程中，可以在Bash shell脚本中启动多个后台进程（使用&），然后调用wait命令，等待所有后台进程都运行完毕，Bash shell脚本再继续向下执行。
+```bash
+command1 &
+command2 &
+wait
+```
+
+17. Linux上的内存如计算？
+
+`top`:
+
+Mem:  131997524k total, 130328500k used,  1669024k free,   793232k buffers
+Swap:  2105272k total,   428816k used,  1676456k free, 122989268k cached
+
+`free -m`
+             total       used       free     shared    buffers     cached
+Mem:        128903     128567        336          0        776     121401
+-/+ buffers/cache:       6389     122514
+Swap:         2055        418       1637
+
+可用内存：
+122514（-/+ buffers/cache free） = 336（free）+ 776（buffers）+ 121401（cached）
+总内存：
+128902（Mem: total） = 6389（-/+ buffers/cache used）+ 122514（-/+ buffers/cache free）
+
+在很多Linux服务器上运行free 命令，会发现剩余内存（Mem:行的free列）很少，但实际服务器上的进程并没有占用很大的内存。这是因为Linux特殊的内存管理机制。Linux内核会把空闲的内存用作buffer/cached，用于提高文件读取性能。当应用程序需要用到内存时，buffer/cached内存是可以马上回收的。所以，对应用程序来说，buffer/cached是可用的，可用内存应该是free+buffers+cached。因为这个原因，free命令也才有第三行的-/+ buffers/cache。
+
+Linux内存占用分析，是一个比较复杂的主题。更多资料可以参考下面的系列文章：
+
+https://techtalk.intersec.com/2013/07/memory-part-1-memory-types/
+
+https://techtalk.intersec.com/2013/07/memory-part-2-understanding-process-memory/
+
+https://techtalk.intersec.com/2013/08/memory-part-3-managing-memory/
+
+https://techtalk.intersec.com/2013/10/memory-part-4-intersecs-custom-allocators/
+
+https://techtalk.intersec.com/2013/12/memory-part-5-debugging-tools/
 
 -----------------
 ## 数据库部分
