@@ -1,4 +1,7 @@
 
+[TOC]
+
+## Maven
 
 Maven是基于项目对象模型（POM），可以通过一小段描述信息来管理项目的构建，报告和文档的软件项目管理工具。其他类似的工具还有Ant，gradle等。
 
@@ -81,6 +84,46 @@ maven/conf/settings.xml，找到`mirrors`节点，修改为：
    | Default: ${user.home}/.m2/repository
   <localRepository>/path/to/local/repo</localRepository>
   -->
+```
+
+5. maven的生命周期
+完整的项目构建过程包括：清理 -> 编译 -> 测试 -> 打包 -> 集成测试 -> 验证 -> 部署
+
+6. 插件
+在Maven的官网（maven.apache.org 侧栏中的Plugin）中提供了很多的插件。
+核心插件：clean, compile等
+
+使用插件的例子：
+``` xml
+	<build>  
+		<plugins>  
+			<plugin>  
+				<groupId>org.apache.maven.plugins</groupId>  
+				<artifactId>maven-compiler-plugin</artifactId>  
+				<version>3.1</version>  
+				<configuration>  
+					<source>1.8</source>  
+					<target>1.8</target>  
+					<encoding>UTF-8</encoding>  
+				</configuration>  
+			</plugin>  
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>  
+				<artifactId>maven-source-plugin</artifactId>  
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>  
+	</build>  
 ```
 
 ## 常用命令
