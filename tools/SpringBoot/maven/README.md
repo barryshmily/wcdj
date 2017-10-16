@@ -126,6 +126,49 @@ maven/conf/settings.xml，找到`mirrors`节点，修改为：
 	</build>  
 ```
 
+7. pom.xml
+pom.xml是maven的核心管理文件，用于项目描述，组织管理，依赖管理和构建信息的管理。
+
+pom.xml里包含了很多标签。
+```
+project 根元素
+modelVersion 指定当前pom的版本
+
+坐标的信息
+groupId
+artifactId
+version
+
+packaging  不指定默认是jar打包，也可以指定为war，zip或者pom
+
+name 项目描述
+url  项目地址
+description 项目描述
+developers 开发人员信息
+licenses 许可证信息
+organization 组织机构
+
+dependencies 依赖列表
+	dependency
+		groupId
+		artifactId
+		version
+		type
+		scope
+		optional
+		exclusions
+
+build
+	plugins    插件列表
+
+parent  子模块对父模块pom的继承
+
+modules
+	module
+```
+
+
+
 ## 常用命令
 
 编译
@@ -393,3 +436,7 @@ http://www.imooc.com/learn/767
 
 Maven
 http://www.imooc.com/learn/443
+
+Spring入门
+http://www.imooc.com/learn/196
+
