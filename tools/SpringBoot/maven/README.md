@@ -1,4 +1,88 @@
 
+
+Maven是基于项目对象模型（POM），可以通过一小段描述信息来管理项目的构建，报告和文档的软件项目管理工具。其他类似的工具还有Ant，gradle等。
+
+安装：
+可以在官网maven.apache.org下载，有各种OS的版本，本文选择OSX的二进制包，并根据下载安装的路径配置PATH环境变量。完成后通过`mvn -version`命令可以查看到如下信息。
+
+PS: jdk需要事先下载，本文使用的是Java SE 9，JDK版本是1.8。
+$java -version
+java version "9"
+Java(TM) SE Runtime Environment (build 9+181)
+Java HotSpot(TM) 64-Bit Server VM (build 9+181, mixed mode)
+http://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+Maven的目录结构：
+```
+src
+     main
+          java
+               package
+     test
+          java
+               package
+     resources
+```
+
+## 基本概念
+
+1. 坐标
+任何一个依赖，插件等称为`构件`。`构件`通过`坐标`作为其**唯一的标识**。
+坐标 = groupId + artifactId + version
+
+2. 仓库
+用于管理项目的依赖。分为本地仓库和远程仓库。
+
+远程仓库地址：
+maven/lib/maven-model-builder-3.3.3.jar
+pom-4.0.0.xml   所有的pom都会继承这个pom
+https://repo.maven.apache.org/maven2
+
+The Central Repository （包含了绝大多数的java的开源项目，比如，spring）
+http://search.maven.org/#browse
+
+3. 镜像仓库
+镜像就是指，a和b提供了一样的功能。
+maven的远程仓库通常都在国外，可能需要翻墙或者访问速度过慢，因此可以改为访问国内的镜像仓库，更快更稳定一些。
+maven/conf/settings.xml，找到`mirrors`节点，修改为：
+
+``` xml
+  <mirrors>
+    <!-- mirror
+     | Specifies a repository mirror site to use instead of a given repository. The repository that
+     | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
+     | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
+     |
+    <mirror>
+      <id>mirrorId</id>
+      <mirrorOf>repositoryId</mirrorOf>
+      <name>Human Readable Name for this Mirror.</name>
+      <url>http://my.repository.com/repo/path</url>
+    </mirror>
+     -->
+
+	<mirror>
+      <id>maven.net.cn</id>
+      <mirrorOf>central</mirrorOf>
+      <name>central mirror in China</name>
+      <url>http://maven.net.cn/content/groups/public</url>
+    </mirror>
+
+  </mirrors>
+```
+
+4. 更改本地仓库的位置
+默认位置：~/.m2/repository
+修改settings.xml，修改`localRepository`节点：
+``` xml
+ <!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   |
+   | Default: ${user.home}/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+```
+
 ## 常用命令
 
 编译
@@ -258,4 +342,11 @@ org.junit.ComparisonFailure: expected:<Hello World[]> but was:<Hello World[, fro
 省略
 ```
 
+## 参考
 
+Spring Boot入门
+
+http://www.imooc.com/learn/767
+
+Maven
+http://www.imooc.com/learn/443
