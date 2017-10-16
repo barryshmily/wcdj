@@ -1,5 +1,5 @@
 
-## 测试命令
+## 常用命令
 
 编译
 mvn compile
@@ -34,6 +34,77 @@ mvn clean
 
 安装jar包到本地仓库
 mvn install
+
+自动创建maven规定的目录骨架（使用archetype插件）
+mvn archetype:generate
+mvn archetype:generate -DgroupId=com.imooc.maven03 -DartifactId=maven03-service -Dversion=1.0.0-SNAPSHOT -Dpackage=com.imooc.maven03.service
+
+其中：
+-DgroupId=组织名，一般是公司网址的反写+项目名
+-DartifactId=项目名-模块名
+-Dversion=版本号
+-Dpackage=代码所存在的包名
+
+例如：自动创建后的提示信息。
+```
+[INFO] Using property: groupId = com.imooc.maven03
+[INFO] Using property: artifactId = maven03-service
+[INFO] Using property: version = 1.0.0-SNAPSHOT
+[INFO] Using property: package = com.imooc.maven03.service
+Confirm properties configuration:
+groupId: com.imooc.maven03
+artifactId: maven03-service
+version: 1.0.0-SNAPSHOT
+package: com.imooc.maven03.service
+ Y: : y
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.1
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: basedir, Value: /Users/gerryyang/github_project/wcdj/tools/SpringBoot/maven/maven03
+[INFO] Parameter: package, Value: com.imooc.maven03.service
+[INFO] Parameter: groupId, Value: com.imooc.maven03
+[INFO] Parameter: artifactId, Value: maven03-service
+[INFO] Parameter: packageName, Value: com.imooc.maven03.service
+[INFO] Parameter: version, Value: 1.0.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /Users/gerryyang/github_project/wcdj/tools/SpringBoot/maven/maven03/maven03-service
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 02:12 min
+[INFO] Finished at: 2017-10-16T22:50:17+08:00
+[INFO] Final Memory: 16M/55M
+[INFO] ------------------------------------------------------------------------
+```
+
+自动创建的目录结构：
+
+```
+gerryyang@mba:maven03$pwd
+/Users/gerryyang/github_project/wcdj/tools/SpringBoot/maven/maven03
+gerryyang@mba:maven03$ls
+maven03-service/
+gerryyang@mba:maven03$tree
+.
+└── maven03-service
+    ├── pom.xml
+    └── src
+        ├── main
+        │   └── java
+        │       └── com
+        │           └── imooc
+        │               └── maven03
+        │                   └── service
+        │                       └── App.java
+        └── test
+            └── java
+                └── com
+                    └── imooc
+                        └── maven03
+                            └── service
+                                └── AppTest.java
+
+14 directories, 3 files
+```
 
 
 ## 注意事项
@@ -144,7 +215,7 @@ Maven安装完成后默认使用JDK 1.5，导致mvn compile时报错，然后通
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
 ```
 
-通常的做法是将包含这个class的jar包加入到classpath中，而maven提供了更简便的方式，通过`mvn install`将依赖的jar包安装到本地仓库中，同时再在主项目的`pom.xml`中添加引用依赖。
+通常的做法是将包含这个class的jar包加入到classpath中，而maven提供了更简便的方式，通过`mvn install`将依赖的jar包安装到本地仓库中，同时再在主项目的`pom.xml`中添加引用依赖。在引用的时候，首先查找本地仓库，如果不存在则从远程仓库中下载到本地仓库。
 
 2. 单元测试，断言错误
 
