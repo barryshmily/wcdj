@@ -268,6 +268,18 @@ https://techtalk.intersec.com/2013/12/memory-part-5-debugging-tools/
 
 1, mysql_use_result和mysql_store_result的区别
 
+2, B+Tree和LSM Tree区别
+nosql基本没有用B+树的，很多采用了LSM Tree，比如hbase/cassandra，rocksdb/leveldb
+B+树跟LSM Tree的时间复杂度对比（N是tree的node数）
+随机点写入，LSM Tree O(1)，B+树O(logN)
+随机点读出，LSM Tree O(N)，B+树O(logN)
+对B+树或者LSM Tree做一些变形增加一些数据结构，也可以优化一些时间复杂度，当然这些优化可能带来额外的开销，更多的时候是在读/写、随机/顺序之间的tradeoff，有些专门的论文研究这方面的数据结构和算法。有兴趣的可以看看tokudb。
+传统OLTP数据库在机械磁盘这种慢设备（随机IO性能差很多）上设计的，OLTP场景本来也是读多写少，数据量不大，因此，选择B+数据的数据结构主要是这些历史原因吧。传统数据库的存储引擎非常复杂（存储引擎和查询优化是单机RDBMS的两个核心难点）。此外，即使在SSD上，随机IO跟顺序IO的性能差异也是有的。因此，SSD出现后，传统RDBMS，也没有动力去重构存储引擎。当然，mysql是出现了myrocks这样的项目作为LSM tree的存储引擎。
+随着数据量的爆炸和SSD的出现，越来越多的新兴数据库选择LSM Tree，这样数据写入性能有较大提升，用LSM tree做列存储，数据压缩效果比行存的B+树也要好很多。同时由于SSD的存在，随机读性能也比B+树也不会差太多。
+
+一般来说LSMtree更适合分析，比如经常做批量数据倒入，范围顺序扫描等场景；B+树更适合OLTP的点查询。LSMTree是列存储友好的（value非定长，容易压缩），B+树是行存储友好的（字段定长）。行存储更多用在事务库，列存储更多是分析库吧。有人提出列存储和行存的混合模式做HTAP的数据库，论文记不清了。对于未来趋势，最近开源出来的OLTP的newsql（cockroach tidb），都是用LSMTree。
+
+https://www.zhihu.com/question/65628840
 
 -----------------
 ## 算法部分
