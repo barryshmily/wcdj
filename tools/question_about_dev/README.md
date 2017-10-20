@@ -109,9 +109,17 @@ int * const p2 = &i;
 
 6. UDP协议和TCP协议的区别
 
-7. TCP协议的粘包问题如何解决
+TCP: bind
 
-8. UDP相关
+UDP: 需要bind吗，可以connect吗（可以然后可以调用send，否则要调用sendto指定目的地址和目的端口）
+
+7. SO_REUSEADDR和SO_REUSEPORT区别
+
+两个不同的socket可以bind到相同的源地址和源端口？默认不行。
+
+8. TCP协议的粘包问题如何解决
+
+9. UDP相关
 UDP数据包的接收
 client发送两次UDP数据，第一次 500字节，第二次300字节，server端阻塞模式下接包，第一次recvfrom( 1000 )，收到是 1000，还是500，还是300，还是其他？
 由于UDP通信的有界性，接收到只能是500或300，又由于UDP的无序性和非可靠性，接收到可能是300，也可能是500，也可能一直阻塞在recvfrom调用上，直到超时返回(也就是什么也收不到)。
@@ -266,9 +274,9 @@ https://techtalk.intersec.com/2013/12/memory-part-5-debugging-tools/
 -----------------
 ## 数据库部分
 
-1, mysql_use_result和mysql_store_result的区别
+1. mysql_use_result和mysql_store_result的区别
 
-2, B+Tree和LSM Tree区别
+2. B+Tree和LSM Tree区别
 nosql基本没有用B+树的，很多采用了LSM Tree，比如hbase/cassandra，rocksdb/leveldb
 B+树跟LSM Tree的时间复杂度对比（N是tree的node数）
 随机点写入，LSM Tree O(1)，B+树O(logN)
@@ -282,9 +290,66 @@ B+树跟LSM Tree的时间复杂度对比（N是tree的node数）
 https://www.zhihu.com/question/65628840
 
 -----------------
-## 算法部分
+## 算法和数据结构
 
-10亿数据中取最大的100个数据 http://www.jianshu.com/p/4427db9337d7
+1. 10亿数据中取最大的100个数据
+
+http://www.jianshu.com/p/4427db9337d7
+
+2. HashMap的实现原理
+
+数组 + 链表（桶）。简单地说，HashMap 在底层将 key-value 当成一个整体进行处理，这个整体就是一个 Entry 对象。HashMap 底层采用一个 Entry[] 数组来保存所有的 key-value 对，当需要存储一个 Entry 对象时，会根据 hash 算法来决定其在数组中的存储位置，在根据 equals 方法决定其在该数组位置上的链表中的存储位置；当需要取出一个Entry 时，也会根据 hash 算法找到其在数组中的存储位置，再根据 equals 方法从该位置上的链表中取出该Entry。
+
+``` java
+public HashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +
+                                               initialCapacity);
+        if (initialCapacity > MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        if (loadFactor <= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +
+                                               loadFactor);
+
+        // Find a power of 2 >= initialCapacity
+        int capacity = 1;
+        while (capacity < initialCapacity)
+            capacity <<= 1;
+
+        this.loadFactor = loadFactor;
+        threshold = (int)Math.min(capacity * loadFactor, MAXIMUM_CAPACITY + 1);
+        table = new Entry[capacity]; // 数组
+        useAltHashing = sun.misc.VM.isBooted() &&
+                (capacity >= Holder.ALTERNATIVE_HASHING_THRESHOLD);
+        init();
+}
+
+static class Entry<K,V> implements Map.Entry<K,V> {
+    final K key;      // 一个键值对
+    V value;
+    Entry<K,V> next;  // next 的 Entry 指针（桶）
+    final int hash;
+    ……
+}
+
+// 核心算法
+static int hash(int h) { 
+        h ^= (h >>> 20) ^ (h >>> 12); 
+        return h ^ (h >>> 7) ^ (h >>> 4); 
+} 
+
+static int indexFor(int h, int length) { 
+        return h & (length-1); 
+ } 
+```
+
+如何保证元素均匀，特殊的取模方法，但是模运算的计算代价高，h%length改为h&(length-1)，要求length是2^n。当数组长度为 2 的 n 次幂的时候，不同的 key 算得得 index 相同的几率较小，那么数据在数组上分布就比较均匀，也就是说碰撞的几率小，相对的，查询的时候就不用遍历某个位置上的链表，这样查询效率也就较高了。
+
+HashMap 的 resize（rehash）？当 HashMap 中的元素越来越多的时候，hash 冲突的几率也就越来越高，因为数组的长度是固定的。所以为了提高查询的效率，就要对 HashMap 的数组进行扩容。而在 HashMap 数组扩容之后，最消耗性能的点就出现了：原数组中的数据必须重新计算其在新数组中的位置，并放进去，这就是 resize。所以如果我们已经预知 HashMap 中元素的个数，那么预设元素的个数能够有效的提高 HashMap 的性能。
+
+线程安全？在Java里的解决方法是：使用java.util.HashTable，效率最低；或者使用java.util.concurrent.ConcurrentHashMap，相对安全，效率较高。
+
+http://wiki.jikexueyuan.com/project/java-collection/hashmap.html
 
 
 
