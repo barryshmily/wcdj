@@ -91,6 +91,98 @@ int * const p2 = &i;
 方法1：(3 + 7) / 2 = 5 溢出问题
 方法2：3 + (7 - 3) / 2 = 5 如果是迭代器只能这样用，因为迭代器没有定义加法，只定义了减法
 
+### GCC
+
+1. __attribute__ ((packed))的作用
+
+告诉编译器取消结构在编译过程中的优化对齐按照实际占用字节数进行对齐，是GCC特有的语法。这个功能是跟操作系统没关系，跟编译器有关，gcc编译器不是紧凑模式的。
+
+``` cpp
+struct stCoRoutineAttr_t
+{
+    int stack_size;
+    stShareStack_t*  share_stack;
+    stCoRoutineAttr_t()
+    {
+        stack_size = 128 * 1024;
+        share_stack = NULL;
+    }
+}__attribute__ ((packed));
+```
+
+2. __thread
+
+线程局部存储(Thread Local Storage)是一种机制，通过这一机制分配的变量，每个当前线程有一个该变量的实例。在多线程编程中，如果使用__thread关键字修饰global变量，可以使得这个变量在每个线程都私有一份。
+
+__thread是GCC内置的线程局部存储设施，存取效率可以和全局变量相比。__thread变量每一个线程有一份独立实体，各个线程的值互不干扰。可以用来修饰那些带有全局性且值可能变，但是又不值得用全局变量保护的变量。
+
+ __thread使用规则：只能修饰POD类型，不能修饰class类型，因为无法自动调用构造函数和析构函数。可以用于修饰全局变量，函数内的静态变量，不能修饰函数的局部变量或者class的普通成员变量。
+
+ http://www.jianshu.com/p/13ebab5cd5b2
+
+3. __sync_fetch_and_add
+
+``` cpp
+volatile unsigned int g_var = 0;
+
+int atom_op()
+{
+    unsigned int old_var = __sync_fetch_and_add(&g_var, 1);
+    printf("%d\n", old_var);
+
+    //unsigned int new_var = __sync_add_and_fetch(&g_var, 1);
+    //printf("%d\n", new_var);
+
+    return 0;
+}
+```
+
+4. 条件编译
+
+``` cpp
+static pid_t GetPid()
+{
+    static __thread pid_t pid = 0;
+    static __thread pid_t tid = 0;
+    if( !pid || !tid || pid != getpid() )
+    {
+        pid = getpid();
+#if defined( __APPLE__ )
+        tid = syscall( SYS_gettid );
+        if( -1 == (long)tid )
+        {
+            tid = pid;
+        }
+#elif defined( __FreeBSD__ )
+        syscall(SYS_thr_self, &tid);
+        if( tid < 0 )
+        {
+            tid = pid;
+        }
+#else 
+        tid = syscall( __NR_gettid );
+#endif
+
+    }
+    return tid;
+}
+
+// or
+static unsigned long long GetTickMS()
+{
+#if defined( __LIBCO_RDTSCP__) 
+    static uint32_t khz = getCpuKhz();
+    return counter() / khz;
+#else
+    struct timeval now = { 0 };
+    gettimeofday( &now,NULL );
+    unsigned long long u = now.tv_sec;
+    u *= 1000;
+    u += now.tv_usec / 1000;
+    return u;
+#endif
+}
+```
 
 -----------------
 ## 网络部分
@@ -342,6 +434,11 @@ static int indexFor(int h, int length) {
         return h & (length-1); 
  } 
 ```
+[Why initialCapacity of Hashtable is 11 while the DEFAULT_INITIAL_CAPACITY in HashMap is 16 and requires a power of 2](https://stackoverflow.com/questions/9413966/why-initialcapacity-of-hashtable-is-11-while-the-default-initial-capacity-in-has)
+
+[HashMap requires a better hashCode() - JDK 1.4 Part II](http://www.javaspecialists.eu/archive/Issue054.html)
+
+hashtable使用质数是考虑到分布更均匀，但模运算比较慢。hashmap使用2的指数可以利用掩码运算速度更快，但是设计了新的rehash方法，总体性能比之前好。
 
 如何保证元素均匀，特殊的取模方法，但是模运算的计算代价高，h%length改为h&(length-1)，要求length是2^n。当数组长度为 2 的 n 次幂的时候，不同的 key 算得得 index 相同的几率较小，那么数据在数组上分布就比较均匀，也就是说碰撞的几率小，相对的，查询的时候就不用遍历某个位置上的链表，这样查询效率也就较高了。
 
@@ -350,6 +447,9 @@ HashMap 的 resize（rehash）？当 HashMap 中的元素越来越多的时候�
 线程安全？在Java里的解决方法是：使用java.util.HashTable，效率最低；或者使用java.util.concurrent.ConcurrentHashMap，相对安全，效率较高。
 
 http://wiki.jikexueyuan.com/project/java-collection/hashmap.html
+
+http://wiki.jikexueyuan.com/project/java-collection/hashtable.html
+
 
 
 

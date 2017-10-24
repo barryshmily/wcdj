@@ -1,0 +1,17 @@
+2017-10-23 17:17:22 INFO main - server success listening 8080
+2017-10-23 17:17:22 INFO main - createChannel: begin to connect remote host[localhost:8080] asynchronously
+2017-10-23 17:17:22 INFO NettyClientWorkerThread_1 - NETTY CLIENT PIPELINE: CONNECT  UNKNOWN => localhost/127.0.0.1:8080
+2017-10-23 17:17:22 INFO main - createChannel: connect remote host[localhost:8080] success, AbstractBootstrap$PendingRegistrationPromise@704921a5(success)
+2017-10-23 17:17:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelRegistered 127.0.0.1:56961
+2017-10-23 17:17:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelActive, the channel[127.0.0.1:56961]
+2017-10-23 17:17:22 INFO main - closeChannel: begin close the channel[127.0.0.1:8080] Found: false
+2017-10-23 17:17:22 INFO main - closeChannel: the channel[127.0.0.1:8080] has been removed from the channel table before
+2017-10-23 17:17:22 INFO main - shutdown thread NettyEventExecuter interrupt false
+2017-10-23 17:17:22 INFO main - join thread NettyEventExecuter eclipse time(ms) 0 90000
+2017-10-23 17:17:22 INFO NettyClientWorkerThread_1 - NETTY CLIENT PIPELINE: CLOSE 127.0.0.1:8080
+2017-10-23 17:17:22 INFO NettyClientWorkerThread_1 - eventCloseChannel: the channel[null] has been removed from the channel table before
+2017-10-23 17:17:22 INFO main - shutdown thread NettyEventExecuter interrupt false
+2017-10-23 17:17:22 INFO main - join thread NettyEventExecuter eclipse time(ms) 0 90000
+2017-10-23 17:17:22 INFO NettyClientSelector_1 - closeChannel: close the connection to remote address[127.0.0.1:8080] result: true
+2017-10-23 17:17:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelInactive, the channel[127.0.0.1:56961]
+2017-10-23 17:17:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelUnregistered, the channel[127.0.0.1:56961]
