@@ -206,7 +206,7 @@ TCP: bind
 UDP: 需要bind吗，可以connect吗（可以然后可以调用send，否则要调用sendto指定目的地址和目的端口）
 
 7. SO_REUSEADDR和SO_REUSEPORT区别
-
+http://www.jianshu.com/p/141aa1c41f15
 两个不同的socket可以bind到相同的源地址和源端口？默认不行。
 
 8. TCP协议的粘包问题如何解决

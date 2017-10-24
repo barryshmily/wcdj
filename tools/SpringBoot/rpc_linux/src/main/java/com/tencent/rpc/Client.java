@@ -21,16 +21,16 @@ import com.tencent.midas.network.netty.NettyRemotingServer;
 import com.tencent.midas.network.netty.NettyServerConfig;
 import com.tencent.midas.network.protocol.RemotingCommand;
 
-public class App {
+public class Client {
 
 	// static logger object
-	private static final Logger log = LoggerFactory.getLogger("RPC");
+	private static final Logger log = LoggerFactory.getLogger("ClientLogger");
 
 	// static function, server-end
-	public static RemotingServer createRemotingServer() throws InterruptedException {
+	public static RemotingServer createRemotingServer(int port) throws InterruptedException {
 
 		NettyServerConfig config = new NettyServerConfig();
-		config.setListenPort(8080);
+		config.setListenPort(port);
 		RemotingServer remotingServer = new NettyRemotingServer(config);
 		remotingServer.registerProcessor("ServiceTest", new ServiceTestImpl(), Executors.newCachedThreadPool());
 
@@ -78,7 +78,7 @@ public class App {
 		// add conf module
 		
 		// log init, TODO config
-		String logbackFile = "conf/logback.xml";
+		String logbackFile = "../conf/logback.xml";
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		JoranConfigurator configurator = new JoranConfigurator();
 		configurator.setContext(lc);
@@ -91,13 +91,15 @@ public class App {
 		}
 		System.out.println("load logback config[" + logbackFile + "] ok");
 		
-		RemotingServer server = null;;
-		RemotingClient client = null;
+
 		try {
-			server = createRemotingServer();
+//			RemotingServer server = null;;
+			RemotingClient client = null;
+//			
+//			server = createRemotingServer();
 			client = createRemotingClient();
 			
-			for (int i = 0; i < 3; ++i) {
+			for (int i = 1; i <= 1; ++i) {
 				TestRequestHeader requestHeader = new TestRequestHeader();
 				requestHeader.setCount(i);
 				requestHeader.setMessageTitle("HelloMessageTitle");
@@ -118,19 +120,15 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		} catch (RemotingConnectException | RemotingSendRequestException | RemotingTimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		} finally {
-			if(client != null)
-				client.shutdown();
-			if(server != null)
-				server.shutdown();
+//			if(client != null)
+//				client.shutdown();
+//			if(server != null)
+//				server.shutdown();
 		}
 		
 		System.out.println("main over");

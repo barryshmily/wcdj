@@ -24,13 +24,13 @@ import com.tencent.midas.network.protocol.RemotingCommand;
 public class App {
 
 	// static logger object
-	private static final Logger log = LoggerFactory.getLogger("RPC");
+	private static final Logger log = LoggerFactory.getLogger("RunLogger");
 
 	// static function, server-end
-	public static RemotingServer createRemotingServer() throws InterruptedException {
+	public static RemotingServer createRemotingServer(int port) throws InterruptedException {
 
 		NettyServerConfig config = new NettyServerConfig();
-		config.setListenPort(8080);
+		config.setListenPort(port);
 		RemotingServer remotingServer = new NettyRemotingServer(config);
 		remotingServer.registerProcessor("ServiceTest", new ServiceTestImpl(), Executors.newCachedThreadPool());
 
@@ -78,7 +78,7 @@ public class App {
 		// add conf module
 		
 		// log init, TODO config
-		String logbackFile = "conf/logback.xml";
+		String logbackFile = "../conf/logback.xml";
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		JoranConfigurator configurator = new JoranConfigurator();
 		configurator.setContext(lc);
@@ -91,46 +91,48 @@ public class App {
 		}
 		System.out.println("load logback config[" + logbackFile + "] ok");
 		
-		RemotingServer server = null;;
-		RemotingClient client = null;
+
 		try {
-			server = createRemotingServer();
-			client = createRemotingClient();
 			
-			for (int i = 0; i < 3; ++i) {
-				TestRequestHeader requestHeader = new TestRequestHeader();
-				requestHeader.setCount(i);
-				requestHeader.setMessageTitle("HelloMessageTitle");
-
-				// TODO
-				// parse header to dispatch
-
-				// client
-				RemotingCommand request = RemotingCommand.createRequestCommand("ServiceTest", requestHeader);
-				RemotingCommand response = client.invokeSync("localhost:8080", request, 1000 * 3000);
-				System.out.println(i + " response[" + response.getRemark() + "]");
-
-				// write file log
-				log.info(i + "invoke result = " + response.getRemark());
-			}
+//			RemotingClient client = null;
+//			
+			RemotingServer server = createRemotingServer(8080);
+			RemotingServer server2 = createRemotingServer(8081);
+			
+			log.info("server start");
+			
+//			client = createRemotingClient();
+//			
+//			for (int i = 0; i < 1; ++i) {
+//				TestRequestHeader requestHeader = new TestRequestHeader();
+//				requestHeader.setCount(i);
+//				requestHeader.setMessageTitle("HelloMessageTitle");
+//
+//				// TODO
+//				// parse header to dispatch
+//
+//				// client
+//				RemotingCommand request = RemotingCommand.createRequestCommand("ServiceTest", requestHeader);
+//				RemotingCommand response = client.invokeSync("localhost:8080", request, 1000 * 3000);
+//				System.out.println(i + " response[" + response.getRemark() + "]");
+//
+//				// write file log
+//				log.info(i + "invoke result = " + response.getRemark());
+//			}
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		} catch (RemotingConnectException | RemotingSendRequestException | RemotingTimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		} finally {
-			if(client != null)
-				client.shutdown();
-			if(server != null)
-				server.shutdown();
+//			if(client != null)
+//				client.shutdown();
+//			if(server != null)
+//				server.shutdown();
 		}
 		
 		System.out.println("main over");

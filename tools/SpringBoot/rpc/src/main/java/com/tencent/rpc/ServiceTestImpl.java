@@ -22,17 +22,19 @@ public class ServiceTestImpl implements NettyRequestProcessor{
 //	}
 
 	
+	@Override
+	public boolean rejectRequest() {
+		// this check before handle request
+		//System.out.println("reject check");
+		return false;
+	}
 	
 	// request process
 	@Override
 	public RemotingCommand processRequest(ChannelHandlerContext ctx, RemotingCommand request) {
+		System.out.println("server handle request");
 		request.setRemark("This is answer." + ctx.channel().remoteAddress());
 		return request;
-	}
-
-	@Override
-	public boolean rejectRequest() {
-		return false;
 	}
 
 }

@@ -1,0 +1,29 @@
+<assembly>
+  <id>bin</id>
+  <formats>
+    <format>zip</format>
+    <format>dir</format>
+  </formats>
+  <dependencySets>
+    <dependencySet>
+      <useProjectArtifact>true</useProjectArtifact>
+      <outputDirectory>lib</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+  <fileSets>
+    <fileSet>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README.md</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>conf</directory>
+      <outputDirectory>conf</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>sbin</directory>
+      <outputDirectory>bin</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
