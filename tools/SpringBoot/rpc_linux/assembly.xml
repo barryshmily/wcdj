@@ -22,8 +22,16 @@
       <outputDirectory>conf</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>tm_conf</directory>
+      <outputDirectory>tm_conf</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>sbin</directory>
       <outputDirectory>bin</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>cpp_lib</directory>
+      <outputDirectory>cpp_lib</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>

@@ -29,6 +29,12 @@ JAVA_OPT="${JAVA_OPT}  -XX:-UseLargePages"
 JAVA_OPT="${JAVA_OPT} -Djava.ext.dirs=${BASE_DIR}/lib"
 #JAVA_OPT="${JAVA_OPT} -Xdebug -Xrunjdwp:transport=dt_socket,address=9555,server=y,suspend=n"
 JAVA_OPT="${JAVA_OPT} -cp ${CLASSPATH}"
+JAVA_OPT="${JAVA_OPT} -Djava.library.path=../cpp_lib/"
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../cpp_lib/deps:../cpp_lib/third_lib:../cpp_lib/tm
+
+ulimit -c unlimited
+
 $JAVA ${JAVA_OPT} $@
 
 

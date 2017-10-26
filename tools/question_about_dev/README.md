@@ -206,8 +206,29 @@ TCP: bind
 UDP: 需要bind吗，可以connect吗（可以然后可以调用send，否则要调用sendto指定目的地址和目的端口）
 
 7. SO_REUSEADDR和SO_REUSEPORT区别
+
+ A TCP/UDP connection is identified by a tuple of five values:
+
+{<protocol>, <src addr>, <src port>, <dest addr>, <dest port>}
+
+Any unique combination of these values identifies a connection. As a result, no two connections can have the same five values, otherwise the system would not be able to distinguish these connections any longer.
+
+
+SO_REUSEADDR和SO_REUSEPORT主要是影响socket绑定ip和port的成功与否。先简单说几点绑定规则
+规则1：socket可以指定绑定到一个特定的ip和port，例如绑定到192.168.0.11:9000上；
+规则2：同时也支持通配绑定方式，即绑定到本地"any address"（例如一个socket绑定为 0.0.0.0:21，那么它同时绑定了所有的本地地址）；
+规则3：默认情况下，任意两个socket都无法绑定到相同的源IP地址和源端口。
+
+SO_REUSEADDR的作用主要包括两点
+a. 改变了通配绑定时处理源地址冲突的处理方式
+b. 改变了系统对处于TIME_WAIT状态的socket的看待方式
+
+SO_REUSEPORT
+a. 打破了上面的规则3，允许将多个socket绑定到相同的地址和端口，前提每个socket绑定前都需设置SO_REUSEPORT
+b. Linux 内核3.9加入了SO_REUSEPORT
+
+https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t
 http://www.jianshu.com/p/141aa1c41f15
-两个不同的socket可以bind到相同的源地址和源端口？默认不行。
 
 8. TCP协议的粘包问题如何解决
 
@@ -450,6 +471,11 @@ http://wiki.jikexueyuan.com/project/java-collection/hashmap.html
 
 http://wiki.jikexueyuan.com/project/java-collection/hashtable.html
 
+http://zhaox.github.io/2016/07/05/hashmap-vs-hashtable
 
 
+-----------------
+## 内核相关
+
+1. Linux的RCU机制
 

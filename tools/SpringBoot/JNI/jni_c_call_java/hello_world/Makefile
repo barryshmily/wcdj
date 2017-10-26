@@ -12,8 +12,7 @@ hello_world: hello_world.c
 	hello_world.c
 
 run: helloWorld.class hello_world
-	export LD_LIBRARY_PATH="$(JAVA_HOME)/jre/lib/amd64/server/"
-	./hello_world
+	export LD_LIBRARY_PATH="$(JAVA_HOME)/jre/lib/amd64/server/" && ./hello_world
 
 clean:
 	rm -f helloWorld.class hello_world

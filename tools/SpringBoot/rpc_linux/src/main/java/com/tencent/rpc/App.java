@@ -23,16 +23,30 @@ import com.tencent.midas.network.protocol.RemotingCommand;
 
 public class App {
 
+	// -------------------- JNI init beg --------------------
+	
+	static {
+		System.loadLibrary("api"); // api.dll (Windows) or libapi.so (Unixes)
+	}
+	// Native method declaration
+	private native int init_once();
+	private native int test();
+	private native int process(String req);
+	
+	// -------------------- JNI init end --------------------
+
 	// static logger object
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
 
 	// static function, server-end
-	public static RemotingServer createRemotingServer(int port) throws InterruptedException {
+	public static RemotingServer createRemotingServer(int port)
+			throws InterruptedException {
 
 		NettyServerConfig config = new NettyServerConfig();
 		config.setListenPort(port);
 		RemotingServer remotingServer = new NettyRemotingServer(config);
-		remotingServer.registerProcessor("ServiceTest", new ServiceTestImpl(), Executors.newCachedThreadPool());
+		remotingServer.registerProcessor("ServiceTest", new ServiceTestImpl(),
+				Executors.newCachedThreadPool());
 
 		// anonymous class
 		// remotingServer.registerProcessor("ServiceTest2", new
@@ -60,7 +74,7 @@ public class App {
 
 	// static function, client-end
 	public static RemotingClient createRemotingClient() {
-		
+
 		NettyClientConfig config = new NettyClientConfig();
 		RemotingClient client = new NettyRemotingClient(config);
 		client.start();
@@ -69,14 +83,25 @@ public class App {
 
 	/**
 	 * program start
+	 * 
 	 * @author gerryyang
 	 * @version 0.0.1
 	 */
 	public static void main(String[] args) {
 		
+
+		// jni
+		new App().test();
+		new App().init_once();  // Invoke native method
+		
+		String req = "gerry test";
+		new App().process(req);
+		
+
+
 		// TODO
 		// add conf module
-		
+
 		// log init, TODO config
 		String logbackFile = "../conf/logback.xml";
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -90,35 +115,38 @@ public class App {
 			e.printStackTrace();
 		}
 		System.out.println("load logback config[" + logbackFile + "] ok");
-		
 
 		try {
-			
-//			RemotingClient client = null;
-//			
+
+			// RemotingClient client = null;
+			//
 			RemotingServer server = createRemotingServer(8080);
 			RemotingServer server2 = createRemotingServer(8081);
-			
+
 			log.info("server start");
-			
-//			client = createRemotingClient();
-//			
-//			for (int i = 0; i < 1; ++i) {
-//				TestRequestHeader requestHeader = new TestRequestHeader();
-//				requestHeader.setCount(i);
-//				requestHeader.setMessageTitle("HelloMessageTitle");
-//
-//				// TODO
-//				// parse header to dispatch
-//
-//				// client
-//				RemotingCommand request = RemotingCommand.createRequestCommand("ServiceTest", requestHeader);
-//				RemotingCommand response = client.invokeSync("localhost:8080", request, 1000 * 3000);
-//				System.out.println(i + " response[" + response.getRemark() + "]");
-//
-//				// write file log
-//				log.info(i + "invoke result = " + response.getRemark());
-//			}
+
+			// client = createRemotingClient();
+			//
+			// for (int i = 0; i < 1; ++i) {
+			// TestRequestHeader requestHeader = new TestRequestHeader();
+			// requestHeader.setCount(i);
+			// requestHeader.setMessageTitle("HelloMessageTitle");
+			//
+			// // TODO
+			// // parse header to dispatch
+			//
+			// // client
+			// RemotingCommand request =
+			// RemotingCommand.createRequestCommand("ServiceTest",
+			// requestHeader);
+			// RemotingCommand response = client.invokeSync("localhost:8080",
+			// request, 1000 * 3000);
+			// System.out.println(i + " response[" + response.getRemark() +
+			// "]");
+			//
+			// // write file log
+			// log.info(i + "invoke result = " + response.getRemark());
+			// }
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -127,14 +155,14 @@ public class App {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 		} finally {
-//			if(client != null)
-//				client.shutdown();
-//			if(server != null)
-//				server.shutdown();
+			// if(client != null)
+			// client.shutdown();
+			// if(server != null)
+			// server.shutdown();
 		}
-		
+
 		System.out.println("main over");
 	}
 }
