@@ -22,7 +22,7 @@ echo $CLASSPATH
 # JVM Configuration
 #===========================================================================================
 JAVA_OPT="${JAVA_OPT} -server -Xms1g -Xmx1g "
-JAVA_OPT="${JAVA_OPT} -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8 -XX:+DisableExplicitGC -XX:-UseParNewGC"
+JAVA_OPT="${JAVA_OPT} -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8 -XX:+DisableExplicitGC"
 JAVA_OPT="${JAVA_OPT} -verbose:gc -Xloggc:/dev/shm/rmq_srv_gc.log -XX:+PrintGCDetails"
 JAVA_OPT="${JAVA_OPT} -XX:-OmitStackTraceInFastThrow"
 JAVA_OPT="${JAVA_OPT}  -XX:-UseLargePages"
@@ -32,9 +32,9 @@ JAVA_OPT="${JAVA_OPT} -cp ${CLASSPATH}"
 JAVA_OPT="${JAVA_OPT} -Djava.library.path=../cpp_lib/"
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../cpp_lib/deps:../cpp_lib/third_lib:../cpp_lib/tm
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"${JAVA_HOME}/jre/lib/amd64/server/"
 
 ulimit -c unlimited
-
 $JAVA ${JAVA_OPT} $@
 
 

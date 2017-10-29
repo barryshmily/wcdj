@@ -62,6 +62,42 @@ The four steps in the process of calling Java methods from C/C++ are as follows:
 3. Write the C/C++ code. This code will create and instantiate a JVM and call the correct Java methods.
 4. Run the native C/C++ application. We'll run the application to see if it works. We'll also go over some tips for dealing with common errors.
 
+
+---
+## Some Errors
+
+1. JNI_CreateJavaVM  error code 5
+
+jni.h defines the possible return values for JNI functions:
+
+``` cpp
+#define JNI_OK           0                 /* success */
+#define JNI_ERR          (-1)              /* unknown error */
+#define JNI_EDETACHED    (-2)              /* thread detached from the VM */
+#define JNI_EVERSION     (-3)              /* JNI version error */
+#define JNI_ENOMEM       (-4)              /* not enough memory */
+#define JNI_EEXIST       (-5)              /* VM already created */
+#define JNI_EINVAL       (-6)              /* invalid arguments */
+```
+
+https://stackoverflow.com/questions/43810827/return-code-of-jni-createjavavm
+
+
+2. Exception in thread "main" java.lang.NoClassDefFoundError: xxx
+
+https://stackoverflow.com/questions/17973970/how-to-solve-java-lang-noclassdeffounderror
+
+3. get classpath
+
+``` java
+String path = System.getProperty("java.class.path");
+```
+
+4. Problematic frame libstdc++.so JNI
+
+
+
+
 ---
 Refer
 
