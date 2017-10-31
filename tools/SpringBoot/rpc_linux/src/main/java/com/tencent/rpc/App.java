@@ -31,7 +31,7 @@ public class App {
 	// Native method declaration
 	private native int init_once();
 	private native int test();
-	private native int process(String req);
+	public native int process(String req);
 	
 	// -------------------- JNI init end --------------------
 
@@ -97,10 +97,7 @@ public class App {
 		// jni
 		new App().test();
 		new App().init_once();  // Invoke native method
-		
-		String req = "gerry test";
-		new App().process(req);
-		
+				
 
 
 		// TODO

@@ -92,9 +92,10 @@ public class Client {
 		System.out.println("load logback config[" + logbackFile + "] ok");
 		
 
+		RemotingClient client = null;
 		try {
 //			RemotingServer server = null;;
-			RemotingClient client = null;
+
 //			
 //			server = createRemotingServer();
 			client = createRemotingClient();
@@ -125,8 +126,8 @@ public class Client {
 			e.printStackTrace();
 			
 		} finally {
-//			if(client != null)
-//				client.shutdown();
+			if(client != null)
+			    client.shutdown();
 //			if(server != null)
 //				server.shutdown();
 		}

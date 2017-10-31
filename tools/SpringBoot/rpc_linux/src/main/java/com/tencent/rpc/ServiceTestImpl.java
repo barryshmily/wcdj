@@ -8,6 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 import com.tencent.midas.network.netty.NettyRequestProcessor;
 import com.tencent.midas.network.protocol.RemotingCommand;
 
+import com.tencent.rpc.App;
+
 public class ServiceTestImpl implements NettyRequestProcessor {
 
 	// static logger object
@@ -39,6 +41,12 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 	public RemotingCommand processRequest(ChannelHandlerContext ctx,
 			RemotingCommand request) {
 		log.info("server handle request:" + request);
+		
+		
+		String req = "gerry test";
+		App app = new App();
+		log.info("hashCode: " + app.hashCode());
+		app.process(req);
 
 		request.setRemark("This is answer." + ctx.channel().remoteAddress());
 		return request;

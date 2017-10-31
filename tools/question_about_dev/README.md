@@ -479,3 +479,103 @@ http://zhaox.github.io/2016/07/05/hashmap-vs-hashtable
 
 1. Linux的RCU机制
 
+
+2. RBP 和 RSP
+X86-64 64位的寄存器一般都是叫RXX，其低32位向下兼容一般称为EXX
+
+不过x86-64时代，现代编译器下已经不是这样的布局了，传递参数不再压栈，而是通过固定的几个寄存器。
+
+现代编译器做了这些改变，除了通过寄存器传递参数比之前参数压栈要快之外。对于我们debug好处，就是当出现堆栈溢出，向上冲破到FunA的栈帧的时候，不会覆盖到这些参数，那么core的时候我们依然可以看到FunA传递给FunB的参数，这样我们就能够定位到底是不是由于FunA传递进来的参数引起的。
+
+```
+# 查看RBP指向的区域
+p $rbp
+x/64ag $rbp
+```
+
+局部变量都在栈底rbp的下方，即$rbp-Offset的区域。如果知道了对应的Offset值，不就能够p去查看了
+
+CPU常用寄存器
+
+在X86-64中，所有寄存器都是64位，相对32位的x86来说，标识符发生了变化，比如：从原来的%ebp变成了%rbp。为了向后兼容性，%ebp依然可以使用，不过指向了%rbp的低32位。
+
+X86-64寄存器的变化，不仅体现在位数上，更加体现在寄存器数量上。新增加寄存器%r8到%r15。加上x86的原有8个，一共16个寄存器。
+
+| 寄存器 | 作用
+| -- | --
+| RIP | 指向哪，程序就运行到哪里。调用FunB，就把RIP指向FunB的入口地址。
+| RAX | 函数的返回值一般通过RAX寄存器传递
+| RBP | 一般用于指向当前函数调用栈的**栈底**，以方便对栈的操作,如获取函数参数、局部变量等。低32位称为EBP
+| RSP | 一直指向当前函数调用栈的**栈顶**，RSP在函数返回时要和调用前的指向要一致，即使所谓的栈平衡。低32位叫ESP
+
+传递参数用到的寄存器，看反汇编时会遇到
+
+| 寄存器 | 作用
+| -- | --
+| RDI | 第1个参数
+| RSI | 第2个参数
+| RDX | 第3个参数
+| RCX | 第4个参数
+| R8 | 第5个参数
+| R9 | 第6个参数
+
+使用gdb 指令info reg 可以查看CPU常用的几个寄存器。对其他寄存器感兴趣的同学可以查看《参考文献》当中《Intel® 64 and IA-32 Architectures Software Developer Manuals》和《X86-64寄存器和栈帧》
+
+反汇编
+
+gdb 指令 disassemble /m 函数名(或者地址)， /m是映射到代码
+
+gdb 默认使用的AT&T的语法，另外一种常见的是Intel 汇编语法（个人更喜欢这种风格）
+
+可以使用set disassembly-flavor intel or att来切换风格
+
+
+参考文献
+
+函数调用 压栈的工作原理
+http://blog.csdn.net/u011555996/article/details/70211315
+
+X86-64寄存器和栈帧
+http://blog.csdn.net/dayancn/article/details/51328959
+
+对于ESP、EBP寄存器的理解
+http://blog.csdn.net/yeruby/article/details/39780943
+
+esp和ebp详解
+http://www.cnblogs.com/dormant/p/5079894.html
+
+GDB相关反汇编指令
+http://blog.csdn.net/linuxheik/article/details/17529919
+
+LINUX下GDB反汇编和调试
+http://www.cnblogs.com/brucemengbm/p/7223724.html
+
+AT&T汇编语法
+http://ted.is-programmer.com/posts/5251.html
+
+AT&T汇编简介
+http://ilovers.sinaapp.com/article/att%E6%B1%87%E7%BC%96gasgnu-assembly
+
+AT&T 与 Intel 汇编语言的比较
+http://blog.csdn.net/21aspnet/article/details/7176915
+
+GCC 中的编译器堆栈保护技术
+https://www.ibm.com/developerworks/cn/linux/l-cn-gccstack/index.html
+
+Linux下缓冲区溢出攻击的原理及对策
+https://www.ibm.com/developerworks/cn/linux/l-overflow/
+
+缓冲区溢出攻击
+http://netsecurity.51cto.com/art/201407/446830.htm
+
+GCC “Options That Control Optimization”
+https://gcc.gnu.org/onlinedocs/gcc-4.4.2/gcc/Optimize-Options.html
+
+Stack overflow “gcc -fomit-frame-pointer”
+https://stackoverflow.com/questions/14666665/trying-to-understand-gcc-option-fomit-frame-pointer
+
+Intel® 64 and IA-32 Architectures Software Developer Manuals
+https://software.intel.com/en-us/articles/intel-sdm
+
+一种处理栈越界的方法
+https://zhuanlan.zhihu.com/p/20642841

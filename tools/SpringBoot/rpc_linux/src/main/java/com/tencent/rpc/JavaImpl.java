@@ -1,10 +1,16 @@
+package com.tencent.rpc;
+
 public class JavaImpl {
 
 	public static void main(String[] args){
+		
 		System.out.println("main JavaImpl");
+		
+		
 	}
 	
-	public static int square(int input){
+	public int square(int input){
+		System.out.println("hashCode: " + hashCode());
 		int output = input * input;
 		return output;
 	}
