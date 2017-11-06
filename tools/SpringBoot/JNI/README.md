@@ -292,6 +292,22 @@ String path = System.getProperty("java.class.path");
 ---
 Refer
 
-https://www.ibm.com/developerworks/java/tutorials/j-jni/j-jni.html
-https://www.ibm.com/developerworks/cn/java/j-lo-jni/index.html
-http://wiki.jikexueyuan.com/project/jni-ndk-developer-guide/
+[Java Native Interface](https://en.wikipedia.org/wiki/Java_Native_Interface)
+[Java Native Interface Specification Contents](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/jniTOC.html)
+[JNI Types and Data Structures](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/types.html)
+[ORACLE JNI Functions](https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html)
+[Java programming with JNI](https://www.ibm.com/developerworks/java/tutorials/j-jni/j-jni.html)
+[JNI 对象在函数调用中的生命周期](https://www.ibm.com/developerworks/cn/java/j-lo-jni/index.html)
+[JNI/NDK 开发指南](http://wiki.jikexueyuan.com/project/jni-ndk-developer-guide/)
+[Java Programming Tutorial Java Native Interface](https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html)
+[Calling Java from C++ with JNI](https://www.codeproject.com/Articles/993067/Calling-Java-from-Cplusplus-with-JNI)
+[Best practices for using the Java Native Interface](https://www.ibm.com/developerworks/library/j-jni/index.html)
+[在 JNI 编程中避免内存泄漏](https://www.ibm.com/developerworks/cn/java/j-lo-jnileak/index.html)
+[Wrapping a C++ library with JNI – introduction](https://thebreakfastpost.com/2012/01/21/wrapping-a-c-library-with-jni-introduction/)
+[Java Native Interface Specification—Contents](https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/jniTOC.html)
+[How to pass a complex structure between C and Java with JNI on Android NDK](https://stackoverflow.com/questions/10300039/how-to-pass-a-complex-structure-between-c-and-java-with-jni-on-android-ndk)
+
+
+https://www.cl.cam.ac.uk/teaching/0910/CandC++/lecture8-6up.pdf
+https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp276
+https://android.googlesource.com/platform/frameworks/opt/net/wifi/+/lollipop-release/service/jni/jni_helper.cpp

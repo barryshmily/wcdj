@@ -110,7 +110,7 @@ public class Client {
 
 				// client
 				RemotingCommand request = RemotingCommand.createRequestCommand("ServiceTest", requestHeader);
-				RemotingCommand response = client.invokeSync("localhost:8080", request, 1000 * 3000);
+				RemotingCommand response = client.invokeSync("localhost:8081", request, 1000 * 3000);
 				System.out.println(i + " response[" + response.getRemark() + "]");
 
 				// write file log

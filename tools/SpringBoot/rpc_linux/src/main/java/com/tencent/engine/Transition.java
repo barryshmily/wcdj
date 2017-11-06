@@ -6,27 +6,27 @@ import java.util.List;
 import com.tencent.operators.Operator;
 
 public class Transition {
-	private Action from;
-	private Action to;
+	private TmeAction from;
+	private TmeAction to;
 	private List<Operator> operators = new ArrayList<Operator>();
 	
-	public Transition(Action from_, Action to_, Operator ...operators_) 
+	public Transition(TmeAction from_, TmeAction to_, Operator ...operators_) 
 	{
 		if (getFrom() == null || to == null || operators_ == null) {
 			//throw ...
 		}
 		from = from_;
 		to = to_;
-		for(Operator op : operators_) {
+		for (Operator op : operators_) {
 			operators.add(op);
 		}
 	}
 
-	public Action getFrom() {
+	public TmeAction getFrom() {
 		return from;
 	}
 	
-	public Action getTo() {
+	public TmeAction getTo() {
 		return to;
 	}
 	

@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import io.netty.channel.ChannelHandlerContext;
 
+import com.mchange.v2.codegen.bean.InnerBeanPropertyBeanGenerator;
+import com.tencent.engine.TransMachineManager;
+import com.tencent.exception.InnerException;
 import com.tencent.midas.network.netty.NettyRequestProcessor;
 import com.tencent.midas.network.protocol.RemotingCommand;
-
 import com.tencent.rpc.App;
 
 public class ServiceTestImpl implements NettyRequestProcessor {
@@ -41,12 +43,25 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 	public RemotingCommand processRequest(ChannelHandlerContext ctx,
 			RemotingCommand request) {
 		log.info("server handle request:" + request);
-		
-		
+
 		String req = "gerry test";
+		// use singleton to prevent thread-safe issue
 		App app = new App();
 		log.info("hashCode: " + app.hashCode());
-		app.process(req);
+		log.info("tid: " + Thread.currentThread().getId());
+
+		// call c
+		// app.process(req);
+		
+		String transName = "routine1";
+		String uuid = "12345abc";
+		String rsp = "";
+		try {
+			TransMachineManager.instance().getTransMachine(transName)
+					.onRequest(uuid, transName, req, rsp);
+		} catch (Exception e) {
+			log.info("onRequest exception");
+		}
 
 		request.setRemark("This is answer." + ctx.channel().remoteAddress());
 		return request;

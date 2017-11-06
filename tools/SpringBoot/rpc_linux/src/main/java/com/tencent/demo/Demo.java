@@ -8,18 +8,24 @@ import com.tencent.engine.Service;
 import com.tencent.engine.TccAction;
 import com.tencent.engine.TransMachine;
 import com.tencent.engine.Transition;
-
 import com.tencent.operators.OperatorPath;
 import com.tencent.operators.OperatorType;
 import com.tencent.operators.OperatorValue;
 import com.tencent.operators.TmeOperator;
+import com.tencent.rpc.App;
+
+
 
 public class Demo {
 	
+	
 	public static TransMachine RegistTestRoutine() throws Exception
 	{
-		TransMachine mch = new TransMachine("test_routine");
+		App.logInstance().info("RegistTestRoutine");
 		
+		TransMachine mch = new TransMachine("routine1");
+		
+		// node a
 		Service tcc_a = new Service("tcc_a");
 		Function a_try = tcc_a.addFunction("tcc_a_try", 
 				new PreProcHandler() {
@@ -33,11 +39,13 @@ public class Demo {
 		Function a_confirm = tcc_a.addFunction("tcc_a_confirm");
 		Function a_cancel = tcc_a.addFunction("tcc_a_cancel");
 		
-		TccAction act_a = new TccAction("tcc_a", a_try, a_confirm, a_cancel);
+		TccAction act_a = new TccAction("tcc_a"/*Service Name*/, 
+				a_try/*Function*/, a_confirm/*Function*/, a_cancel/*Function*/);
 		
+		// node b
 		Service tcc_b = new Service("tcc_b");
-		TccAction act_b = new TccAction("tcc_b", tcc_b.addFunction("tcc_b_try"), tcc_b.addFunction("tcc_b_confirm"),
-				tcc_b.addFunction("tcc_b_cancel"));
+		TccAction act_b = new TccAction("tcc_b", 
+				tcc_b.addFunction("tcc_b_try"), tcc_b.addFunction("tcc_b_confirm"), tcc_b.addFunction("tcc_b_cancel"));
 		
 		mch.addAction(act_a);
 		mch.addAction(act_b);

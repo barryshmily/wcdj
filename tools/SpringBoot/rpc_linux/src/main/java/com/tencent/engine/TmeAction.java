@@ -3,16 +3,20 @@ package com.tencent.engine;
 import com.tencent.engine.Function.FunctionType;
 
 public class TmeAction implements Action {
+	
 	String name;
 	private ActionType type;
 	Function func0;
 	Function func1;
 	Function func2;
 	
-	public final static Action BEGIN = new TmeAction("begin", ActionType.TCC);
-	public final static Action COMMIT = new TmeAction("commit", ActionType.TRYBEST);
-	public final static Action ROLLBACK = new TmeAction("rollback", ActionType.TRYBEST);
-	public final static Action END = new TmeAction("end", ActionType.TRYBEST);
+	public StateEdge edge;
+	public StateEdge adjacent_edges;
+	
+	public final static TmeAction BEGIN = new TmeAction("begin", ActionType.TCC);
+	public final static TmeAction COMMIT = new TmeAction("commit", ActionType.TRYBEST);
+	public final static TmeAction ROLLBACK = new TmeAction("rollback", ActionType.TRYBEST);
+	public final static TmeAction END = new TmeAction("end", ActionType.TRYBEST);
 	
 	TmeAction(String name_, ActionType type_)
 	{

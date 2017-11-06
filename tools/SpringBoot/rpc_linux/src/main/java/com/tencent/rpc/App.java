@@ -9,6 +9,11 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
+import com.tencent.demo.Demo;
+import com.tencent.engine.TransMachine;
+import com.tencent.engine.TransMachineManager;
+import com.tencent.exception.InnerException;
+import com.tencent.exception.LogicException;
 // private packages
 import com.tencent.midas.network.RemotingClient;
 import com.tencent.midas.network.RemotingServer;
@@ -33,10 +38,14 @@ public class App {
 	private native int test();
 	public native int process(String req);
 	
+	
 	// -------------------- JNI init end --------------------
 
 	// static logger object
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
+	public static Logger logInstance() {
+		return log;
+	}
 
 	// static function, server-end
 	public static RemotingServer createRemotingServer(int port)
@@ -91,15 +100,26 @@ public class App {
 		
 		
 		String path = System.getProperty("java.class.path");
-		System.out.println("classpath" + path);
+		System.out.println("classpath: " + path);
 		
-
+		
 		// jni
 		new App().test();
 		new App().init_once();  // Invoke native method
+		
+		try {
+			// TODO register more routines
+			TransMachine tm = Demo.RegistTestRoutine();
+			
+			TransMachineManager.instance().addTransMachine(tm);
+			// ...
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("exception: create TransMachine");
+		}
+		
 				
-
-
 		// TODO
 		// add conf module
 
@@ -121,8 +141,8 @@ public class App {
 
 			// RemotingClient client = null;
 			//
-			RemotingServer server = createRemotingServer(8080);
-			RemotingServer server2 = createRemotingServer(8081);
+			RemotingServer server = createRemotingServer(8081);
+			RemotingServer server2 = createRemotingServer(8082);
 
 			log.info("server start");
 
