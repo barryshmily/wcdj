@@ -2,12 +2,8 @@ package com.tencent.operators;
 
 import java.util.List;
 
-public class TmeOperator implements Operator
-{
-	protected OperatorType type;
-	protected OperatorPath path;
-	protected OperatorValue value;
-	
+public class TmeOperator extends Operator
+{	
 	public TmeOperator(OperatorType type_, OperatorPath path_, OperatorValue value_)
 	{
 		if (type_ == null) {
@@ -44,17 +40,17 @@ public class TmeOperator implements Operator
 		type = type_;
 	}
 
-	@Override
+	//@Override
 	public OperatorType getType() {
 		return type;
 		}
 
-	@Override
+	//@Override
 	public List<String> getPath() {
 		return path.getPath();
 	}
 
-	@Override
+	//@Override
 	public List<Object> getValue() {
 		return value.getValue();
 	}

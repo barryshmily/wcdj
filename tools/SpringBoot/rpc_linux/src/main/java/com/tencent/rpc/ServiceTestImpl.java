@@ -60,7 +60,7 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 			TransMachineManager.instance().getTransMachine(transName)
 					.onRequest(uuid, transName, req, rsp);
 		} catch (Exception e) {
-			log.info("onRequest exception");
+			log.info("onRequest exception: " + e.getMessage());// TODO
 		}
 
 		request.setRemark("This is answer." + ctx.channel().remoteAddress());

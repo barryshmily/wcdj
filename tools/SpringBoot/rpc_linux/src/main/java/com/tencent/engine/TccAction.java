@@ -9,7 +9,7 @@ public class TccAction extends TmeAction {
 	
 	public TccAction(String name, Function tryFunc, Function confirmFunc, Function cancelFunc)
 	{
-		super(name, ActionType.TCC, tryFunc, confirmFunc, cancelFunc);
+		super(name, ActionType.TCC, tryFunc, confirmFunc, cancelFunc, null);
 	}
 	
 	public TccAction setTry(Function tryFunc)

@@ -5,8 +5,20 @@ import java.util.List;
 
 import com.tencent.operators.Operator;
 
+
 public class Transition {
 	private TmeAction from;
+	public void setFrom(TmeAction from) {
+		this.from = from;
+	}
+
+	public void setTo(TmeAction to) {
+		this.to = to;
+	}
+
+	public void setOperators(List<Operator> operators) {
+		this.operators = operators;
+	}
 	private TmeAction to;
 	private List<Operator> operators = new ArrayList<Operator>();
 	
@@ -33,4 +45,5 @@ public class Transition {
 	public List<Operator> getOperators() {
 		return operators;
 	}
+
 }

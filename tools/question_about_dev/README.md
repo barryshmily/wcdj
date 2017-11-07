@@ -91,6 +91,15 @@ int * const p2 = &i;
 方法1：(3 + 7) / 2 = 5 溢出问题
 方法2：3 + (7 - 3) / 2 = 5 如果是迭代器只能这样用，因为迭代器没有定义加法，只定义了减法
 
+6. 宏
+
+测试方法：
+``` 
+gcc –E  macro.test.c
+```
+
+https://gcc.gnu.org/onlinedocs/cpp/Macros.html
+
 ### GCC
 
 1. __attribute__ ((packed))的作用
@@ -183,6 +192,7 @@ static unsigned long long GetTickMS()
 #endif
 }
 ```
+
 
 -----------------
 ## 网络部分
@@ -384,6 +394,114 @@ https://techtalk.intersec.com/2013/10/memory-part-4-intersecs-custom-allocators/
 
 https://techtalk.intersec.com/2013/12/memory-part-5-debugging-tools/
 
+
+18. Makefile
+
+一个工程中的源文件不计其数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作。
+
+比如有一个test.c文件，gcc针对上面几个过程，对应的命令如下：
+```
+预处理：gcc -E test.c -o test.i
+
+编译：gcc -S test.c -o test.s
+
+汇编：gcc -c test.s -o test.o
+
+连接：gcc test.o -o test
+```
+
+并行编译。工程比较大时，并行编译非常会充分利用多CPU的优势，缩短编译的时间。
+```
+make -f makefile -j 8
+```
+
+两个函数patsubst，wildcard
+
+makefile函数定义格式为：$(<function><arguments>)。<function>就是函数名，make支持的函数不多。<arguments>是函数的参数，参数间以逗号“,”分隔，而函数名和参数之间以“空格”分隔
+```
+$(wildcard *.cpp)：表示展开工作目录下所有的.cpp文件；
+$(patsubst %.cpp,%.o,$(wildcard *.cpp))：表示对.cpp文件列表字符串进行替换，替换为.o文件后缀的列表字符串；
+```
+
+Makefile.comm
+``` 
+CXX = g++
+OBJS = $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+OBJS_I = $(patsubst %.cpp,%.i,$(wildcard *.cpp))
+DEPENDS = $(patsubst %.o,%.d,$(OBJS))
+
+MYFLAGS = -MMD -Wno-unused -pipe -g -O2 -D_GNU_SOURCE
+PLATFORM := $(strip $(shell echo `uname -m`))
+ifeq ($(PLATFORM,x86_64))
+    PLAT_FLAGS := 64
+else
+    PLAT_FLAGS := 32
+endif
+MYFLAGS += -m${PLAT_FLAGS}
+```
+
+常用编译选项
+
+-MMD：生成文件关联信息，并将结果保存在.d文件中；我们可以很方便的分析，引用的.h文件目录是否正确；
+
+-Wno_unused：对于定义了没有使用的变量是否需要告警出来；
+
+-pipe：使用管道代替编译中的临时文件；这是gcc的优化参数，默认情况下，gcc编译过程中的中间临时文件会放到/tmp目录下，并在编译完成后删除掉；读写文件会影响到编译的效率，管道取代临时文件，提升了编译效率；
+
+-g：产生调试信息；调试信息分级别，默认是g2，也可以提升为g3，这样包含定义的宏；
+
+-02：编译器的优化选项的4个级别，-O0表示没有优化,-O1为缺省值，-O3优化级别最高；
+
+-D_GNU_SOURCE：表示程序在GNU标准下进行编译，如果用到了GNU标准的信号量，锁等API函数，需要加上该选项；
+
+-m32：生成32位操作系统的汇编代码；
+
+$(strip $(shell  echo `uname -m`))：打印操作系统版本出来；
+
+Makefile
+```
+include ./Makefile.comm
+
+TARGET = your_bin
+PROJ_DIR = $(shell pwd)
+SRC_DIR = ./
+OBJ_DIR = ./
+
+.PHONY: all clean init
+
+all: $(OBJS_I) $(TARGET)
+    @echo -e "make proj dir $(PROJ_DIR) success"
+
+$(TARGET): $(OBJS)
+    $(CXX) $(MYFLAGS) $^ -o $@ $(LIB)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+    $(CXX) $(MYFLAGS) -c -o $@ $(INC) $<
+
+$(OBJ_DIR)%.i: $(SRC_DIR)%.cpp
+    $(CXX) $(MYFLAGS) -o $@ $(INC) -E $<
+
+clean:
+    rm -f $(OBJS) $(TARGET) $(DEPENDS)
+
+-include $(DEPENDS)
+```
+PHONY：定义了显示执行makefile的命令名称，告诉编译系统，all，clean，init假定这些目标需要更新。有两个作用：a）如果clean为一个文件时，make clean将失效；b）如果all后面加上clean，但clean未声明为PHONY，编译系统会认为clean没有依赖，clean文件已经是最新的，不需要执行；
+
+可以看见makefile的第一个目标为all，因此只执行make不加目标名的时候，将执行该伪目标；
+用到了makefile常用的几个通配符，$^ $@, $<
+$@：目标文件
+$^：所有的依赖文件
+$<：第一个依赖文件
+include表示包含一个外部的makefile文件进来，-include和include功能一样，-include忽略文件不存在的报错；
+
+通常我们在Makefile中可使用“-include”来代替“include”，来忽略由于包含文件不存在或者无法创建时的错误提示（“-”的意思是告诉make，忽略此操作的错误。make继续执行）。像下边那样：
+-include FILENAMES...
+使用这种方式时，当所要包含的文件不存在时不会有错误提示、make也不会退出；除此之外，和第一种方式效果相同。以下是这两种方式的比较：
+使用“include FILENAMES...”，make程序处理时，如果“FILENAMES”列表中的任何一个文件不能正常读取而且不存在一个创建此文件的规则时make程序将会提示错误并退出。
+使用“-include FILENAMES...”的情况是，当所包含的文件不存在或者不存在一个规则去创建它，make程序会继续执行，只有真正由于不能正确完成终极目标的重建时（某些必需的目标无法在当前已读取的makefile文件内容中找到正确的重建规则），才会提示致命错误并退出。
+为了和其它的make程序进行兼容。也可以使用“sinclude”来代替“-include”（GNU所支持的方式）。
+
 -----------------
 ## 数据库部分
 
@@ -473,6 +591,13 @@ http://wiki.jikexueyuan.com/project/java-collection/hashtable.html
 
 http://zhaox.github.io/2016/07/05/hashmap-vs-hashtable
 
+3. KMP算法
+
+KMP算法的时间复杂度为0（m+n），这个算法最为巧妙的地方在于：每次匹配时，利用了之前匹配的结果，从而避免需要将指针回退。
+
+子串的next数组实际是这个算法的cache数据，牺牲了空间，换取了时间上的高效，在我们实际项目中，有很多类似的应用场景；
+
+另外一个经典的字符串匹配算法AC自动机匹配算法，用于对一段Query进行字典词匹配。在实际应用场景中，如基于字典表的分词，脏词库识别等，都有广泛应用，后面也将展开该算法的实现。
 
 -----------------
 ## 内核相关

@@ -11,7 +11,7 @@ public class TmeAction implements Action {
 	Function func2;
 	
 	public StateEdge edge;
-	public StateEdge adjacent_edges;
+	//public StateEdge adjacent_edges;
 	
 	public final static TmeAction BEGIN = new TmeAction("begin", ActionType.TCC);
 	public final static TmeAction COMMIT = new TmeAction("commit", ActionType.TRYBEST);
@@ -20,10 +20,10 @@ public class TmeAction implements Action {
 	
 	TmeAction(String name_, ActionType type_)
 	{
-		this(name_, type_, null, null, null);
+		this(name_, type_, null, null, null, null);
 	}
 	
-	TmeAction(String name_, ActionType type_, Function func0_, Function func1_, Function func2_)
+	TmeAction(String name_, ActionType type_, Function func0_, Function func1_, Function func2_, StateEdge edge_)
 	{
 		if (name_ == null || type_ == null) {
 			//..throw
@@ -34,6 +34,7 @@ public class TmeAction implements Action {
 		func0 = func0_;
 		func1 = func1_;
 		func2 = func2_;
+		edge = edge_;
 	}
 	
 	private void checkFunction(Function func)
@@ -84,5 +85,13 @@ public class TmeAction implements Action {
 	{
 		checkFunction(func2_);
 		func2 = func2_;
+	}
+	
+	public StateEdge getEdge() {
+		return edge;
+	}
+	
+	public void setEdge(StateEdge edge_) {
+		edge = edge_;
 	}
 }

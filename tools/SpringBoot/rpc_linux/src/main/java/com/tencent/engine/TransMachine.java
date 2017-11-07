@@ -3,9 +3,12 @@ package com.tencent.engine;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+
 
 import com.tencent.exception.InnerException;
 import com.tencent.exception.LogicException;
@@ -31,6 +34,38 @@ class StateEdge
 	
 	public StateEdge next;
 	
+	public StateEdge getNext() {
+		return next;
+	}
+	
+	public void setNext(StateEdge next_) {
+		next = next_;
+	}
+	
+	public TmeAction getFrom() {
+		return from;
+	}
+	
+	public void setFrom(TmeAction from_) {
+		from = from_;
+	}
+	
+	public TmeAction getTo() {
+		return to;
+	}
+	
+	public void setTo(TmeAction to_) {
+		from = to_;
+	}
+	
+	public List<Operator> getOperators() {
+		return operators;
+	}
+	
+	public void setOperators(List<Operator> operators_) {
+		operators = operators_;
+	}
+	
 	
 }
 
@@ -43,6 +78,144 @@ class StateNode
 	public Function fun1;
 	public Function fun2;
 	
+}
+
+class Function2Jason
+{
+	private String name;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name_) {
+		name = name_;
+	}
+}
+
+class TmeAction2Jason
+{
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ActionType getType() {
+		return type;
+	}
+
+	public void setType(ActionType type) {
+		this.type = type;
+	}
+
+	public String getFunc0() {
+		return func0;
+	}
+
+	public void setFunc0(String func0) {
+		this.func0 = func0;
+	}
+
+	public String getFunc1() {
+		return func1;
+	}
+
+	public void setFunc1(String func1) {
+		this.func1 = func1;
+	}
+
+	public String getFunc2() {
+		return func2;
+	}
+
+	public void setFunc2(String func2) {
+		this.func2 = func2;
+	}
+
+	public String getNext_name() {
+		return next_name;
+	}
+
+	public void setNext_name(String next_name) {
+		this.next_name = next_name;
+	}
+
+	public String name;
+	public ActionType type;
+	
+	// TODO
+	public String func0;
+	public String func1;
+	public String func2;
+	
+	public String next_name;
+}
+
+class TransMachine2Jason
+{
+	public Map<String, TmeAction2Jason> actions = new HashMap<String, TmeAction2Jason>();
+	
+	public void convertActions(TransMachine transMachine) {
+		
+		// actions
+//		for (Map.Entry<String, TmeAction> entry: transMachine.actions.entrySet()) {
+//			String key = entry.getKey();
+//			TmeAction tac = entry.getValue();
+//			
+//			App.logInstance().info("key: " + key + " value: " + tac);
+//			
+//			TmeAction2Jason tac2j = new TmeAction2Jason();
+//			tac2j.name = tac.getName();
+//			tac2j.type = tac.getType();
+//			tac2j.func0 = tac.getFunc0().getName();
+//			tac2j.func1 = tac.getFunc1().getName();
+//			tac2j.func2 = tac.getFunc2().getName();
+//			tac2j.next_name = tac.getEdge().getFrom().getName();
+//			
+//			actions.put(key, tac2j);
+//			
+//		}
+		
+		Iterator<Map.Entry<String, TmeAction>> entries = transMachine.actions.entrySet().iterator();
+		
+		while (entries.hasNext()) {
+			
+			Map.Entry<String, TmeAction> entry = entries.next();
+			String key = entry.getKey();
+			TmeAction tac = entry.getValue();
+			
+			App.logInstance().info("key: " + key + " value: " + tac);
+			
+			TmeAction2Jason tac2j = new TmeAction2Jason();
+			tac2j.name = tac.getName();
+			tac2j.type = tac.getType();
+			tac2j.func0 = tac.getFunc0().getName();
+			tac2j.func1 = tac.getFunc1().getName();
+			tac2j.func2 = tac.getFunc2().getName();
+			
+//			if (tac.getEdge().getFrom().getName() == null) {
+//				tac2j.next_name = "end";
+//			} else {
+//				tac2j.next_name = tac.getEdge().getFrom().getName();// error TODO
+//			}
+//			
+			if (actions.put(key, tac2j) != null) {
+				App.logInstance().info("dulpicated key: " + key);
+			}
+			
+		}
+	}
+	
+	public Map<String, TmeAction2Jason> getActions() {
+		return actions;
+	}
+	
+	public void setActions(Map<String, TmeAction2Jason> actions_) {
+		actions = actions_;
+	}
 }
 
 public class TransMachine 

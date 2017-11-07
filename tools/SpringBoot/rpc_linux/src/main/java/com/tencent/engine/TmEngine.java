@@ -4,11 +4,9 @@ package com.tencent.engine;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.tencent.exception.InnerException;
 import com.tencent.rpc.App;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class TmEngine {
 	
@@ -40,7 +38,11 @@ class TmEngine {
 //		states.put(uuid, new State(transName));
 
 		// TODO call c engine
-		App.logInstance().info("call c");
+		App.logInstance().info("begin to call cpp");
+		TransMachine2Jason tm2j = new TransMachine2Jason();
+		tm2j.convertActions(transMachine);
+		String stm2j = JSON.toJSONString(tm2j);
+		App.logInstance().info("TransMachine2Jason: " + stm2j);
 		
 		int ret = transMachine.cBegin(uuid, transName, req, rsp);
 //		processResult(uuid, status);
