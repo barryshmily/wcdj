@@ -28,3 +28,13 @@ VO vo = JSON.parseObject("...", VO.class);
 import com.alibaba.fastjson.TypeReference;
 List<VO> list = JSON.parseObject("...", new TypeReference<List<VO>>() {});
 ```
+
+
+主要：
+1. 对象的非public字段如果没有实现getter，则不会进行序列化
+2. 对象的非public字段如果没有实现setter，则不会进行反序列化
+
+
+Demo
+http://www.cnblogs.com/Jie-Jack/p/3758046.html
+

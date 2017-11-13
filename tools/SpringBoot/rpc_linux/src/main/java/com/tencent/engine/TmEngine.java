@@ -1,24 +1,20 @@
 package com.tencent.engine;
 
-
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.tencent.exception.InnerException;
-import com.tencent.rpc.App;
+
 
 class TmEngine {
 	
+	private static final Logger log = LoggerFactory.getLogger("RunLogger");
 	
 	private static TmEngine instance = new TmEngine();
 
-
-	private Map<String, State> states = new HashMap<String, State>();
-
-	private TmEngine() {
-
-	}
+	//private Map<String, State> states = new HashMap<String, State>();
 
 	public void init() throws Exception {
 		//initTransMachines();
@@ -29,28 +25,22 @@ class TmEngine {
 	}
 
 	public void begin(TransMachine transMachine, String uuid, String transName, String req, String rsp) throws InnerException {
-		
-//		State state = states.get(uuid);
-//		if (state != null) {
-//			// throw ...
-//			throw new InnerException("dulplicated uuid");
-//		}
-//		states.put(uuid, new State(transName));
 
-		// TODO call c engine
-		App.logInstance().info("begin to call cpp");
-		TransMachine2Jason tm2j = new TransMachine2Jason();
-		tm2j.convertActions(transMachine);
-		String stm2j = JSON.toJSONString(tm2j);
-		App.logInstance().info("TransMachine2Jason: " + stm2j);
+		log.info("begin to call cpp");
 		
+		if (!transMachine.isInit) {
+			transMachine.isInit = true;
+			
+			TransMachine2Jason tm2j = new TransMachine2Jason();
+			tm2j.convert2Jason(transMachine);
+			String stm2j = JSON.toJSONString(tm2j, SerializerFeature.WriteMapNullValue, SerializerFeature.PrettyFormat);
+			log.info("TransMachine2Jason: " + stm2j);
+			
+			transMachine.cInit(uuid, transName, stm2j);
+		} 
+			
 		int ret = transMachine.cBegin(uuid, transName, req, rsp);
-//		processResult(uuid, status);
-		
-		
-		
-		
+	    log.info("ret:" + ret);
 	}
-
 	
 }

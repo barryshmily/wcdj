@@ -12,40 +12,30 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import com.tencent.demo.Demo;
 import com.tencent.engine.TransMachine;
 import com.tencent.engine.TransMachineManager;
-import com.tencent.exception.InnerException;
-import com.tencent.exception.LogicException;
+
 // private packages
 import com.tencent.midas.network.RemotingClient;
 import com.tencent.midas.network.RemotingServer;
-import com.tencent.midas.network.exception.RemotingConnectException;
-import com.tencent.midas.network.exception.RemotingSendRequestException;
-import com.tencent.midas.network.exception.RemotingTimeoutException;
 import com.tencent.midas.network.netty.NettyClientConfig;
 import com.tencent.midas.network.netty.NettyRemotingClient;
 import com.tencent.midas.network.netty.NettyRemotingServer;
 import com.tencent.midas.network.netty.NettyServerConfig;
-import com.tencent.midas.network.protocol.RemotingCommand;
+
 
 public class App {
 
-	// -------------------- JNI init beg --------------------
-	
+	// -------------------- JNI beg --------------------
 	static {
-		System.loadLibrary("api"); // api.dll (Windows) or libapi.so (Unixes)
+		System.loadLibrary("api"); // api.dll (Windows) or libapi.so (Unix)
 	}
+
 	// Native method declaration
 	private native int init_once();
 	private native int test();
 	public native int process(String req);
-	
-	
-	// -------------------- JNI init end --------------------
+	// -------------------- JNI end --------------------
 
-	// static logger object
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
-	public static Logger logInstance() {
-		return log;
-	}
 
 	// static function, server-end
 	public static RemotingServer createRemotingServer(int port)
@@ -97,29 +87,33 @@ public class App {
 	 * @version 0.0.1
 	 */
 	public static void main(String[] args) {
-		
-		
+
 		String path = System.getProperty("java.class.path");
 		System.out.println("classpath: " + path);
-		
-		
+
 		// jni
-		new App().test();
-		new App().init_once();  // Invoke native method
-		
+		try {
+			// new App().test();
+			new App().init_once(); // Invoke native method
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("exception: cpp init");
+		}
+
 		try {
 			// TODO register more routines
 			TransMachine tm = Demo.RegistTestRoutine();
-			
+
 			TransMachineManager.instance().addTransMachine(tm);
 			// ...
-			
+		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("exception: create TransMachine");
 		}
-		
-				
+
 		// TODO
 		// add conf module
 

@@ -2,8 +2,13 @@ package com.tencent.operators;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Operator 
 {
+	private static final Logger log = LoggerFactory.getLogger("RunLogger");
+	
 //	OperatorType getType();
 //	List<String> getPath();
 //	List<Object> getValue();
@@ -29,6 +34,7 @@ public class Operator
 	}
 	
 	public List<Object> getValue() {
+		//log.info("Operator getValue");
 		return value.getValue();
 	}
 	

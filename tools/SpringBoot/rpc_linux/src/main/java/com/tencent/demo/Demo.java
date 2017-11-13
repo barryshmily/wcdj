@@ -1,9 +1,11 @@
 package com.tencent.demo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tencent.engine.TmeAction;
 import com.tencent.engine.Function;
 import com.tencent.engine.PreProcHandler;
-import com.tencent.engine.RegistTransMachine;
 import com.tencent.engine.Service;
 import com.tencent.engine.TccAction;
 import com.tencent.engine.TransMachine;
@@ -12,16 +14,16 @@ import com.tencent.operators.OperatorPath;
 import com.tencent.operators.OperatorType;
 import com.tencent.operators.OperatorValue;
 import com.tencent.operators.TmeOperator;
-import com.tencent.rpc.App;
-
 
 
 public class Demo {
 	
+	private static final Logger log = LoggerFactory.getLogger("RunLogger");
+	
 	
 	public static TransMachine RegistTestRoutine() throws Exception
 	{
-		App.logInstance().info("RegistTestRoutine");
+		log.info("RegistTestRoutine");
 		
 		TransMachine mch = new TransMachine("routine1");
 		

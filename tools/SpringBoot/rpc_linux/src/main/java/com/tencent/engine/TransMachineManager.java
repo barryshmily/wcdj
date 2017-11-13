@@ -1,18 +1,12 @@
 package com.tencent.engine;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.tencent.exception.*;
 
 public class TransMachineManager {
 	
-	private final String modulePath = "bin"; // TODO config // for test
+	//private final String modulePath = "bin"; // test
 
 	private static TransMachineManager instance = new TransMachineManager();
 
@@ -28,19 +22,14 @@ public class TransMachineManager {
 	public void addTransMachine(TransMachine transMachine) throws InnerException, LogicException, Exception {
 				
 		if (transMachine == null) {
-			// throw
 			throw new InnerException("addTransMachine");
 		}
 		
-		// TODO
-		transMachine.buildAndCheck();
+		transMachine.buildAndCheck();// TODO
 		
 		if (transMachines.put(transMachine.getName(), transMachine) != null) {
-			// throw
 			throw new LogicException("addTransMachine");
 		}
-		
-		
 	}
 
 	public TransMachine getTransMachine(String name) {

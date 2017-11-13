@@ -3,6 +3,17 @@
 [TOC]
 
 -----------------
+
+## 计算机基础
+
+1. 字符编码 ASCII，Unicode 和 UTF-8
+
+http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
+
+http://www.unicode.org/
+https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/
+
+
 ## 编程语言部分
 
 ### C++
@@ -598,6 +609,12 @@ KMP算法的时间复杂度为0（m+n），这个算法最为巧妙的地方在�
 子串的next数组实际是这个算法的cache数据，牺牲了空间，换取了时间上的高效，在我们实际项目中，有很多类似的应用场景；
 
 另外一个经典的字符串匹配算法AC自动机匹配算法，用于对一段Query进行字典词匹配。在实际应用场景中，如基于字典表的分词，脏词库识别等，都有广泛应用，后面也将展开该算法的实现。
+
+
+4. 无锁队列的实现
+数组
+链表
+
 
 -----------------
 ## 内核相关
