@@ -12,9 +12,6 @@ public class TransMachineManager {
 
 	private Map<String, TransMachine> transMachines = new HashMap<String, TransMachine>();
 
-	private TransMachineManager() {
-	}
-
 	public static TransMachineManager instance() {
 		return instance;
 	}

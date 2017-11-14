@@ -14,19 +14,13 @@ class TmEngine {
 	
 	private static TmEngine instance = new TmEngine();
 
-	//private Map<String, State> states = new HashMap<String, State>();
-
-	public void init() throws Exception {
-		//initTransMachines();
-	}
 
 	public static TmEngine instance() {
 		return instance;
 	}
 
-	public void begin(TransMachine transMachine, String uuid, String transName, String req, String rsp) throws InnerException {
-
-		log.info("begin to call cpp");
+	public void init(TransMachine transMachine) throws InnerException {
+		log.info("call cpp to init");
 		
 		if (!transMachine.isInit) {
 			transMachine.isInit = true;
@@ -36,10 +30,15 @@ class TmEngine {
 			String stm2j = JSON.toJSONString(tm2j, SerializerFeature.WriteMapNullValue, SerializerFeature.PrettyFormat);
 			log.info("TransMachine2Jason: " + stm2j);
 			
-			transMachine.cInit(uuid, transName, stm2j);
+			transMachine.cInit(transMachine.getName(), stm2j);
 		} 
-			
+	}
+	
+	public void begin(TransMachine transMachine, String uuid, String transName, String req, String rsp) throws InnerException {
+
+		log.info("begin to call cpp");		
 		int ret = transMachine.cBegin(uuid, transName, req, rsp);
+		
 	    log.info("ret:" + ret);
 	}
 	

@@ -9,10 +9,6 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
-import com.tencent.demo.Demo;
-import com.tencent.engine.TransMachine;
-import com.tencent.engine.TransMachineManager;
-
 // private packages
 import com.tencent.midas.network.RemotingClient;
 import com.tencent.midas.network.RemotingServer;
@@ -21,19 +17,13 @@ import com.tencent.midas.network.netty.NettyRemotingClient;
 import com.tencent.midas.network.netty.NettyRemotingServer;
 import com.tencent.midas.network.netty.NettyServerConfig;
 
+// --------------- import TME package beg ---------------
+import com.tencent.demo.Demo;
+import com.tencent.engine.TransMachine;
+import com.tencent.engine.TransMachineManager;
+//--------------- import TME package end ---------------
 
 public class App {
-
-	// -------------------- JNI beg --------------------
-	static {
-		System.loadLibrary("api"); // api.dll (Windows) or libapi.so (Unix)
-	}
-
-	// Native method declaration
-	private native int init_once();
-	private native int test();
-	public native int process(String req);
-	// -------------------- JNI end --------------------
 
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
 
@@ -91,33 +81,7 @@ public class App {
 		String path = System.getProperty("java.class.path");
 		System.out.println("classpath: " + path);
 
-		// jni
-		try {
-			// new App().test();
-			new App().init_once(); // Invoke native method
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("exception: cpp init");
-		}
-
-		try {
-			// TODO register more routines
-			TransMachine tm = Demo.RegistTestRoutine();
-
-			TransMachineManager.instance().addTransMachine(tm);
-			// ...
-		
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("exception: create TransMachine");
-		}
-
-		// TODO
-		// add conf module
-
-		// log init, TODO config
+		// TODO configure
 		String logbackFile = "../conf/logback.xml";
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		JoranConfigurator configurator = new JoranConfigurator();
@@ -130,6 +94,23 @@ public class App {
 			e.printStackTrace();
 		}
 		System.out.println("load logback config[" + logbackFile + "] ok");
+
+		// --------------- INIT TME info beg ---------------
+		try {
+			// TODO register more routines
+			TransMachine tm = Demo.RegistTestRoutine();
+
+			TransMachineManager.instance().addTransMachine(tm);
+			// ...
+		
+			// initialize TME info to CPP
+			tm.initEngine();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("exception: create TransMachine");
+		}
+		// --------------- INIT TME info end ---------------
 
 		try {
 

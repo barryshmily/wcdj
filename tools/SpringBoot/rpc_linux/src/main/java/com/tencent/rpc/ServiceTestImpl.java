@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import com.tencent.midas.network.netty.NettyRequestProcessor;
 import com.tencent.midas.network.protocol.RemotingCommand;
-import com.tencent.rpc.App;
 
+// import TME jar
 import com.tencent.engine.TransMachineManager;
 
 
@@ -39,11 +39,11 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 		log.info("server handle request:" + request);
 
 		// use singleton to prevent thread-safe issue
-		App app = new App();
-		log.info("hashCode: " + app.hashCode());
+		/*App app = new App();
+		log.info("hashCode: " + app.hashCode());*/
 		log.info("tid: " + Thread.currentThread().getId());
 
-		// call TME
+		// --------------- carry out TME beg ---------------
 		String uuid = "12345abc";
 		String transName = "routine1";
 		String req = "gerry test";
@@ -53,9 +53,13 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 			TransMachineManager.instance().getTransMachine(transName)
 					.onRequest(uuid, transName, req, rsp);
 		} catch (Exception e) {
-			log.info("onRequest exception: " + e.getMessage());
-			log.info("onRequest exception(detail): " + getStackTrace(e));
+			log.info("onRequest exception: " + e.getMessage() + ", detail: " + getStackTrace(e));
 		}
+		
+		// TODO
+		// other interface
+		
+		// --------------- carry out TME end ---------------
 
 		request.setRemark("This is answer." + ctx.channel().remoteAddress());
 		return request;

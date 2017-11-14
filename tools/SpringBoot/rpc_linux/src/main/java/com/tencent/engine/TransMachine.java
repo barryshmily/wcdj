@@ -334,7 +334,7 @@ public class TransMachine {
 
 	// Native method declaration
 	public native int cBegin(String uuid, String transName, String req, String rsp);
-	public native int cInit(String uuid, String transName, String transMachine2jason);
+	public native int cInit(String transName, String transMachine2jason);
 
 	// ---------------------------
 
@@ -518,6 +518,11 @@ public class TransMachine {
 
 	}
 
+	public void initEngine()
+			throws InnerException {
+		TmEngine.instance().init(this);
+	}
+	
 	public void onRequest(String uuid, String transName, String req, String rsp)
 			throws InnerException {
 		TmEngine.instance().begin(this, uuid, transName, req, rsp);
