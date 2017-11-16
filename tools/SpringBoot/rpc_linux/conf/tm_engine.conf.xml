@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<tm_engine>
+    <system>
+        <trans_module file_path="../trans_module" />
+        <action_call_times max="1" />
+        <pause_time_max max="7" />
+        <auto_rollback allow="false" />
+    </system>
+    <mq_conf topic="tme" service="mq_local_service_" function="mq_local_func_" >
+    </mq_conf>
+    <db_conf db="tm_conf" service="tm_db_service_" function="tm_db_function_" >
+    	<t_suspend_conf table="t_suspend_conf" />
+    </db_conf>
+    <dclog>
+        <format request="$(ip),$(PortalSerialNo),$(InternalRequestType)_req">
+    </dclog>
+</tm_engine>

@@ -3,23 +3,54 @@ package com.tencent.rpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.rocketmq.client.exception.MQBrokerException;
+import com.alibaba.rocketmq.client.exception.MQClientException;
+import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
+import com.alibaba.rocketmq.client.producer.SendResult;
+import com.alibaba.rocketmq.common.message.Message;
+import com.alibaba.rocketmq.remoting.exception.RemotingException;
+
 public class JavaImpl {
-	
+
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
 
-	public static void main(String[] args){
-		
+	public static void main(String[] args) {
+
 		log.info("main JavaImpl");
-		
-		
+
 	}
-	
-	public int java_rpc(int input /* TODO params string jason */) {
-		log.info("java_rpc hashCode: " + hashCode());
+
+	/* TODO params string jason */
+	public int java_rpc(String service, String function, String req, String rsp) {
+		log.info("java_rpc hashCode: " + hashCode() + ", service: " + service
+				+ ", function: " + function + ", req: " + req);
+
+		// Do RPC according to different service and function
 		
-		// ...
-		
-		return 0;// ok
+		if (service.equals("mq_local_service_")
+				&& function.equals("mq_local_func_")) {
+			
+			DefaultMQProducer producer = new DefaultMQProducer(
+					"tme_java");
+			producer.setNamesrvAddr("10.235.25.15:9876,127.0.0.1:9877"); // test environment
+			Message msg = new Message("tme",// topic
+					"routine1",// tag
+					"12345abc",// key
+					req.getBytes());// body
+			try {
+				SendResult sendResult = producer.send(msg);
+			} catch (MQClientException | RemotingException | MQBrokerException
+					| InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			log.info("service[" + service + "] function[" + function + "] invalid");
+		}
+
+		log.info("rsp: " + rsp);
+
+		return 1;// ok
 	}
 
 	public static int power(int input, int exponent) {
@@ -31,4 +62,3 @@ public class JavaImpl {
 		return output;
 	}
 }
-
