@@ -1,0 +1,4 @@
+Log file created at: 2017/11/17 09:25:40
+Running on machine: TENCENT64.site
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I1117 09:25:40.398722 16925 demo.cpp:10] gerry test, a[1]
