@@ -1,5 +1,6 @@
 package com.tencent.rpc;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
@@ -9,6 +10,12 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
+import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
+import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import com.alibaba.rocketmq.client.exception.MQClientException;
+import com.alibaba.rocketmq.common.message.MessageExt;
 // private packages
 import com.tencent.midas.network.RemotingClient;
 import com.tencent.midas.network.RemotingServer;
@@ -21,6 +28,7 @@ import com.tencent.midas.network.netty.NettyServerConfig;
 import com.tencent.demo.Demo;
 import com.tencent.engine.TransMachine;
 import com.tencent.engine.TransMachineManager;
+
 //--------------- import TME package end ---------------
 
 public class App {
@@ -102,7 +110,7 @@ public class App {
 
 			TransMachineManager.instance().addTransMachine(tm);
 			// ...
-		
+
 			// initialize TME info to CPP
 			tm.initEngine();
 
@@ -158,6 +166,64 @@ public class App {
 			// if(server != null)
 			// server.shutdown();
 		}
+
+		// ---------------- MQ consumer begin ----------------
+		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(
+				"tme_java_consumer");
+		consumer.setNamesrvAddr("10.235.25.15:9876");
+		consumer.setConsumeMessageBatchMaxSize(30);
+		/**
+		 * 订阅指定topic下tags分别等于TagA或TagC或TagD
+		 */
+		try {
+			consumer.subscribe("tme_java", "*");
+		} catch (MQClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/**
+		 * 订阅指定topic下所有消息<br>
+		 * 注意：一个consumer对象可以订阅多个topic
+		 */
+		consumer.registerMessageListener(new MessageListenerConcurrently() {
+
+			/**
+			 * 默认msgs里只有一条消息，可以通过设置consumeMessageBatchMaxSize参数来批量接收消息
+			 */
+			@Override
+			public ConsumeConcurrentlyStatus consumeMessage(
+					List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+				// System.out.println(Thread.currentThread().getName()
+				// + " Receive New Messages: " + msgs.size());
+
+//				long offset = msgs.get(0).getQueueOffset();
+//				String maxOffset = msgs.get(0).getProperty(
+//						MessageConst.PROPERTY_MAX_OFFSET);
+//				long diff = Long.parseLong(maxOffset) - offset;
+				for (int i = 0; i < msgs.size(); i++) {
+					MessageExt msg = msgs.get(i);
+					String body = new String(msg.getBody());
+					log.info("body[" + body + "]");;
+				}
+
+				return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+				// return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+			}
+
+
+		});
+
+		/**
+		 * Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
+		 */
+		try {
+			consumer.start();
+		} catch (MQClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// ---------------- MQ consumer end ----------------
 
 		System.out.println("main over");
 	}

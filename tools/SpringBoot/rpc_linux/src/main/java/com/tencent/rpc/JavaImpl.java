@@ -7,12 +7,38 @@ import com.alibaba.rocketmq.client.exception.MQBrokerException;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
+import com.alibaba.rocketmq.client.producer.SendStatus;
 import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.remoting.exception.RemotingException;
 
 public class JavaImpl {
 
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
+	
+
+	private static final DefaultMQProducer producer = new DefaultMQProducer("tme_java_producer");// product group name
+	private static void startProducer() {
+		try {
+			producer.setNamesrvAddr("10.235.25.15:9876"); // test environment
+			producer.start();
+		} catch (MQClientException e1) {
+			log.info(getStackTrace(e1));
+		}
+	}
+	
+	static {
+		startProducer();
+	}
+	
+	public static String getStackTrace(Exception e) {
+		String eStr = e.toString();
+		StackTraceElement[] err = e.getStackTrace();
+		for(int i=0; i<err.length; i++) {
+			eStr += "\n";
+			eStr += err[i];
+		}
+		return eStr;
+	}
 
 	public static void main(String[] args) {
 
@@ -29,19 +55,25 @@ public class JavaImpl {
 		
 		if (service.equals("mq_local_service_")
 				&& function.equals("mq_local_func_")) {
-			
-			DefaultMQProducer producer = new DefaultMQProducer(
-					"tme_java");
-			producer.setNamesrvAddr("10.235.25.15:9876,127.0.0.1:9877"); // test environment
-			Message msg = new Message("tme",// topic
+
+			Message msg = new Message("tme_java",// topic
 					"routine1",// tag
 					"12345abc",// key
 					req.getBytes());// body
 			try {
 				SendResult sendResult = producer.send(msg);
+				
+				
+				// TODO result
+				if (sendResult.getSendStatus() != SendStatus.SEND_OK) {
+					log.info("send to MQ err");
+				} else {
+					log.info("send to MQ ok");
+				}
+				
 			} catch (MQClientException | RemotingException | MQBrokerException
 					| InterruptedException e) {
-				e.printStackTrace();
+				log.info(getStackTrace(e));
 			}
 
 		} else {
