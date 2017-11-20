@@ -46,13 +46,22 @@ public class JavaImpl {
 
 	}
 
-	/* TODO params string jason */
+	/**
+	 * 
+	 * @param service
+	 * @param function
+	 * @param req JSON
+	 * @param rsp
+	 * @return
+	 */
 	public int java_rpc(String service, String function, String req, String rsp) {
 		log.info("java_rpc hashCode: " + hashCode() + ", service: " + service
 				+ ", function: " + function + ", req: " + req);
 
 		// Do RPC according to different service and function
+		int ret = 1;
 		
+		// TODO enclose
 		if (service.equals("mq_local_service_")
 				&& function.equals("mq_local_func_")) {
 
@@ -60,37 +69,36 @@ public class JavaImpl {
 					"routine1",// tag
 					"12345abc",// key
 					req.getBytes());// body
+			
 			try {
 				SendResult sendResult = producer.send(msg);
-				
-				
-				// TODO result
 				if (sendResult.getSendStatus() != SendStatus.SEND_OK) {
 					log.info("send to MQ err");
 				} else {
 					log.info("send to MQ ok");
+					ret = 0;
 				}
 				
 			} catch (MQClientException | RemotingException | MQBrokerException
 					| InterruptedException e) {
 				log.info(getStackTrace(e));
+				
+			} finally {
+				log.info("finally");
+				if (ret != 0) {
+					// TODO error
+				}
 			}
 
 		} else {
-			log.info("service[" + service + "] function[" + function + "] invalid");
+			log.info("service[" + service + "] do function[" + function + "]");
+			rsp = "OK";
+			ret = 0;
 		}
 
 		log.info("rsp: " + rsp);
 
-		return 1;// ok
+		return ret;
 	}
 
-	public static int power(int input, int exponent) {
-		int output, i;
-		output = 1;
-		for (i = 0; i < exponent; i++) {
-			output *= input;
-		}
-		return output;
-	}
 }

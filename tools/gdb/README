@@ -1,5 +1,5 @@
 
-GDB常用命令记录
+# GDB常用命令记录
 
 gdb中简写命令配合tab键使用
 
@@ -36,3 +36,14 @@ shell                           在gdb中调用shell，使用完后exit重新返回到gdb中
 set args                        可指定运行时参数（如：set args 10 20 30 40 50）
 show args                       命令可以查看设置好的运行参数
 
+
+# gdb扩展
+
+dbinit_stl_views-1.03.txt
+
+This file should be "included" in .gdbinit as following:
+`source stl-views.gdb` or just paste it into your `.gdbinit` file
+
+# 用法
+
+[一种处理栈越界的方法](https://zhuanlan.zhihu.com/p/20642841)

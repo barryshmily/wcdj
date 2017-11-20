@@ -306,7 +306,7 @@ Refer
 [Wrapping a C++ library with JNI – introduction](https://thebreakfastpost.com/2012/01/21/wrapping-a-c-library-with-jni-introduction/)
 [Java Native Interface Specification—Contents](https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/jniTOC.html)
 [How to pass a complex structure between C and Java with JNI on Android NDK](https://stackoverflow.com/questions/10300039/how-to-pass-a-complex-structure-between-c-and-java-with-jni-on-android-ndk)
-
+[JNI 调用性能测试及优化](http://wiki.jikexueyuan.com/project/jni-ndk-developer-guide/performance.html)
 
 https://www.cl.cam.ac.uk/teaching/0910/CandC++/lecture8-6up.pdf
 https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp276

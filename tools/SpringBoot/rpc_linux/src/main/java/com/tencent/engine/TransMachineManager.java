@@ -2,6 +2,7 @@ package com.tencent.engine;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.tencent.exception.*;
 
 public class TransMachineManager {
@@ -31,6 +32,10 @@ public class TransMachineManager {
 
 	public TransMachine getTransMachine(String name) {
 		return transMachines.get(name);
+	}
+	
+	public TransMachine getTransMachine() throws InnerException {
+		return new TransMachine("anonymous");
 	}
 	
 //	private void dfsLoadRegistModule(File file) throws Exception {

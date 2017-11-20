@@ -26,6 +26,10 @@
       <outputDirectory>tm_conf</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>trans_module</directory>
+      <outputDirectory>trans_module</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>sbin</directory>
       <outputDirectory>bin</outputDirectory>
     </fileSet>

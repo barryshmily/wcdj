@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<tm_conf>
+	<t_action_conf>
+		<routine_order>
+			<check_req action="check_req" func1="CheckReq" func2="CheckReq" func3="" mode="TRY_BEST" remark="" service="check_req" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<dkq_paycancel action="dkq_paycancel" func1="DkqPayCancelReq" func2="DkqPayCancelReq" func3="" mode="TRY_BEST" remark="" service="dkq_paycancel" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<dkq_prepay action="dkq_prepay" func1="DkqPrepayReq" func2="DkqPrepayReq" func3="" mode="TRY_BEST" remark="" service="dkq_prepay" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<price action="price" func1="PriceReq" func2="PriceReq" func3="" mode="TRY_BEST" remark="" service="price" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<wechat_order action="wechat_order" func1="WechatOrderReq" func2="WechatOrderReq" func3="" mode="TRY_BEST" remark="" service="wechat_order" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+		</routine_order>
+	</t_action_conf>
+	<t_service_conf>
+		<routine_order>
+			<check_req>
+				<CheckReq action="check_req" func="CheckReq" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="routine_order" type="sync" async_delay_level="0" max_call_time="3" return_field="" merge_keys="OrderId,ProvideUin,OfferId" update_time="2017-04-17 19:31:34" />
+			</check_req>
+			<dkq_paycancel>
+				<DkqPayCancelReq action="dkq_paycancel" func="DkqPayCancelReq" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="routine_order" type="sync" async_delay_level="0" max_call_time="4" return_field="" merge_keys=""  update_time="2017-04-17 19:31:34" />
+			</dkq_paycancel>
+			<dkq_prepay>
+				<DkqPrepayReq action="dkq_prepay" func="DkqPrepayReq" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="routine_order" type="sync" async_delay_level="0" max_call_time="" return_field="" merge_keys=""  update_time="2017-04-17 19:31:34" />
+			</dkq_prepay>
+			<price>
+				<PriceReq action="price" func="PriceReq" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="routine_order" type="sync" async_delay_level="0" max_call_time="" return_field="" merge_keys=""  update_time="2017-04-17 19:31:34" />
+			</price>
+			<wechat_order>
+				<WechatOrderReq action="wechat_order" func="WechatOrderReq" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="routine_order" type="sync" async_delay_level="4" max_call_time="2" return_field="" merge_keys=""  update_time="2017-04-17 19:31:34" />
+			</wechat_order>
+		</routine_order>
+	</t_service_conf>
+	<t_transition_conf>
+		<routine_order>
+			<1 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="begin" id="1" remark="" to="check_req" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<10 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="dkq_paycancel" id="10" remark="" to="end" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<2 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="check_req" id="2" remark="" to="price" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<3 cond1="ne(0)" cond2="" cond3="" cond4="" cond5="" from="check_req" id="3" remark="" to="end" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<4 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="price" id="4" remark="" to="dkq_prepay" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<5 cond1="ne(0)" cond2="" cond3="" cond4="" cond5="" from="price" id="5" remark="" to="end" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<6 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="dkq_prepay" id="6" remark="" to="wechat_order" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<7 cond1="ne(0)" cond2="" cond3="" cond4="" cond5="" from="dkq_prepay" id="7" remark="" to="end" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<8 cond1="ne(0)" cond2="" cond3="" cond4="" cond5="" from="wechat_order" id="8" remark="" to="dkq_paycancel" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+			<9 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="wechat_order" id="9" remark="" to="end" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+		</routine_order>
+	</t_transition_conf>
+	<t_flow_conf>
+		<routine_order trans_name="routine_order" error_strategies="rollback,to_mq,throw" remark="" update_time="2017-04-17 19:31:34" />
+	</t_flow_conf>
+	<t_transition_meta_conf>
+		<routine_order author="" remark="" trans_name="routine_order" update_time="2017-04-17 19:31:34" />
+	</t_transition_meta_conf>
+</tm_conf>

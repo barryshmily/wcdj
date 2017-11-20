@@ -44,13 +44,13 @@ public class ServiceTestImpl implements NettyRequestProcessor {
 		log.info("tid: " + Thread.currentThread().getId());
 
 		// --------------- carry out TME beg ---------------
-		String uuid = "12345abc";
-		String transName = "routine1";
+		String uuid = "59919ac3-edbb-b021-11fd-0232c46d4491";
+		String transName = "routine_order";
 		String req = "gerry test";
 		String rsp = "";
 		
 		try {
-			TransMachineManager.instance().getTransMachine(transName)
+			TransMachineManager.instance().getTransMachine()
 					.onRequest(uuid, transName, req, rsp);
 		} catch (Exception e) {
 			log.info("onRequest exception: " + e.getMessage() + ", detail: " + getStackTrace(e));

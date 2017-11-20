@@ -79,8 +79,7 @@ public class App {
 	}
 
 	/**
-	 * program start
-	 * 
+	 *
 	 * @author gerryyang
 	 * @version 0.0.1
 	 */
@@ -200,6 +199,7 @@ public class App {
 //				String maxOffset = msgs.get(0).getProperty(
 //						MessageConst.PROPERTY_MAX_OFFSET);
 //				long diff = Long.parseLong(maxOffset) - offset;
+				
 				for (int i = 0; i < msgs.size(); i++) {
 					MessageExt msg = msgs.get(i);
 					String body = new String(msg.getBody());
@@ -219,7 +219,6 @@ public class App {
 		try {
 			consumer.start();
 		} catch (MQClientException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
