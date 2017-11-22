@@ -28,9 +28,6 @@ class StateEdge {
 
 	}
 
-	//
-	// public StateNode ownerStateNode;
-
 	public TmeAction from;
 	public TmeAction to;
 	public List<Operator> operators;
@@ -333,7 +330,8 @@ public class TransMachine {
 	}
 
 	// Native method declaration
-	public native int cBegin(String uuid, String transName, String req, String rsp);
+	public native int cBegin(String uuid, String transName, String req, StringBuffer sbuf);
+	public native int cMQBegin(String uuid, String transName, String req, StringBuffer rsp);
 	public native int cInit(String transName, String transMachine2jason);
 
 	// ---------------------------
@@ -354,6 +352,15 @@ public class TransMachine {
 	// reach table
 	public List<List<String>> reach_table = new ArrayList<List<String>>();
 
+	private static TransMachine anonymous = new TransMachine();
+	public static TransMachine instance() {
+		return anonymous;
+	}
+	
+	public TransMachine() {
+		name = "anonymous";
+	}
+	
 	public TransMachine(String name_) throws InnerException {
 		if (name_ == null) {
 			// ..throw
@@ -521,11 +528,17 @@ public class TransMachine {
 	public void initEngine()
 			throws InnerException {
 		TmEngine.instance().init(this);
+		MQConsumer.instance().InitMQConsumer();
 	}
 	
-	public void onRequest(String uuid, String transName, String req, String rsp)
+	public ResultDao onRequest(String uuid, String transName, String req)
 			throws InnerException {
-		TmEngine.instance().begin(this, uuid, transName, req, rsp);
+		return TmEngine.instance().begin(this, uuid, transName, req);
+	}
+	
+	public ResultDao onMQRequest(String uuid, String transName, String req)
+			throws InnerException {
+		return TmEngine.instance().mqBegin(this, uuid, transName, req);
 	}
 
 	public TmeAction getAction(String name) {

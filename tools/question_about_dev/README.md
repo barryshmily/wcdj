@@ -734,3 +734,9 @@ https://zhuanlan.zhihu.com/p/20642841
 
 https://www.zhihu.com/question/31024021
 
+
+-----------------
+## 数学
+
+1. 已知某酒鬼有90%的日子都会出去喝酒，喝酒只去固定三家酒吧。今天警察找了其中两家酒吧都没有找到酒鬼。问：酒鬼在第三家酒吧的几率？
+https://www.guokr.com/post/61605/

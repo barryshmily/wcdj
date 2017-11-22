@@ -307,6 +307,8 @@ Refer
 [Java Native Interface Specification—Contents](https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/jniTOC.html)
 [How to pass a complex structure between C and Java with JNI on Android NDK](https://stackoverflow.com/questions/10300039/how-to-pass-a-complex-structure-between-c-and-java-with-jni-on-android-ndk)
 [JNI 调用性能测试及优化](http://wiki.jikexueyuan.com/project/jni-ndk-developer-guide/performance.html)
+[Java Tip 54: Returning data in reference arguments via JNI](https://www.javaworld.com/article/2077554/learn-java/java-tip-54--returning-data-in-reference-arguments-via-jni.html)
+[How to catch JNI/Java Exception](https://stackoverflow.com/questions/2054598/how-to-catch-jni-java-exception)
 
 https://www.cl.cam.ac.uk/teaching/0910/CandC++/lecture8-6up.pdf
 https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp276

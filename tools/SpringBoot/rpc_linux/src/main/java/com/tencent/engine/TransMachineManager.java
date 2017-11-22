@@ -6,8 +6,6 @@ import java.util.Map;
 import com.tencent.exception.*;
 
 public class TransMachineManager {
-	
-	//private final String modulePath = "bin"; // test
 
 	private static TransMachineManager instance = new TransMachineManager();
 
@@ -34,56 +32,4 @@ public class TransMachineManager {
 		return transMachines.get(name);
 	}
 	
-	public TransMachine getTransMachine() throws InnerException {
-		return new TransMachine("anonymous");
-	}
-	
-//	private void dfsLoadRegistModule(File file) throws Exception {
-//		if (file.isDirectory()) {
-//			for (File childFile : file.listFiles()) {
-//				dfsLoadRegistModule(childFile);
-//			}
-//		} else if (file.getPath().endsWith(".class")) {
-//			String className = file.getPath().toString();
-//			className = className.substring(modulePath.length() + 1);
-//			className = className.substring(0, className.length() - 6);
-//			className = className.replace(File.separatorChar, '.');
-//			Class<?> registClass = Class.forName(className);
-//			for (Method mod : registClass.getMethods()) {
-//				if (java.lang.reflect.Modifier.isStatic(mod.getModifiers())) {
-//					if (mod.getAnnotation((Class<T>) RegistTransMachine.class) != null) {
-//						Object obj = mod.invoke(null);
-//						if (obj instanceof TransMachine) {
-//							TransMachineManager.instance().addTransMachine(
-//									(TransMachine) obj);
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-
-//	private void initTransMachines() throws Exception {
-//		
-//		
-//        
-//		Method method = URLClassLoader.class.getDeclaredMethod("addURL",
-//				URL.class);
-//		boolean accessible = method.isAccessible();
-//
-//		if (accessible == false) {
-//			method.setAccessible(true);
-//		}
-//		URLClassLoader classLoader = (URLClassLoader) ClassLoader
-//				.getSystemClassLoader();
-//		method.invoke(classLoader, Paths.get(modulePath).toUri().toURL());
-//
-//		method.setAccessible(accessible); // finally
-//
-//		File moduleRoot = new File(modulePath);
-//		dfsLoadRegistModule(moduleRoot);
-//		
-//	}
-
-	// native void Regist(TransMachine transMachine);
 }

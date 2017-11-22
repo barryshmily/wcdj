@@ -36,12 +36,32 @@ class TmEngine {
 		} 
 	}
 	
-	public void begin(TransMachine transMachine, String uuid, String transName, String req, String rsp) throws InnerException {
+	public ResultDao begin(TransMachine transMachine, String uuid, String transName, String req) throws InnerException {
 
-		log.info("begin to call cpp");		
-		int ret = transMachine.cBegin(uuid, transName, req, rsp);
+		log.info("begin to call cpp");
 		
-	    log.info("ret:" + ret);
+		StringBuffer sbuf = new StringBuffer ("");
+		int ret = transMachine.cBegin(uuid, transName, req, sbuf);
+		//log.info("sbuf[" + sbuf + "]");
+		
+		String rsp = new String(sbuf);
+	    log.info("cBegin ret[" + ret + "] rsp[" + rsp + "]");
+	       
+	    return new ResultDao(ret, rsp);
+	}
+	
+	public ResultDao mqBegin(TransMachine transMachine, String uuid, String transName, String req) throws InnerException {
+
+		log.info("begin to call cpp");
+		
+		StringBuffer sbuf = new StringBuffer ("");
+		int ret = transMachine.cMQBegin(uuid, transName, req, sbuf);
+		//log.info("sbuf[" + sbuf + "]");
+		
+		String rsp = new String(sbuf);
+	    log.info("cBegin ret[" + ret + "] rsp[" + rsp + "]");
+	       
+	    return new ResultDao(ret, rsp);
 	}
 	
 }
