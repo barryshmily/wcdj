@@ -1,5 +1,6 @@
 package com.tencent.rpc;
 
+import java.util.Date;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
@@ -125,7 +126,7 @@ public class App implements Action {
 		
 		String uuid = request.getParam("uuid");
 		if (uuid == null || uuid.isEmpty()) {
-			uuid = "59919ac3-edbb-b021-11fd-0232c46d4491";
+			uuid = CommUtil.getUUID();
 		}
 		String transName = request.getParam("transname");
 		if (transName == null || transName.isEmpty()) {
@@ -136,6 +137,7 @@ public class App implements Action {
 			req = "";
 		}
 		
+		long start = System.currentTimeMillis();
 		ResultDao res = null;
 		try {
 			// usage 1
@@ -153,6 +155,9 @@ public class App implements Action {
 		} else {
 			response.setContent("response uuid[" + uuid + "] transname[" + transName + "] err, rsp[" + res.getMsg() + "]");
 		}
+		long end = System.currentTimeMillis( );
+        long diff = end - start;
+        System.out.println("time used[" + diff + "] ms.");
 		// --------------- carry out TME end ---------------
 	}
 	

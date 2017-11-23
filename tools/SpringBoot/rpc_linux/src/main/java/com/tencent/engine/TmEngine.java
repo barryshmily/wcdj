@@ -50,12 +50,12 @@ class TmEngine {
 	    return new ResultDao(ret, rsp);
 	}
 	
-	public ResultDao mqBegin(TransMachine transMachine, String uuid, String transName, String req) throws InnerException {
+	public ResultDao mqBegin(TransMachine transMachine, int reconsumeTimes, String uuid, String transName, String req) throws InnerException {
 
 		log.info("begin to call cpp");
 		
 		StringBuffer sbuf = new StringBuffer ("");
-		int ret = transMachine.cMQBegin(uuid, transName, req, sbuf);
+		int ret = transMachine.cMQBegin(reconsumeTimes, uuid, transName, req, sbuf);
 		//log.info("sbuf[" + sbuf + "]");
 		
 		String rsp = new String(sbuf);

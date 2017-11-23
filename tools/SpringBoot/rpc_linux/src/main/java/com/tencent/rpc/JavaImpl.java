@@ -12,6 +12,10 @@ import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.remoting.exception.RemotingException;
 import com.tencent.engine.CommUtil;
 
+/**
+ * @author gerryyang
+ *
+ */
 public class JavaImpl {
 	
 	private static final Logger log = LoggerFactory.getLogger("RunLogger");
@@ -20,33 +24,27 @@ public class JavaImpl {
 		log.info("main JavaImpl");
 	}
 
-	/**
-	 * TODO
-	 * 
-	 * @param service
-	 * @param function
-	 * @param req
-	 *            JSON
-	 * @param rsp
-	 * @return
-	 */
-	public int rpcProcess(String uuid, String transName, String service,
+	public int rpcProcess(int reconsumeTimes, String uuid, String transName, String service,
 			String function, String req, String rsp) {
 
-		log.info("tid[" + Thread.currentThread().getId()
+		log.info("reconsumeTimes[" + reconsumeTimes +"] tid[" + Thread.currentThread().getId()
 				+ "] java_rpc hashCode[" + hashCode() + "] uuid[" + uuid
 				+ "] transName[" + transName + "] service:[" + service
 				+ "] function[" + function + "] req[" + req + "]");
 
 		// Do RPC according to different service and function
 		// ...
-		
-		log.info("service[" + service + "] do function[" + function + "]");
-		rsp = "rpcProcess OK";
 		int ret = 0;
-
+		if (service.equals("service2")
+				&& function.equals("addLilyMoney")) {
+			ret = -1;
+			log.info("ABNORMAL: addLilyMoney");
+			
+		} else {
+			rsp = "rpcProcess OK";
+		}
+		
 		log.info("ret[" + ret + "] rsp[" + rsp + "]");
-
 		return ret;
 	}
 

@@ -331,7 +331,7 @@ public class TransMachine {
 
 	// Native method declaration
 	public native int cBegin(String uuid, String transName, String req, StringBuffer sbuf);
-	public native int cMQBegin(String uuid, String transName, String req, StringBuffer rsp);
+	public native int cMQBegin(int reconsumeTimes, String uuid, String transName, String req, StringBuffer rsp);
 	public native int cInit(String transName, String transMachine2jason);
 
 	// ---------------------------
@@ -536,9 +536,9 @@ public class TransMachine {
 		return TmEngine.instance().begin(this, uuid, transName, req);
 	}
 	
-	public ResultDao onMQRequest(String uuid, String transName, String req)
+	public ResultDao onMQRequest(int reconsumeTimes, String uuid, String transName, String req)
 			throws InnerException {
-		return TmEngine.instance().mqBegin(this, uuid, transName, req);
+		return TmEngine.instance().mqBegin(this, reconsumeTimes, uuid, transName, req);
 	}
 
 	public TmeAction getAction(String name) {

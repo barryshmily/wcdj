@@ -309,6 +309,7 @@ Refer
 [JNI 调用性能测试及优化](http://wiki.jikexueyuan.com/project/jni-ndk-developer-guide/performance.html)
 [Java Tip 54: Returning data in reference arguments via JNI](https://www.javaworld.com/article/2077554/learn-java/java-tip-54--returning-data-in-reference-arguments-via-jni.html)
 [How to catch JNI/Java Exception](https://stackoverflow.com/questions/2054598/how-to-catch-jni-java-exception)
+[Exception Handling in JNI](https://www.developer.com/java/data/exception-handling-in-jni.html)
 
 https://www.cl.cam.ac.uk/teaching/0910/CandC++/lecture8-6up.pdf
 https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp276

@@ -19,7 +19,7 @@ public class MQConsumer {
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(
 				"tme_java_consumer");
 		consumer.setNamesrvAddr("10.235.25.15:9876");
-		consumer.setConsumeMessageBatchMaxSize(30);
+		consumer.setConsumeMessageBatchMaxSize(1);
 		/**
 		 * 订阅指定topic下tags分别等于TagA或TagC或TagD
 		 */

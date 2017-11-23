@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<tm_conf>
+	<t_action_conf>
+		<demo>
+			<action1 action="action1" func1="deductBobMoney" func2="confirmProcess" func3="cancelProcess" mode="TCC" remark="" service="service1" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<action2 action="action2" func1="addLilyMoney" func2="confirmProcess" func3="cancelProcess" mode="TCC" remark="" service="service2" trans_name="demo" update_time="2017-11-22 19:31:34" />
+		</demo>
+	</t_action_conf>
+
+	<t_service_conf>
+		<demo>
+			<service1>
+				<deductBobMoney action="action1" func="deductBobMoney" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+				<confirmProcess action="action1" func="confirmProcess" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+				<cancelProcess action="action1" func="cancelProcess" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+			</service1>
+			<service2>
+				<addLilyMoney action="action2" func="addLilyMoney" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+				<confirmProcess action="action2" func="confirmProcess" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+				<cancelProcess action="action2" func="cancelProcess" pre_proc_in="built-in,STD" pre_proc_out="built-in,STD" remark="" trans_name="demo" type="sync" async_delay_level="0" max_call_time="5" return_field="" merge_keys="" update_time="2017-11-22 19:31:34" />
+			</service2>
+		</demo>
+	</t_service_conf>
+
+	<t_transition_conf>
+		<demo>
+			<1 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="begin" id="1" remark="" to="action1" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<2 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="action1" id="2" remark="" to="action2" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<3 cond1="gt(0)" cond2="" cond3="" cond4="" cond5="" from="action1" id="3" remark="" to="rollback" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<4 cond1="eq(0)" cond2="" cond3="" cond4="" cond5="" from="action2" id="4" remark="" to="commit" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<5 cond1="gt(0)" cond2="" cond3="" cond4="" cond5="" from="action2" id="5" remark="" to="rollback" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<6 cond1="other()" cond2="" cond3="" cond4="" cond5="" from="commit" id="6" remark="" to="end" trans_name="demo" update_time="2017-11-22 19:31:34" />
+			<7 cond1="other()" cond2="" cond3="" cond4="" cond5="" from="rollback" id="7" remark="" to="end" trans_name="demo" update_time="2017-11-22 19:31:34" />
+		</demo>
+	</t_transition_conf>
+
+	<t_flow_conf>
+		<demo trans_name="demo" error_strategies="to_mq,rollback,throw" remark="" update_time="2017-11-22 19:31:34" />
+	</t_flow_conf>
+
+	<t_transition_meta_conf>
+		<demo author="" remark="" trans_name="demo" update_time="2017-11-22 19:31:34" />
+	</t_transition_meta_conf>
+</tm_conf>

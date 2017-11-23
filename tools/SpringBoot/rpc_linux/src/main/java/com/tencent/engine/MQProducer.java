@@ -34,7 +34,7 @@ public class MQProducer {
 	public int rpcProcess(String uuid, String transName, String service,
 			String function, String req, String rsp) {
 
-		log.info("tid[" + Thread.currentThread().getId()
+		log.info("MQProducer rpcProcess tid[" + Thread.currentThread().getId()
 				+ "] java_rpc hashCode[" + hashCode() + "] uuid[" + uuid
 				+ "] transName[" + transName + "] service:[" + service
 				+ "] function[" + function + "] req[" + req + "]");
@@ -70,6 +70,7 @@ public class MQProducer {
 				log.info(CommUtil.getStackTrace(e));
 
 			} finally {
+				rsp = "service[" + service + "] function[" + function + "]";
 				if (ret != 0) {
 					// TODO error
 					log.info("finally, send to mq error");
