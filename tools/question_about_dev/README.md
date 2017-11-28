@@ -740,3 +740,27 @@ https://www.zhihu.com/question/31024021
 
 1. 已知某酒鬼有90%的日子都会出去喝酒，喝酒只去固定三家酒吧。今天警察找了其中两家酒吧都没有找到酒鬼。问：酒鬼在第三家酒吧的几率？
 https://www.guokr.com/post/61605/
+
+
+-----------------
+## 性能调优
+
+1. the zero-cost exception model
+It offers zero runtime overhead for an error-free execution, which surpasses even that of C return-value error handling. As a trade-off, the propagation of an exception has a large overhead.
+
+```
+Exception Frames
+
+Exceptions are handled in frames. The simplest of these frames is a ‘try/catch’ block in the source code. The ‘try’ opens an exception frame and the ‘catch’ defines the handler for that frame. Exceptions within that frame flow to the handler: either they match and the exception is handled, or they do not match and the exception is propagated further.
+
+In addition to ‘catch’ handlers, are cleanup handlers. This is code that must be called during exception propagation but doesn’t stop the exception. This includes any ‘finally’ blocks and C++ destructors. Explicit ‘finally’ blocks are matched with a ‘try’, so it is easy to see where their frame is defined. Destructors create implicit frames, starting at the point of instantiation (variable declaration), ending with the enclosing scope. Note that every object with a destructor creates its own exception frame.
+
+Languages with ‘defer’ statements, like Leaf, also introduce exception frames. These are very similar to destructors: the ‘defer’ statement opens a frame which ends with the enclosing scope. Any language feature which requires code to execute during an exception will require an exception frame.
+
+**It’s important to see all of these frames; compilers used to generate code at each ‘try’ statement to handle exceptions. One technique was ‘setjmp/longjmp’: each ‘try’ adds a jump address to an exception handler stack and the ‘finally’ clauses remove it. Even if no exception was thrown the work of adding/removing from the handler stack would still be done. One of the key goals of zero-cost exceptions was to get rid of this needless setup/teardown work.**
+```
+
+https://mortoray.com/2013/09/12/the-true-cost-of-zero-cost-exceptions/
+http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
+
+
