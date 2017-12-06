@@ -274,6 +274,19 @@ UDP丢包问题
 ARP的缓存时间约10分钟，APR缓存列表没有对方的MAC地址或缓存过期的时候，会发送ARP请求获取MAC地址，在没有获取到MAC地址之前，用户发送出去的UDP数据包会被内核缓存到arp_queue这个队列中，默认最多缓存3个包，多余的UDP包会被丢弃。被丢弃的UDP包可以从/proc/net/stat/arp_cache的最后一列的unresolved_discards看到。当然我们可以通过echo 30 > /proc/sys/net/ipv4/neigh/eth1/unres_qlen来增大可以缓存的UDP包。
 UDP的丢包信息可以从cat /proc/net/udp 的最后一列drops中得到，而倒数第四列inode是丢失UDP数据包的socket的全局唯一的虚拟i节点号，可以通过这个inode号结合lsof(lsof -P -n | grep 25445445)来查到具体的进程。
 
+10. What does “connection reset by peer” mean?
+
+> This means that a TCP RST was received and the connection is now closed. This occurs when a packet is sent from your end of the connection but the other end does not recognize the connection; it will send back a packet with the RST bit set in order to forcibly close the connection.
+
+This can happen if the other side crashes and then comes back up or if it calls close() on the socket while there is data from you in transit, and is an indication to you that some of the data that you previously sent may not have been received.
+
+It is up to you whether that is an error; if the information you were sending was only for the benefit of the remote client then it may not matter that any final data may have been lost. However you should close the socket and free up any other resources associated with the connection.
+
+https://stackoverflow.com/questions/1434451/what-does-connection-reset-by-peer-mean
+https://everything2.com/title/Connection+reset+by+peer
+http://blog.csdn.net/factor2000/article/details/3929816
+
+
 -----------------
 ## Linux系统编程部分
 
@@ -376,20 +389,23 @@ wait
 17. Linux上的内存如计算？
 
 `top`:
-
+```
 Mem:  131997524k total, 130328500k used,  1669024k free,   793232k buffers
 Swap:  2105272k total,   428816k used,  1676456k free, 122989268k cached
+```
 
 `free -m`
+```
              total       used       free     shared    buffers     cached
 Mem:        128903     128567        336          0        776     121401
 -/+ buffers/cache:       6389     122514
 Swap:         2055        418       1637
+```
 
 可用内存：
-122514（-/+ buffers/cache free） = 336（free）+ 776（buffers）+ 121401（cached）
+122514 （-/+ buffers/cache free） = 336 （free）+ 776 （buffers）+ 121401 （cached）
 总内存：
-128902（Mem: total） = 6389（-/+ buffers/cache used）+ 122514（-/+ buffers/cache free）
+128902 （Mem: total） = 6389 （-/+ buffers/cache used）+ 122514 （-/+ buffers/cache free）
 
 在很多Linux服务器上运行free 命令，会发现剩余内存（Mem:行的free列）很少，但实际服务器上的进程并没有占用很大的内存。这是因为Linux特殊的内存管理机制。Linux内核会把空闲的内存用作buffer/cached，用于提高文件读取性能。当应用程序需要用到内存时，buffer/cached内存是可以马上回收的。所以，对应用程序来说，buffer/cached是可用的，可用内存应该是free+buffers+cached。因为这个原因，free命令也才有第三行的-/+ buffers/cache。
 
