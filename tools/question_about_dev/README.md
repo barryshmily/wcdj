@@ -532,9 +532,17 @@ include表示包含一个外部的makefile文件进来，-include和include功�
 -----------------
 ## 数据库部分
 
-1. mysql_use_result和mysql_store_result的区别
+1. Locking Reads
+select ... for update
 
-2. B+Tree和LSM Tree区别
+Locking of rows for update using SELECT FOR UPDATE only applies when autocommit is disabled (either by beginning transaction with START TRANSACTION or by setting autocommit to 0. If autocommit is enabled, the rows matching the specification are not locked.
+
+https://stackoverflow.com/questions/10935850/when-to-use-select-for-update
+https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
+
+2. mysql_use_result和mysql_store_result的区别
+
+3. B+Tree和LSM Tree区别
 nosql基本没有用B+树的，很多采用了LSM Tree，比如hbase/cassandra，rocksdb/leveldb
 B+树跟LSM Tree的时间复杂度对比（N是tree的node数）
 随机点写入，LSM Tree O(1)，B+树O(logN)
@@ -779,4 +787,7 @@ Languages with ‘defer’ statements, like Leaf, also introduce exception frame
 https://mortoray.com/2013/09/12/the-true-cost-of-zero-cost-exceptions/
 http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
 
-
+2. gettimeofday优化
+https://access.redhat.com/solutions/18627
+cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+echo "acpi_pm" > /sys/devices/system/clocksource/clocksource0/current_clocksource
