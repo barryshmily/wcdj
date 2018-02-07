@@ -81,6 +81,13 @@ bad_alloc和nothrow都定义在头文件new中。
 
 12. 深拷贝和浅拷贝的区别
 
+13. new失败如何处理
+
+http://www.cplusplus.com/reference/new/operator%20new[]/
+
+[New (std::nothrow) vs. New within a try/catch block](https://stackoverflow.com/questions/7277637/new-stdnothrow-vs-new-within-a-try-catch-block)
+[C++ new operator and error checking [duplicate]](https://stackoverflow.com/questions/18628918/c-new-operator-and-error-checking)
+
 ### C
 
 1. 无符号和有符号是否可以比较
