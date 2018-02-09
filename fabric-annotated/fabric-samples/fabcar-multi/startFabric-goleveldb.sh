@@ -49,17 +49,40 @@ echo "=================="
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" \
 -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" \
 -e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
-cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -v 1.0 -c '{"Args":[""]}' -P "AND ('Org1MSP.member','Org2MSP.member')"
+cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -v 1.0 -c '{"Args":[""]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
 
 sleep 10
 
+:<< gerry
 echo "=================="
 echo "Invoke the chaincode"
 echo "=================="
+# 注意，如果是AND策略这里invoke的背书检查会失败，因为只请求了一个背书节点
+
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" \
 -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" \
 -e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
 cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"initLedger","Args":[""]}'
+
+docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" \
+-e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" \
+-e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
+cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"createCar","Args":["CAR100","BMW","320","blue","Gerry"]}'
+
+
+echo "=================="
+echo "Query the chaincode"
+echo "=================="
+docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" \
+-e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" \
+-e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
+cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"queryAllCars","Args":[""]}'
+
+docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" \
+-e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" \
+-e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
+cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"queryCar","Args":["CAR100"]}'
+gerry
 
 printf "\nTotal setup execution time : $(($(date +%s) - starttime)) secs ...\n\n\n"
 printf "Start by installing required packages run 'npm install'\n"

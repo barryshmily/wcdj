@@ -48,7 +48,7 @@ type Car struct {
 	Model  string `json:"model"`
 	Colour string `json:"colour"`
 	Owner  string `json:"owner"`
-	Value  string `json:"value"`   // for test, gerry
+	Value  int    `json:"value"`   // for test, gerry
 }
 
 /*
@@ -225,12 +225,12 @@ func (s *SmartContract) setValue(APIstub shim.ChaincodeStubInterface, args []str
 	car := Car{}
 
 	json.Unmarshal(carAsBytes, &car)
-	/*value, err := strconv.Atoi(args[1])
+	value, err := strconv.Atoi(args[1])
 	if err != nil {
         return shim.Error("strconv.Atoi err")
-    }*/
+    }
 	
-	car.Value = args[1]
+	car.Value = value
 
 	fmt.Printf("car: %v\n", car)
 	carAsBytes, _ = json.Marshal(car)
@@ -258,13 +258,7 @@ func (s *SmartContract) addValue(APIstub shim.ChaincodeStubInterface, args []str
 	if err != nil {
         return shim.Error("strconv.Atoi err")
     }
-	
-	cur_value, err := strconv.Atoi(car.Value)
-	if err != nil {
-        return shim.Error("strconv.Atoi err")
-    }
-	
-	car.Value = strconv.Itoa(cur_value + value)
+	car.Value += value
 
 	fmt.Printf("car: %v\n", car)
 	carAsBytes, _ = json.Marshal(car)

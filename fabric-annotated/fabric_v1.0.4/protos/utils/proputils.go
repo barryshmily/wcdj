@@ -497,6 +497,8 @@ func CheckProposalTxID(txid string, nonce, creator []byte) error {
 		return fmt.Errorf("Transaction is not valid. Got [%s], expected [%s]", txid, computedTxID)
 	}
 
+	// TODO dupl
+
 	return nil
 }
 

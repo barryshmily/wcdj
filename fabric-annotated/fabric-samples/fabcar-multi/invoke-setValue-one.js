@@ -20,13 +20,13 @@ var fabric_client = new Fabric_Client();
 var channel = fabric_client.newChannel('mychannel');
 
 var peer0 = fabric_client.newPeer('grpc://localhost:7051');
-var peer1 = fabric_client.newPeer('grpc://localhost:8051');
-var peer2 = fabric_client.newPeer('grpc://localhost:9051');
-var peer3 = fabric_client.newPeer('grpc://localhost:10051');
+//var peer1 = fabric_client.newPeer('grpc://localhost:8051');
+//var peer2 = fabric_client.newPeer('grpc://localhost:9051');
+//var peer3 = fabric_client.newPeer('grpc://localhost:10051');
 channel.addPeer(peer0);
-channel.addPeer(peer1);
-channel.addPeer(peer2);
-channel.addPeer(peer3);
+//channel.addPeer(peer1);
+//channel.addPeer(peer2);
+//channel.addPeer(peer3);
 
 var order = fabric_client.newOrderer('grpc://localhost:7050')
 channel.addOrderer(order);
@@ -67,10 +67,10 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	// changeCarOwner chaincode function - requires 2 args , ex: args: ['CAR10', 'Barry'],
 	// must send the proposal to endorsing peers
 	var request = {
-		//targets: let default to the peer assigned to the client
+		//targets: let default to the peer assignBlueed to the client
 		chaincodeId: 'fabcar',
-		fcn: 'createCar',
-		args: ['CAR13', 'Honda', 'Accord', 'Black', 'Tom'],
+		fcn: 'setValue',
+		args: ['CAR100', '100'],
 		chainId: 'mychannel',
 		txId: tx_id
 	};
