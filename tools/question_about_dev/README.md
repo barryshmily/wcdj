@@ -764,3 +764,9 @@ https://mortoray.com/2013/09/12/the-true-cost-of-zero-cost-exceptions/
 http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
 
 
+-----------------
+## KV数据库设计
+
+[淘宝Tair分布式K-V存储方案](https://www.cnblogs.com/chenny7/p/4875396.html)
+
+
