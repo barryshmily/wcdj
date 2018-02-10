@@ -81,6 +81,13 @@ bad_alloc和nothrow都定义在头文件new中。
 
 12. 深拷贝和浅拷贝的区别
 
+13. new失败如何处理
+
+http://www.cplusplus.com/reference/new/operator%20new[]/
+
+[New (std::nothrow) vs. New within a try/catch block](https://stackoverflow.com/questions/7277637/new-stdnothrow-vs-new-within-a-try-catch-block)
+[C++ new operator and error checking [duplicate]](https://stackoverflow.com/questions/18628918/c-new-operator-and-error-checking)
+
 ### C
 
 1. 无符号和有符号是否可以比较
@@ -274,6 +281,19 @@ UDP丢包问题
 ARP的缓存时间约10分钟，APR缓存列表没有对方的MAC地址或缓存过期的时候，会发送ARP请求获取MAC地址，在没有获取到MAC地址之前，用户发送出去的UDP数据包会被内核缓存到arp_queue这个队列中，默认最多缓存3个包，多余的UDP包会被丢弃。被丢弃的UDP包可以从/proc/net/stat/arp_cache的最后一列的unresolved_discards看到。当然我们可以通过echo 30 > /proc/sys/net/ipv4/neigh/eth1/unres_qlen来增大可以缓存的UDP包。
 UDP的丢包信息可以从cat /proc/net/udp 的最后一列drops中得到，而倒数第四列inode是丢失UDP数据包的socket的全局唯一的虚拟i节点号，可以通过这个inode号结合lsof(lsof -P -n | grep 25445445)来查到具体的进程。
 
+10. What does “connection reset by peer” mean?
+
+> This means that a TCP RST was received and the connection is now closed. This occurs when a packet is sent from your end of the connection but the other end does not recognize the connection; it will send back a packet with the RST bit set in order to forcibly close the connection.
+
+This can happen if the other side crashes and then comes back up or if it calls close() on the socket while there is data from you in transit, and is an indication to you that some of the data that you previously sent may not have been received.
+
+It is up to you whether that is an error; if the information you were sending was only for the benefit of the remote client then it may not matter that any final data may have been lost. However you should close the socket and free up any other resources associated with the connection.
+
+https://stackoverflow.com/questions/1434451/what-does-connection-reset-by-peer-mean
+https://everything2.com/title/Connection+reset+by+peer
+http://blog.csdn.net/factor2000/article/details/3929816
+
+
 -----------------
 ## Linux系统编程部分
 
@@ -376,20 +396,23 @@ wait
 17. Linux上的内存如计算？
 
 `top`:
-
+```
 Mem:  131997524k total, 130328500k used,  1669024k free,   793232k buffers
 Swap:  2105272k total,   428816k used,  1676456k free, 122989268k cached
+```
 
 `free -m`
+```
              total       used       free     shared    buffers     cached
 Mem:        128903     128567        336          0        776     121401
 -/+ buffers/cache:       6389     122514
 Swap:         2055        418       1637
+```
 
 可用内存：
-122514（-/+ buffers/cache free） = 336（free）+ 776（buffers）+ 121401（cached）
+122514 （-/+ buffers/cache free） = 336 （free）+ 776 （buffers）+ 121401 （cached）
 总内存：
-128902（Mem: total） = 6389（-/+ buffers/cache used）+ 122514（-/+ buffers/cache free）
+128902 （Mem: total） = 6389 （-/+ buffers/cache used）+ 122514 （-/+ buffers/cache free）
 
 在很多Linux服务器上运行free 命令，会发现剩余内存（Mem:行的free列）很少，但实际服务器上的进程并没有占用很大的内存。这是因为Linux特殊的内存管理机制。Linux内核会把空闲的内存用作buffer/cached，用于提高文件读取性能。当应用程序需要用到内存时，buffer/cached内存是可以马上回收的。所以，对应用程序来说，buffer/cached是可用的，可用内存应该是free+buffers+cached。因为这个原因，free命令也才有第三行的-/+ buffers/cache。
 
@@ -516,9 +539,17 @@ include表示包含一个外部的makefile文件进来，-include和include功�
 -----------------
 ## 数据库部分
 
-1. mysql_use_result和mysql_store_result的区别
+1. Locking Reads
+select ... for update
 
-2. B+Tree和LSM Tree区别
+Locking of rows for update using SELECT FOR UPDATE only applies when autocommit is disabled (either by beginning transaction with START TRANSACTION or by setting autocommit to 0. If autocommit is enabled, the rows matching the specification are not locked.
+
+https://stackoverflow.com/questions/10935850/when-to-use-select-for-update
+https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
+
+2. mysql_use_result和mysql_store_result的区别
+
+3. B+Tree和LSM Tree区别
 nosql基本没有用B+树的，很多采用了LSM Tree，比如hbase/cassandra，rocksdb/leveldb
 B+树跟LSM Tree的时间复杂度对比（N是tree的node数）
 随机点写入，LSM Tree O(1)，B+树O(logN)
@@ -763,10 +794,8 @@ Languages with ‘defer’ statements, like Leaf, also introduce exception frame
 https://mortoray.com/2013/09/12/the-true-cost-of-zero-cost-exceptions/
 http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
 
-
------------------
-## KV数据库设计
-
-[淘宝Tair分布式K-V存储方案](https://www.cnblogs.com/chenny7/p/4875396.html)
-
+2. gettimeofday优化
+https://access.redhat.com/solutions/18627
+cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+echo "acpi_pm" > /sys/devices/system/clocksource/clocksource0/current_clocksource
 

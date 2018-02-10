@@ -1,0 +1,24 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+networks:
+  byfn:
+
+services:
+
+  zookeeper0:
+    container_name: zookeeper0
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+        - ZOO_MY_ID=1
+        - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    networks:
+      - byfn
+
+
