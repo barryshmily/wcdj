@@ -16,6 +16,7 @@ gerryyang
 
 ### 基本架构
 
+![arch.png](https://github.com/gerryyang/wcdj/blob/master/fabric-annotated/pic/arch.png?raw=true)
 
 ### 关键特性
 
@@ -48,7 +49,7 @@ type Block struct {
 [Glossary](http://hyperledger-fabric.readthedocs.io/en/release/glossary.html)
 
 
-## 1 `First network`安装构建
+## 1 First network安装构建
 
 下面是关于使用[fabric](https://github.com/hyperledger/fabric)应用区块链的一个场景。 [first network](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html)是一个关于转账的例子，其代码可通过`git clone https://github.com/hyperledger/fabric-samples.git`下载到本地。 若只是测试例子则不用下载fabric源码，通过下载镜像即可。若修改功能，则需要下载fabric源码并修改其内部模块。在开发环境配置好`GOPATH`，然后通过`go get github.com/hyperledger/fabric`下载fabric源码到开发环境。
 
@@ -800,7 +801,7 @@ Deleted: sha256:5e1e2b2493dd8818e5b75b5173b50c9535e55564c49a91dbbe921acf5f848620
 Deleted: sha256:381dc25de27e0bdab40916e346a496c8a9e748efe5ca359c606a277e90ad046c
 ```
 
-## 2 `Frist network`源码分析
+## 2 Frist network源码分析
 
 整个例子通过`byfn.sh`脚本进行控制。
 
@@ -2226,7 +2227,7 @@ protos 包：包括各种协议和消息的 protobuf 定义文件和生成的 go
 在`script.sh`脚本中，会调用`peer`程序，具体命令含义如下。
 
 | BIN | CMD | SUBCMD | Jobs
-| -- | -- | --
+| -- | -- | -- | --
 | peer | node | start;status
 | peer | channel | create | 1, sendCreateChainTransaction（broadcast）-> order:7050 
 | | | | 2, getGenesisBlock（deliver） 
@@ -4170,15 +4171,15 @@ https://github.com/hyperledger/blockchain-explorer
 
 http://45.55.51.66:8080/
 
-pic
+![blockchain-explorer.png](https://github.com/gerryyang/wcdj/blob/master/fabric-annotated/pic/blockchain-explorer.png?raw=true)
 
 创世块：
 
-pic
+![blockchain-explorer_genisis.png](https://github.com/gerryyang/wcdj/blob/master/fabric-annotated/pic/blockchain-explorer_genisis.png?raw=true)
 
 对应的数据库信息：
 
-pic
+![blockchain-explorer-db.png](https://github.com/gerryyang/wcdj/blob/master/fabric-annotated/pic/blockchain-explorer-db.png?raw=true)
 
 
 ## 5 链码（Chaincode/智能合约）
@@ -4483,6 +4484,7 @@ func GetActionFromEnvelope(envBytes []byte) (*peer.ChaincodeAction, error) {
 
 ### peer启动日志
 
+```
 2018-02-24 06:46:27.811 UTC [main.go:114] [main] main -> INFO 001 [gerry] mspMgrConfigDir[/etc/hyperledger/msp/peer/]
 2018-02-24 06:46:28.007 UTC [main.go:54] [main] func1 -> INFO 002 [gerry] logging_level: debug
 2018-02-24 06:46:28.008 UTC [start.go:89] [nodeCmd] serve -> INFO 003 Starting peer:
@@ -5013,9 +5015,11 @@ VzjGEYBCqQeZY618tcg=
 2018-02-24 06:46:28.163 UTC [logging.go:121] [flogging] setModuleLevel -> DEBU 1c7 Module 'policies' logger enabled for log level 'WARNING'
 2018-02-24 06:46:28.164 UTC [logging.go:121] [flogging] setModuleLevel -> DEBU 1c8 Module 'grpc' logger enabled for log level 'ERROR'
 2018-02-24 06:46:28.164 UTC [start.go:271] [nodeCmd] func5 -> INFO 1c9 Starting profiling server with listenAddress = 0.0.0.0:6060
+```
 
 ### order启动日志
 
+```
 2018-02-24 06:57:41.234 UTC [orderer/main][*/opt/gopath/src/github.com/hyperledger/fabric/orderer/main.go:68] main -> INFO 001 Starting orderer:
  Version: 1.0.5
  Go version: go1.7.5
@@ -5540,9 +5544,11 @@ config和police的日志
 {"log":"\u001b[36m2018-02-24 07:01:47.579 UTC [orderer/common/deliver] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/deliver/deliver.go:75 Handle -\u003e DEBU 8cd\u001b[0m Attempting to read seek info message\n","stream":"stderr","time":"2018-02-24T07:01:47.590709701Z"}
 {"log":"\u001b[33m2018-02-24 07:01:47.579 UTC [orderer/common/deliver] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/deliver/deliver.go:83 Handle -\u003e WARN 8ce\u001b[0m Error reading from stream: rpc error: code = Canceled desc = context canceled\n","stream":"stderr","time":"2018-02-24T07:01:47.608070326Z"}
 {"log":"\u001b[36m2018-02-24 07:01:47.583 UTC [orderer/main] /opt/gopath/src/github.com/hyperledger/fabric/orderer/server.go:91 func1 -\u003e DEBU 8cf\u001b[0m Closing Deliver stream\n","stream":"stderr","time":"2018-02-24T07:01:47.608112811Z"}
+```
 
 ### join channel (peer 日志)
 
+```
 2018-02-24 07:15:47.476 UTC [endorser.go:373] [endorser] ProcessProposal -> DEBU 1ca Entry
 2018-02-24 07:15:47.480 UTC [msgvalidation.go:79] [protoutils] ValidateProposalMessage -> DEBU 1cb ValidateProposalMessage starts for signed proposal 0xc4202b1380
 2018-02-24 07:15:47.480 UTC [msgvalidation.go:215] [protoutils] validateChannelHeader -> DEBU 1cc validateChannelHeader info: header type 1
@@ -5864,10 +5870,11 @@ txId= locPointer=offset=38, bytesLength=11869
 2018-02-24 07:15:53.534 UTC [client.go:165] [deliveryClient] afterConnect -> DEBU 306 Entering
 2018-02-24 07:15:53.534 UTC [requester.go:42] [deliveryClient] RequestBlocks -> DEBU 307 Starting deliver with block [1] for channel mychannel
 2018-02-24 07:15:53.538 UTC [client.go:192] [deliveryClient] afterConnect -> DEBU 308 Exiting
-
+```
 
 ### install chaincode (peer 日志)
 
+```
 2018-02-24 07:22:17.166 UTC [endorser.go:373] [endorser] ProcessProposal -> DEBU 309 Entry
 2018-02-24 07:22:17.170 UTC [msgvalidation.go:79] [protoutils] ValidateProposalMessage -> DEBU 30a ValidateProposalMessage starts for signed proposal 0xc42213e780
 2018-02-24 07:22:17.170 UTC [msgvalidation.go:215] [protoutils] validateChannelHeader -> DEBU 30b validateChannelHeader info: header type 3
@@ -5912,9 +5919,11 @@ txId= locPointer=offset=38, bytesLength=11869
 2018-02-24 07:22:17.178 UTC [endorser.go:506] [endorser] ProcessProposal -> DEBU 332 chainID is NULL, txid: b44dcddb8e6bd971200fdbc60f95cf18ea65f8ad0d65c740da767448285d78b1
 2018-02-24 07:22:17.178 UTC [endorser.go:523] [endorser] ProcessProposal -> DEBU 333 go here txid: b44dcddb8e6bd971200fdbc60f95cf18ea65f8ad0d65c740da767448285d78b1
 2018-02-24 07:22:17.178 UTC [endorser.go:530] [endorser] ProcessProposal -> DEBU 334 Exit
+```
 
 ### instantiate chaincode (peer 日志)
 
+```
 2018-02-24 07:26:49.610 UTC [endorser.go:373] [endorser] ProcessProposal -> DEBU 335 Entry
 2018-02-24 07:26:49.610 UTC [msgvalidation.go:79] [protoutils] ValidateProposalMessage -> DEBU 336 ValidateProposalMessage starts for signed proposal 0xc421e1b6e0
 2018-02-24 07:26:49.610 UTC [msgvalidation.go:215] [protoutils] validateChannelHeader -> DEBU 337 validateChannelHeader info: header type 3
@@ -6192,10 +6201,11 @@ txId=862dbe7cb0f7e4f5e4cf3fff5d590eca2f3700cb0d40db28b0bbba7f13a473cf locPointer
 2018-02-24 07:27:11.338 UTC [events.go:344] [eventhub_producer] Send -> DEBU 438 Exit
 2018-02-24 07:27:11.338 UTC [eventhelper.go:107] [eventhub_producer] SendProducerBlockEvent -> DEBU 439 Exit
 2018-02-24 07:27:11.339 UTC [register_internal_events.go:41] [eventhub_producer] getMessageType -> DEBU 43a [gerry] Event_Block
-
+```
 
 ### instantiate chaincode (order 日志)
 
+```
 2018-02-24 07:26:49.602 UTC [orderer/main] /opt/gopath/src/github.com/hyperledger/fabric/orderer/server.go:74 Broadcast -> DEBU 911 Starting new Broadcast handler
 2018-02-24 07:26:49.602 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:77 Handle -> DEBU 912 Starting new broadcast loop
 2018-02-24 07:27:09.244 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:138 Handle -> DEBU 913 [channel: mychannel] Broadcast is filtering message of type ENDORSER_TRANSACTION
@@ -6305,9 +6315,11 @@ txId=862dbe7cb0f7e4f5e4cf3fff5d590eca2f3700cb0d40db28b0bbba7f13a473cf locPointer
 2018-02-24 07:27:11.275 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:114 nextBlockBytesAndPlacementInfo -> DEBU 955 Remaining bytes=[5159], Going to peek [8] bytes
 2018-02-24 07:27:11.275 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:147 nextBlockBytesAndPlacementInfo -> DEBU 956 Returning blockbytes - length=[5157], placementInfo={fileNum=[0], startOffset=[11912], bytesOffset=[11914]}
 2018-02-24 07:27:11.276 UTC [orderer/common/deliver] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/deliver/deliver.go:191 Handle -> DEBU 957 [channel: mychannel] Delivering block for (0xc42085a3c0)
+```
 
 ### invork (执行peer 日志)
 
+```
 2018-02-24 07:37:41.584 UTC [endorser.go:373] [endorser] ProcessProposal -> DEBU 43b Entry
 2018-02-24 07:37:41.584 UTC [msgvalidation.go:79] [protoutils] ValidateProposalMessage -> DEBU 43c ValidateProposalMessage starts for signed proposal 0xc422017d70
 2018-02-24 07:37:41.584 UTC [msgvalidation.go:215] [protoutils] validateChannelHeader -> DEBU 43d validateChannelHeader info: header type 3
@@ -6522,9 +6534,11 @@ txId=420ef361db9483bdef5afc107b5a539f556b7a88971f15459453ad0d43d677cf locPointer
 2018-02-24 07:37:43.660 UTC [events.go:344] [eventhub_producer] Send -> DEBU 50c Exit
 2018-02-24 07:37:43.660 UTC [eventhelper.go:107] [eventhub_producer] SendProducerBlockEvent -> DEBU 50d Exit
 2018-02-24 07:37:43.660 UTC [register_internal_events.go:41] [eventhub_producer] getMessageType -> DEBU 50e [gerry] Event_Block
+```
 
 ### invork (同步peer 日志)
 
+```
 2018-02-24 07:37:43.623 UTC [blocksprovider.go:184] [blocksProvider] DeliverBlocks -> DEBU 38d [mychannel] Adding payload locally, buffer seqNum = [2], peers number [0]
 2018-02-24 07:37:43.623 UTC [blocksprovider.go:191] [blocksProvider] DeliverBlocks -> DEBU 38e [mychannel] Gossiping block [2], peers number [0]
 2018-02-24 07:37:43.626 UTC [committer_impl.go:73] [committer] Commit -> DEBU 38f Validating block
@@ -6612,10 +6626,11 @@ txId=420ef361db9483bdef5afc107b5a539f556b7a88971f15459453ad0d43d677cf locPointer
 2018-02-24 07:37:43.648 UTC [events.go:344] [eventhub_producer] Send -> DEBU 3df Exit
 2018-02-24 07:37:43.648 UTC [eventhelper.go:107] [eventhub_producer] SendProducerBlockEvent -> DEBU 3e0 Exit
 2018-02-24 07:37:43.648 UTC [register_internal_events.go:41] [eventhub_producer] getMessageType -> DEBU 3e1 [gerry] Event_Block
-
+```
 
 ### invork (order 日志)
 
+```
 2018-02-24 07:37:41.576 UTC [orderer/main] /opt/gopath/src/github.com/hyperledger/fabric/orderer/server.go:74 Broadcast -> DEBU 958 Starting new Broadcast handler
 2018-02-24 07:37:41.577 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:77 Handle -> DEBU 959 Starting new broadcast loop
 2018-02-24 07:37:41.603 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:138 Handle -> DEBU 95a [channel: mychannel] Broadcast is filtering message of type ENDORSER_TRANSACTION
@@ -6725,9 +6740,11 @@ txId=420ef361db9483bdef5afc107b5a539f556b7a88971f15459453ad0d43d677cf locPointer
 2018-02-24 07:37:43.627 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:114 nextBlockBytesAndPlacementInfo -> DEBU 99c Remaining bytes=[4752], Going to peek [8] bytes
 2018-02-24 07:37:43.628 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:147 nextBlockBytesAndPlacementInfo -> DEBU 99d Returning blockbytes - length=[4750], placementInfo={fileNum=[0], startOffset=[17071], bytesOffset=[17073]}
 2018-02-24 07:37:43.629 UTC [orderer/common/deliver] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/deliver/deliver.go:191 Handle -> DEBU 99e [channel: mychannel] Delivering block for (0xc4209d8560)
+```
 
 ### query (执行peer 日志)
 
+```
 2018-02-24 07:43:03.321 UTC [endorser.go:373] [endorser] ProcessProposal -> DEBU 50f Entry
 2018-02-24 07:43:03.323 UTC [msgvalidation.go:79] [protoutils] ValidateProposalMessage -> DEBU 510 ValidateProposalMessage starts for signed proposal 0xc421ff5e90
 2018-02-24 07:43:03.323 UTC [msgvalidation.go:215] [protoutils] validateChannelHeader -> DEBU 511 validateChannelHeader info: header type 3
@@ -6906,9 +6923,11 @@ txId=d715b4d1c0c45f9d0ace149349a29961d97d5462e2ac0d8cf86c21a9faaca69f locPointer
 2018-02-24 07:43:05.419 UTC [events.go:344] [eventhub_producer] Send -> DEBU 5bc Exit
 2018-02-24 07:43:05.419 UTC [eventhelper.go:107] [eventhub_producer] SendProducerBlockEvent -> DEBU 5bd Exit
 2018-02-24 07:43:05.419 UTC [register_internal_events.go:41] [eventhub_producer] getMessageType -> DEBU 5be [gerry] Event_Block
+```
 
 ### query (同步peer 日志)
 
+```
 2018-02-24 07:43:05.372 UTC [blocksprovider.go:184] [blocksProvider] DeliverBlocks -> DEBU 3e2 [mychannel] Adding payload locally, buffer seqNum = [3], peers number [0]
 2018-02-24 07:43:05.372 UTC [blocksprovider.go:191] [blocksProvider] DeliverBlocks -> DEBU 3e3 [mychannel] Gossiping block [3], peers number [0]
 2018-02-24 07:43:05.372 UTC [committer_impl.go:73] [committer] Commit -> DEBU 3e4 Validating block
@@ -6962,9 +6981,11 @@ txId=d715b4d1c0c45f9d0ace149349a29961d97d5462e2ac0d8cf86c21a9faaca69f locPointer
 2018-02-24 07:43:05.398 UTC [events.go:344] [eventhub_producer] Send -> DEBU 412 Exit
 2018-02-24 07:43:05.398 UTC [eventhelper.go:107] [eventhub_producer] SendProducerBlockEvent -> DEBU 413 Exit
 2018-02-24 07:43:05.398 UTC [register_internal_events.go:41] [eventhub_producer] getMessageType -> DEBU 414 [gerry] Event_Block
+```
 
 ### query (order 日志)
 
+```
 2018-02-24 07:43:03.314 UTC [orderer/main] /opt/gopath/src/github.com/hyperledger/fabric/orderer/server.go:74 Broadcast -> DEBU 99f Starting new Broadcast handler
 2018-02-24 07:43:03.318 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:77 Handle -> DEBU 9a0 Starting new broadcast loop
 2018-02-24 07:43:03.342 UTC [orderer/common/broadcast] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/broadcast/broadcast.go:138 Handle -> DEBU 9a1 [channel: mychannel] Broadcast is filtering message of type ENDORSER_TRANSACTION
@@ -7074,15 +7095,12 @@ txId=d715b4d1c0c45f9d0ace149349a29961d97d5462e2ac0d8cf86c21a9faaca69f locPointer
 2018-02-24 07:43:05.378 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:114 nextBlockBytesAndPlacementInfo -> DEBU 9e3 Remaining bytes=[4652], Going to peek [8] bytes
 2018-02-24 07:43:05.378 UTC [fsblkstorage] /opt/gopath/src/github.com/hyperledger/fabric/common/ledger/blkstorage/fsblkstorage/block_stream.go:147 nextBlockBytesAndPlacementInfo -> DEBU 9e4 Returning blockbytes - length=[4650], placementInfo={fileNum=[0], startOffset=[21823], bytesOffset=[21825]}
 2018-02-24 07:43:05.378 UTC [orderer/common/deliver] /opt/gopath/src/github.com/hyperledger/fabric/orderer/common/deliver/deliver.go:191 Handle -> DEBU 9e5 [channel: mychannel] Delivering block for (0xc42032a640)
-
-
-### 
-
-
+```
 
 
 ### commit时
 
+```
 2018-02-08 10:06:33.033 UTC [validator.go:630] [txvalidator] VSCCValidateTxForCC -> ERRO 46eb VSCC check failed for transaction txid=ec3837e234e68e0635785d9b8ba6f1a666fc7a64a0c7faa2a12dc5e25923fd0a, error VSCC error: policy evaluation failed, err Failed to authenticate policy
 2018-02-08 10:06:33.033 UTC [lockbased_query_executer.go:62] [lockbasedtxmgr] Done -> DEBU 46ec Done with transaction simulation / query execution [ee97c24f-17c8-4b7e-a8ae-5121d036df13]
 2018-02-08 10:06:33.033 UTC [validator.go:206] [txvalidator] Validate -> ERRO 46ed VSCCValidateTx for transaction txId = ec3837e234e68e0635785d9b8ba6f1a666fc7a64a0c7faa2a12dc5e25923fd0a returned error VSCC error: policy evaluation failed, err Failed to authenticate policy
@@ -7093,7 +7111,7 @@ txId=d715b4d1c0c45f9d0ace149349a29961d97d5462e2ac0d8cf86c21a9faaca69f locPointer
 2018-02-08 10:06:33.033 UTC [state_based_validator.go:80] [statevalidator] ValidateAndPrepareBatch -> DEBU 46f2 Validating a block with [1] transactions
 2018-02-08 10:06:33.033 UTC [state_based_validator.go:95] [statevalidator] ValidateAndPrepareBatch -> WARN 46f3 Block [16] Transaction index [0] marked as invalid by committer. Reason code [10]
 2018-02-08 10:06:33.034 UTC [kv_ledger.go:221] [kvledger] Commit -> DEBU 46f4 Channel [mychannel]: Committing block [16] to storage
-
+```
 
 ## Refer
 
@@ -7283,8 +7301,6 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 ### Q&A
 
 [Difference between chain and state database in Hyperledger fabric?](https://stackoverflow.com/questions/47505084/difference-between-chain-and-state-database-in-hyperledger-fabric)
-
-
 [Add Org or peer in Org dynamically in Hyperledger fabric](https://stackoverflow.com/questions/43593890/add-org-or-peer-in-org-dynamically-in-hyperledger-fabric)
 
 
