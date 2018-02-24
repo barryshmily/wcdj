@@ -4480,6 +4480,18 @@ func GetActionFromEnvelope(envBytes []byte) (*peer.ChaincodeAction, error) {
 }
 ```
 
+例子：
+Org1：peer0, peer1
+Org2: peer0, peer1
+
+AND策略：
+200, 100    假设200是第一个Action，则commit返回ENDORSEMENT_POLICY_FAILURE错误
+100, 100
+
+200, 100    假设100是第一个Action，则commit返回成功
+100, 100
+
+
 ## 关键日志
 
 ### peer启动日志
