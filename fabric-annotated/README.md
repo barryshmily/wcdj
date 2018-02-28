@@ -56,7 +56,8 @@ type Block struct {
 > **What does this demonstrate?**
 Chaincode MUST be installed on a peer in order for it to successfully perform read/write operations against the ledger. Furthermore, a chaincode container is not started for a peer until an init or traditional transaction - read/write - is performed against that chaincode (e.g. query for the value of “a”). The transaction causes the container to start. Also, all peers in a channel maintain an exact copy of the ledger which comprises the blockchain to store the immutable, sequenced record in blocks, as well as a state database to maintain a snapshot of the current state. This includes those peers that do not have chaincode installed on them (like peer1.org1.example.com in the above example) . Finally, the chaincode is accessible after it is installed (like peer1.org2.example.com in the above example) because it has already been instantiated.
 
-意思是：
+这个例子可以说明：
+
 1. `chaincode`(智能合约，例子中使用go语言实现)，必须安装到某一个`peer`上才能完成对`ledger`的读写操作。
 2. 在初始化或者在交易发生读写操作时，才运行包含`chaincode`的容器。
 3. 另外，所有在一个`channel`里的`peers`，维护了一个`ledger`的副本，这个副本由`blockchain`组成，而每个block保存了不可更改，和排序的记录。同时，一个`state database`用于维护当前状态的快照。
@@ -71,6 +72,9 @@ Chaincode MUST be installed on a peer in order for it to successfully perform re
 ```
 # ubuntu源
 /etc/apt/sources.list 
+
+# ubuntu docker 配置
+/etc/default/docker
 
 # Docker镜像的默认位置
 /var/lib/docker
@@ -192,6 +196,20 @@ https://github.com/hyperledger/fabric/blob/master/scripts/bootstrap.sh
 `bootstrap.sh`执行脚本会下载`Hyperledger Fabric` 涉及到的相关docker images。可以通过下面命令grep到所有fabric用到的镜像。
 ```
 docker images | grep hyperledger* 
+```
+
+下载的版本信息可以通过参数指定，或者使用参数默认值：
+
+``` bash
+# current version of fabric released
+export VERSION=${1:-1.0.4}
+# current version of fabric-ca released
+export CA_VERSION=${2:-$VERSION}
+# current version of thirdparty images (couchdb, kafka and zookeeper) released
+export THIRDPARTY_IMAGE_VERSION=0.4.5
+export ARCH=$(echo "$(uname -s|tr '[:upper:]' '[:lower:]'|sed 's/mingw64_nt.*/windows/')-$(uname -m | sed 's/x86_64/amd64/g')" | awk '{print tolower($0)}')
+#Set MARCH variable i.e ppc64le,s390x,x86_64,i386
+MARCH=`uname -m`
 ```
 
 比如：
@@ -3886,18 +3904,39 @@ TODO
 ### 2.7 node sdk
 
 [Installing Node.js via package manage](https://nodejs.org/en/download/package-manager/)
+
+#### ubuntu
+
 apt-get update
+
 apt-get install npm
 
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
 sudo apt-get install -y nodejs
 
+#### centos
+
+https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
+
+curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+
+sudo yum -y install nodejs
+
+#### install fabric client api
+
 npm install fabric-client
+
 npm install fabric-ca-client
+
 npm install grpc
 
+#### debug
+
 **调试技巧**：使用`supervisor`实现动态修改js代码，当`supervisor`发现js代码变动后会重新启动nodejs。
+
 npm install -g supervisor
+
 supervisor app.js
 
 安装问题：
@@ -4350,6 +4389,51 @@ https://hyperledger.github.io/composer/reference/acl_language.html
 
 ## 9 一些验证
 
+### overlay网络，chaincode容器启动失败
+
+因为chaincode容器是以域名的方式访问peer节点（-peer.address=peer0.org1.example.com:7051），overlay网络需要设置DNS配置，否则访问会失败。
+
+``` 
+[root@10 fabcar-one-goleveldb]# docker inspect 91b1e6bd49f1
+[
+    {
+        "Id": "91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a",
+        "Created": "2018-02-27T09:35:08.180627381Z",
+        "Path": "chaincode",
+        "Args": [
+            "-peer.address=peer0.org1.example.com:7051"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 23353,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2018-02-27T09:35:08.441815983Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:1c895e589e09852f85a2e1e0ba722d7b51495add4bdd44ceedc92d4ec3ae4d50",
+        "ResolvConfPath": "/var/lib/docker/containers/91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a/hostname",
+        "HostsPath": "/var/lib/docker/containers/91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a/hosts",
+        "LogPath": "/var/lib/docker/containers/91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a/91b1e6bd49f1157bb7eb421d75c9a55c91809ddf124d0d77d16ba7084c66626a-json.log",
+        "Name": "/dev-peer0.org1.example.com-fabcar-1.0",
+        "RestartCount": 0,
+        "Driver": "overlay",
+        "Platform": "linux",
+        ...
+```
+
+### instantiation是否需要满足背书策略
+
+If your chaincode requires arguments be passed to the init method, then you will need to provide the appropriate key/vals and reinitialize the state. This is not the recommended practice, because the upgrade submitter could arbitrarily rewrite the world state. Instead, consider editing the source code to remove the argument dependency, or start with a chaincode that does not require args upon instantiation.
+
+http://hyperledger-fabric.readthedocs.io/en/latest/channel_update.html
+
 ### txid重复检查
 
 两个阶段：
@@ -4427,7 +4511,7 @@ if common.HeaderType(chdr.Type) == common.HeaderType_ENDORSER_TRANSACTION {
 	}
 }
 ```
-1.1.0-alpha多了一个检查：
+1.1.0-alpha版本，新增了一个对当前即将写入账本的区块中是否存在重复txid的检查，因为此时还没有写账本，在账本中查不到。
 
 ``` go				
 // fabric-v1.1.0-alpha\core\committer\txvalidator\validator.go
@@ -7155,6 +7239,7 @@ https://www.hyperledger.org/projects/fabric
 [Channels](http://hyperledger-fabric.readthedocs.io/en/release/channels.html)
 [Gossip data dissemination protocol](http://hyperledger-fabric.readthedocs.io/en/release/gossip.html)
 [Hyperledger Fabric CA](http://hyperledger-fabric-ca.readthedocs.io/en/latest/)
+[Adding an Org to a Channel](http://hyperledger-fabric.readthedocs.io/en/latest/channel_update.html)
 
 ### 智能合约
 
@@ -7313,6 +7398,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 ### Q&A
 
 [Difference between chain and state database in Hyperledger fabric?](https://stackoverflow.com/questions/47505084/difference-between-chain-and-state-database-in-hyperledger-fabric)
+
 [Add Org or peer in Org dynamically in Hyperledger fabric](https://stackoverflow.com/questions/43593890/add-org-or-peer-in-org-dynamically-in-hyperledger-fabric)
 
 
