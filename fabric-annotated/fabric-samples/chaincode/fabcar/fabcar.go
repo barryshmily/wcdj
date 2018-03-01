@@ -58,6 +58,19 @@ type Car struct {
 func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 	fmt.Println("[gerry] do Init")
 	
+	cars := []Car{
+		Car{Make: "BMW", Model: "320", Colour: "blue", Owner: "Gerry"},
+	}
+
+	i := 0
+	for i < len(cars) {
+		fmt.Println("i is ", i)
+		carAsBytes, _ := json.Marshal(cars[i])
+		APIstub.PutState("CAR"+strconv.Itoa(i), carAsBytes)
+		fmt.Println("Added", cars[i])
+		i = i + 1
+	}
+
 	return shim.Success(nil)
 }
 

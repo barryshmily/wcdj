@@ -3940,8 +3940,15 @@ npm install -g supervisor
 supervisor app.js
 
 安装问题：
-https://stackoverflow.com/questions/19936850/nodejs-error-node-js810-var-cwd-process-cwd
 
+1. https://stackoverflow.com/questions/19936850/nodejs-error-node-js810-var-cwd-process-cwd
+
+2. 
+npm rebuild
+
+#### some tools
+
+[Examples of sequential, concurrent and parallel requests in node.js](https://gist.github.com/montanaflynn/cb349fd109b561c35d6c8500471cdb39)
 
 
 ### 2.8 fabric-sdk-go
@@ -4430,9 +4437,63 @@ https://hyperledger.github.io/composer/reference/acl_language.html
 
 ### instantiation是否需要满足背书策略
 
+验证测试不需要。特殊逻辑
+
+```
+root@ubuntu-s-1vcpu-3gb-nyc3-01:~# docker inspect --format={{.LogPath}} peer0.org1.example.com | xargs grep "Signature set is of size"    
+
+# instantiate操作，只请求了一个peer节点，不满足AND背书策略，但是commit成功                                                                       
+{"log":"\u001b[36m2018-02-28 06:52:57.706 UTC [validator_onevalidsignature.go:457] [vscc] deduplicateIdentity -\u003e DEBU 412\u001b[0m Signature set is of size 1 out of 1 endorsement(s)\n","stream":"stderr","time":"2018-02-28T06:52:57.706780243Z"}
+
+# invork操作，需要满足AND背书策略，才能commit成功
+{"log":"\u001b[36m2018-02-28 07:05:08.378 UTC [validator_onevalidsignature.go:457] [vscc] deduplicateIdentity -\u003e DEBU 600\u001b[0m Signature set is of size 4 out of 4 endorsement(s)\n","stream":"stderr","time":"2018-02-28T07:05:08.378978783Z"}
+```
+
 If your chaincode requires arguments be passed to the init method, then you will need to provide the appropriate key/vals and reinitialize the state. This is not the recommended practice, because the upgrade submitter could arbitrarily rewrite the world state. Instead, consider editing the source code to remove the argument dependency, or start with a chaincode that does not require args upon instantiation.
 
 http://hyperledger-fabric.readthedocs.io/en/latest/channel_update.html
+
+
+### commit逻辑
+
+gossip时的commit
+
+``` golang
+// fabric_v1.0.4\gossip\state\state.go
+
+func (s *GossipStateProviderImpl) deliverPayloads() {
+	defer s.done.Done()
+
+	for {
+		select {
+		// Wait for notification that next seq has arrived
+		case <-s.payloads.Ready():
+			logger.Debugf("Ready to transfer payloads to the ledger, next sequence number is = [%d]", s.payloads.Next())
+			// Collect all subsequent payloads
+			for payload := s.payloads.Pop(); payload != nil; payload = s.payloads.Pop() {
+				rawBlock := &common.Block{}
+				if err := pb.Unmarshal(payload.Data, rawBlock); err != nil {
+					logger.Errorf("Error getting block with seqNum = %d due to (%s)...dropping block", payload.SeqNum, err)
+					continue
+				}
+				if rawBlock.Data == nil || rawBlock.Header == nil {
+					logger.Errorf("Block with claimed sequence %d has no header (%v) or data (%v)",
+						payload.SeqNum, rawBlock.Header, rawBlock.Data)
+					continue
+				}
+				logger.Debug("New block with claimed sequence number ", payload.SeqNum, " transactions num ", len(rawBlock.Data.Data))
+				if err := s.commitBlock(rawBlock); err != nil {
+					logger.Panicf("Cannot commit block to the ledger due to %s", err)
+				}
+			}
+		case <-s.stopCh:
+			s.stopCh <- struct{}{}
+			logger.Debug("State provider has been stoped, finishing to push new blocks.")
+			return
+		}
+	}
+}
+```
 
 ### txid重复检查
 
@@ -7324,6 +7385,11 @@ https://yeasy.gitbooks.io/docker_practice/content/image/dockerfile/entrypoint.ht
 
 https://stackoverflow.com/questions/43830372/error-manifest-for-hyperledger-fabric-ordererlatest-not-found
 https://hub.docker.com/u/hyperledger/
+
+[在 Docker 中配置时区](https://tommy.net.cn/2015/02/05/config-timezone-in-docker/)
+https://forums.docker.com/t/synchronize-timezone-from-host-to-container/39116
+https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes
+
 
 ### 前端
 https://github.com/hyperledger/blockchain-explorer
