@@ -1,10 +1,23 @@
 
+---
+[TOC]
+
 ## Codes
 
 [使用异步 I/O 大大提高应用程序的性能](https://www.ibm.com/developerworks/cn/linux/l-async/)
 
 
 ## Tools
+
+### iostat
+
+iostat -dx
+
+iostat -dx 1
+
+iostat -dx <disk name> 1
+
+[How to get total read and total write IOPS in Linux?](https://unix.stackexchange.com/questions/225095/how-to-get-total-read-and-total-write-iops-in-linux)
 
 ### bmon
 
