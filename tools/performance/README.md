@@ -25,6 +25,8 @@ bmon - bandwidth monitor and rate estimator
 
 ### dd
 
+[使用 dd 命令进行硬盘 I/O 性能检测](https://linux.cn/article-6104-1.html)
+
 ```
 [root@10 ~]# dd if=/dev/zero of=/tmp/gerry bs=1G count=1 oflag=direct
 1+0 records in

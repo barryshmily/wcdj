@@ -3,3 +3,6 @@ man 5 proc
 
 /proc/sys/kernel/threads-max
 
+
+网络相关数据
+/proc/net/dev 

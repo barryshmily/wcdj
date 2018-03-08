@@ -4215,6 +4215,9 @@ TODO
 
 https://github.com/hyperledger/blockchain-explorer
 
+mysql -u<username> -p < db/fabricexplorer.sql
+./start.sh
+
 http://45.55.51.66:8080/
 
 ![blockchain-explorer.png](https://github.com/gerryyang/wcdj/blob/master/fabric-annotated/pic/blockchain-explorer.png?raw=true)
