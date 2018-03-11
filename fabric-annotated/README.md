@@ -7568,7 +7568,13 @@ https://cloud.tencent.com/product/tbaas
 ### 比特币
 
 http://www.8btc.com/wiki/bitcoin-a-peer-to-peer-electronic-cash-system
+
 https://en.bitcoin.it/wiki/Transaction
+
+https://blockgeeks.com/guides/bitcoin-developer/  (必看)
+
+https://blockgeeks.com/guides
+
 
 ### IBM
 
