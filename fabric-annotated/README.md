@@ -216,6 +216,71 @@ export GOROOT=/root/LAMP/golang/go_1_9_2
 export PATH=$GOROOT/bin:$PATH
 ```
 
+补充说明：
+
+> 其他版本可访问下面页面进行下载
+>
+> https://store.docker.com/search?type=edition&offering=community
+> 比如：centos
+> https://docs.docker.com/install/linux/docker-ce/centos/
+
+centos安装docker-ce的一些问题：
+
+1. 安装docker-ce失败：Requires: container-selinux >= 2.9
+
+解决方法：使用rpm包安装。参考：https://github.com/docker/for-linux/issues/21
+```
+wget ftp://ftp.icm.edu.pl/vol/rzm6/linux-centos-vault/7.3.1611/extras/x86_64/Packages/container-selinux-2.9-4.el7.noarch.rpm
+rpm -Uvh container-selinux-2.9-4.el7.noarch.rpm
+yum install docker-ce-17.12.1.ce-1.el7.centos.x86_64.rpm
+```
+
+2. storage driver
+
+https://docs.docker.com/storage/storagedriver/device-mapper-driver/#configure-docker-with-the-devicemapper-storage-driver
+
+
+3. Error starting daemon: Error initializing network controller: list bridge addresses failed: no available network
+
+http://blog.csdn.net/longxing_123/article/details/78044840
+
+
+4. open /run/docker/containerd/daemon/io.containerd.runtime.v1.linux/moby no such file
+
+```
+yum install http://mirror.centos.org/centos/7/os/x86_64/Packages/libseccomp-2.3.1-3.el7.x86_64.rpm
+yum install docker-ce
+```
+https://github.com/moby/moby/issues/35906
+
+5. ltdl.h: No such file
+
+yum install libtool-ltdl-devel
+
+https://stackoverflow.com/questions/43626320/ltdl-h-not-found-error-while-building-chaincode
+
+6. [Errno 14] curl#60 - "Peer's Certificate issuer is not recognized
+
+vi /etc/yum.conf
+修改 sslcacert
+
+
+7. nopt
+
+```
+sudo npm install nopt
+sudo npm install npmlog
+sudo npm install semver
+sudo npm install rimraf
+sudo npm install sqlite3@3.1.3 --unsafe-perm
+```
+
+### 1.0 Install go
+
+https://golang.org/dl/
+
+wget https://dl.google.com/go/go1.10.linux-amd64.tar.gz
+
 
 ### 1.1 Uninstall old versions
 如果之前环境上安装过docker，且版本比较老，则可以通过下述命令移除老版本。注意，只会移除老的docker engine，不会删除已安装的镜像。

@@ -799,3 +799,7 @@ https://access.redhat.com/solutions/18627
 cat /sys/devices/system/clocksource/clocksource0/available_clocksource
 echo "acpi_pm" > /sys/devices/system/clocksource/clocksource0/current_clocksource
 
+
+
+3. 锁
+互斥锁和自旋锁。
