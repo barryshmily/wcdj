@@ -184,6 +184,62 @@ type Block struct {
 
 下面是关于使用[fabric](https://github.com/hyperledger/fabric)应用区块链的一个场景。 [first network](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html)是一个关于转账的例子，其代码可通过`git clone https://github.com/hyperledger/fabric-samples.git`下载到本地。 若只是测试例子则不用下载fabric源码，通过下载镜像即可。若修改功能，则需要下载fabric源码并修改其内部模块。在开发环境配置好`GOPATH`，然后通过`go get github.com/hyperledger/fabric`下载fabric源码到开发环境。
 
+**特别说明：**
+
+如果要使用不同的fabric版本测试，可以通过下面方法进行切换。
+http://hyperledger-fabric.readthedocs.io/en/latest/samples.html
+
+```
+# git clone -b master https://github.com/hyperledger/fabric-samples.git
+# cd fabric-samples
+# git checkout -b {TAG}
+# git tag
+v1.0.2
+v1.0.6
+v1.1.0-alpha
+v1.1.0-preview
+v1.1.0-rc1
+# git checkout -b v1.1.0-rc1
+# cd fabric-samples/scripts 
+# ./fabric-preload.sh $tag
+```
+切换版本时，只需要重新执行下面命令即可。
+```
+# ./fabric-preload.sh 1.1.0-rc1
+# ./fabric-preload.sh 1.0.4
+```
+
+比如：
+```
+hyperledger/fabric-ca                                                                                    x86_64-1.1.0-rc1    8a6c8c2e2ebf        2 weeks ago         283MB
+hyperledger/fabric-tools                                                                                 x86_64-1.1.0-rc1    006c689ec08e        2 weeks ago         1.46GB
+hyperledger/fabric-orderer                                                                               x86_64-1.1.0-rc1    10afc128d402        2 weeks ago         180MB
+hyperledger/fabric-peer                                                                                  x86_64-1.1.0-rc1    6b44b1d021cb        2 weeks ago         187MB
+hyperledger/fabric-javaenv                                                                               x86_64-1.1.0-rc1    ea263125afb1        2 weeks ago         1.52GB
+hyperledger/fabric-ccenv                                                                                 x86_64-1.1.0-rc1    65c951b9681f        2 weeks ago         1.39GB
+hyperledger/fabric-baseos                                                                                x86_64-0.4.6        220e5cf3fb7f        3 weeks ago         151MB
+hyperledger/fabric-ca                                                                                    latest              8e691b3509bf        4 months ago        238MB
+hyperledger/fabric-ca                                                                                    x86_64-1.0.4        8e691b3509bf        4 months ago        238MB
+hyperledger/fabric-tools                                                                                 latest              6051774928a6        4 months ago        1.33GB
+hyperledger/fabric-tools                                                                                 x86_64-1.0.4        6051774928a6        4 months ago        1.33GB
+hyperledger/fabric-couchdb                                                                               latest              cf24b91dfeb1        4 months ago        1.5GB
+hyperledger/fabric-couchdb                                                                               x86_64-1.0.4        cf24b91dfeb1        4 months ago        1.5GB
+hyperledger/fabric-kafka                                                                                 latest              7a9d6f3c4a7c        4 months ago        1.29GB
+hyperledger/fabric-kafka                                                                                 x86_64-1.0.4        7a9d6f3c4a7c        4 months ago        1.29GB
+hyperledger/fabric-zookeeper                                                                             latest              53c4a0d95fd4        4 months ago        1.3GB
+hyperledger/fabric-zookeeper                                                                             x86_64-1.0.4        53c4a0d95fd4        4 months ago        1.3GB
+hyperledger/fabric-orderer                                                                               latest              b17741e7b036        4 months ago        151MB
+hyperledger/fabric-orderer                                                                               x86_64-1.0.4        b17741e7b036        4 months ago        151MB
+hyperledger/fabric-peer                                                                                  latest              1ce935adc397        4 months ago        154MB
+hyperledger/fabric-peer                                                                                  x86_64-1.0.4        1ce935adc397        4 months ago        154MB
+hyperledger/fabric-javaenv                                                                               latest              a517b70135c7        4 months ago        1.41GB
+hyperledger/fabric-javaenv                                                                               x86_64-1.0.4        a517b70135c7        4 months ago        1.41GB
+hyperledger/fabric-ccenv                                                                                 latest              856061b1fed7        4 months ago        1.28GB
+hyperledger/fabric-ccenv                                                                                 x86_64-1.0.4        856061b1fed7        4 months ago        1.28GB
+hyperledger/fabric-baseos                                                                                x86_64-0.3.2        bbcbb9da2d83        6 months ago        129MB
+```
+
+
 > **What does this demonstrate?**
 Chaincode MUST be installed on a peer in order for it to successfully perform read/write operations against the ledger. Furthermore, a chaincode container is not started for a peer until an init or traditional transaction - read/write - is performed against that chaincode (e.g. query for the value of “a”). The transaction causes the container to start. Also, all peers in a channel maintain an exact copy of the ledger which comprises the blockchain to store the immutable, sequenced record in blocks, as well as a state database to maintain a snapshot of the current state. This includes those peers that do not have chaincode installed on them (like peer1.org1.example.com in the above example) . Finally, the chaincode is accessible after it is installed (like peer1.org2.example.com in the above example) because it has already been instantiated.
 
@@ -224,7 +280,7 @@ export PATH=$GOROOT/bin:$PATH
 > 比如：centos
 > https://docs.docker.com/install/linux/docker-ce/centos/
 
-centos安装docker-ce的一些问题：
+### centos安装fabric的一些问题
 
 1. 安装docker-ce失败：Requires: container-selinux >= 2.9
 
@@ -241,6 +297,8 @@ https://docs.docker.com/storage/storagedriver/device-mapper-driver/#configure-do
 
 
 3. Error starting daemon: Error initializing network controller: list bridge addresses failed: no available network
+
+sudo route del -net 172.16.0.0/12
 
 http://blog.csdn.net/longxing_123/article/details/78044840
 
@@ -265,7 +323,7 @@ vi /etc/yum.conf
 修改 sslcacert
 
 
-7. nopt
+7. nopt缺失
 
 ```
 sudo npm install nopt
@@ -274,6 +332,33 @@ sudo npm install semver
 sudo npm install rimraf
 sudo npm install sqlite3@3.1.3 --unsafe-perm
 ```
+
+8. 修改Docker的根目录
+
+老版本方法：
+Docker默认的根目录是/var/lib/docker/，这样会导致Docker images文件占用/root分区空间，故将其修改到/data分区下。修改Docker在Centos下的配置文件/etc/sysconfig/docker（Ubuntu下为/etc/default/docker）。
+
+OPTIONS='--selinux-enabled -b=none -g /data/home/gerryyang/root_docker'
+
+新版方法：
+https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory
+https://docs.docker.com/v1.11/engine/reference/commandline/daemon/#daemon-configuration-file
+
+```
+# /etc/docker/daemon.json
+{
+  "storage-driver": "devicemapper",
+  "graph": "/data/home/gerryyang/root_docker"
+}
+```
+
+9. docker save and load
+
+docker save hyperledger/fabric-tools > fabric-tools.tar  
+docker import fabric-ca.tar hyperledger/fabric-tools 
+
+https://docs.docker.com/engine/reference/commandline/save/#options
+https://stackoverflow.com/questions/36925261/what-is-the-difference-between-import-and-load-in-docker
 
 ### 1.0 Install go
 
@@ -7575,6 +7660,7 @@ https://github.com/yeasy/blockchain_guide/issues/51
 
 ### Docker
 
+https://docs.docker.com/engine/reference/commandline
 https://docs.docker.com/compose/compose-file/compose-file-v2/
 https://docs.docker.com/engine/userguide/storagedriver/imagesandcontainers/#container-size-on-disk
 https://docs.docker.com/engine/admin/resource_constraints/
@@ -7589,6 +7675,9 @@ https://hub.docker.com/u/hyperledger/
 https://forums.docker.com/t/synchronize-timezone-from-host-to-container/39116
 https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes
 
+### kubernetes
+
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
 ### 前端
 https://github.com/hyperledger/blockchain-explorer

@@ -4,6 +4,17 @@
 
 -----------------
 
+## Linux常用工具
+
+http://linuxtools-rst.readthedocs.io/zh_CN/latest/base/index.html
+
+### iostat
+
+* %util 接近100%，说明产生的I/O请求太多，I/O系统已经满负荷，该磁盘可能存在瓶颈。
+* svctm 比较接近await，说明I/O 几乎没有等待时间。
+* await 远大于svctm，说明I/O队列太长，应用得到的响应时间变慢。
+* %util很大，而rkB/s和wkB/s很小，一般是因为磁盘存在较多的磁盘随机读写，最好把磁盘随机读写优化成顺序读写。
+
 ## 计算机基础
 
 1. 字符编码 ASCII，Unicode 和 UTF-8
@@ -800,6 +811,12 @@ cat /sys/devices/system/clocksource/clocksource0/available_clocksource
 echo "acpi_pm" > /sys/devices/system/clocksource/clocksource0/current_clocksource
 
 
-
 3. 锁
 互斥锁和自旋锁。
+
+
+4. 超线程
+cat /proc/cpuinfo | grep "core id"
+具有相同core id的cpu是同一个core的超线程，通过flags显示有ht选项。
+[超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
+
