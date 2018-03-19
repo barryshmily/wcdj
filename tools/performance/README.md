@@ -57,7 +57,10 @@ https://linux.die.net/man/1/fio
 Refer:
 
 [使用fio测试磁盘I/O性能](ttps://wsgzao.github.io/post/fio/)
+
 [Fio压测工具和io队列深度理解和误区](http://blog.yufeng.info/archives/2104)
+
+https://github.com/bingjin/CloudTesting/blob/master/test_cbs/test_procedure.md
 
 ```
 #yum安装

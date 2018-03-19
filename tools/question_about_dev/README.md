@@ -820,3 +820,10 @@ cat /proc/cpuinfo | grep "core id"
 具有相同core id的cpu是同一个core的超线程，通过flags显示有ht选项。
 [超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
 
+
+-----------------
+## 安全相关
+
+1. HTTPS
+
+2. Public keys and Private Keys

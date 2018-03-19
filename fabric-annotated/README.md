@@ -7678,6 +7678,10 @@ https://serverfault.com/questions/683605/docker-container-time-timezone-will-not
 ### kubernetes
 
 https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+https://github.com/kubernetes/examples/tree/master/staging/volumes/cephfs/
+[腾讯云-数据卷概览](https://cloud.tencent.com/document/product/457/9112)
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/persistent-storage.md
 
 ### 前端
 https://github.com/hyperledger/blockchain-explorer
@@ -7755,12 +7759,26 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 [Getting Started with Blockchain Development](https://blog.selman.org/2017/07/08/getting-started-with-blockchain-development/)
 
+### 性能调优
+
+[超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
+
+### 容器云
+
+[腾讯云-容器服务](https://cloud.tencent.com/document/product/457)
+[腾讯云-查询容器服务监控信息](https://cloud.tencent.com/document/product/457/9505)
+
+### 安全
+
+https://en.wikipedia.org/wiki/Public_key_infrastructure
+https://en.wikipedia.org/wiki/X.509
+
+
 ### Q&A
 
 [Difference between chain and state database in Hyperledger fabric?](https://stackoverflow.com/questions/47505084/difference-between-chain-and-state-database-in-hyperledger-fabric)
 
 [Add Org or peer in Org dynamically in Hyperledger fabric](https://stackoverflow.com/questions/43593890/add-org-or-peer-in-org-dynamically-in-hyperledger-fabric)
-
 
 
 
