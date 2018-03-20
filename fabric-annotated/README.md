@@ -7759,6 +7759,14 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 [Getting Started with Blockchain Development](https://blog.selman.org/2017/07/08/getting-started-with-blockchain-development/)
 
+[Managing external dependencies for chaincode written in Go](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4ade.html#managing-external-dependencies-for-chaincode-written-in-go)
+
+[Chaincode for Developers](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4ade.html)
+
+[Chaincode for Operators](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4noah.html)
+
+[Update](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4noah.html#upgrade)
+
 ### 性能调优
 
 [超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)

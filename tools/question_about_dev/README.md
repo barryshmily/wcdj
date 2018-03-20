@@ -226,6 +226,8 @@ static unsigned long long GetTickMS()
 -----------------
 ## 网络部分
 
+0. 短连接和长连接
+
 1. IP首部和TCP首部分别是多少个字节
 20字节，8字节
 
