@@ -7554,6 +7554,58 @@ txId=d715b4d1c0c45f9d0ace149349a29961d97d5462e2ac0d8cf86c21a9faaca69f locPointer
 2018-02-08 10:06:33.034 UTC [kv_ledger.go:221] [kvledger] Commit -> DEBU 46f4 Channel [mychannel]: Committing block [16] to storage
 ```
 
+## hyperledger/caliper
+
+Caliper is a blockchain performance benchmark framework, which allows users to test different blockchain solutions with predefined use cases, and get a set of performance test results.
+
+https://github.com/hyperledger/caliper
+
+
+## Fabric常用工具
+
+* 查看fabric日志级别
+
+```
+docker inspect --format={{.LogPath}} peer0.org1.example.com | xargs grep "setModuleLevel" 
+```
+
+* 清除容器和镜像
+
+```
+docker rm `docker ps -aq`
+docker rmi `docker images dev* -aq`
+
+docker images | grep none | awk -F' ' '{print $3}' | while read f; do docker rmi -f $f; done
+```
+
+* 通过日志统计TPS
+
+关键日志：
+```
+# 1.0.4
+{"log":"2018-02-28 12:28:53.378 UTC [kvledger] Commit -\u003e INFO 039\u001b[0m Channel [mychannel]: Created block [4] with 2 transaction(s)\n","stream":"stderr","time":"2018-02-28T12:28:53.378598294Z"}
+
+# 1.1.0
+2018-03-06 07:29:58.620 UTC [kvledger] CommitWithPvtData -> INFO 038 Channel [mychannel]: Committed block [4] with 1 transaction(s)
+```
+
+统计脚本：
+```
+# 1.0.4
+# docker inspect --format={{.LogPath}} peer0.org1.example.com | xargs grep "Created" | perl -ne 'if(/(\d\d:\d\d:(\d+)).*with\s(\d+)/)  {$c+=$3; if($pre != $2) {printf("%s qps:%d\n", $1, $c); $c=0; $pre = $2;} }'
+
+10:12:18 qps:1
+10:12:33 qps:1
+10:12:43 qps:1
+12:26:30 qps:1
+12:28:53 qps:2
+
+# 1.1.0
+# docker inspect --format={{.LogPath}} peer0.org1.example.com | xargs grep "Committed" | perl -ne 'if(/(\d\d:\d\d:(\d+)).*with\s(\d+)/)  {$c+=$3; if($pre != $2) {printf("%s qps:%d\n", $1, $c); $c=0; $pre = $2;} }'
+```
+
+
+
 ## Refer
 
 ### Fabric官方介绍
@@ -7770,6 +7822,8 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 ### 性能调优
 
 [超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
+
+[hyperledger/caliper](https://github.com/hyperledger/caliper)
 
 ### 容器云
 
