@@ -270,6 +270,10 @@ Chaincode MUST be installed on a peer in order for it to successfully perform re
 export GOPATH=/root/go
 export GOROOT=/root/LAMP/golang/go_1_9_2
 export PATH=$GOROOT/bin:$PATH
+
+# 网络相关
+/etc/resolv.conf
+/etc/hosts
 ```
 
 补充说明：
@@ -7683,6 +7687,8 @@ https://hub.docker.com/u/hyperledger/
 [在 Docker 中配置时区](https://tommy.net.cn/2015/02/05/config-timezone-in-docker/)
 https://forums.docker.com/t/synchronize-timezone-from-host-to-container/39116
 https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes
+
+[Networking in Compose](https://docs.docker.com/compose/networking/)
 
 ### kubernetes
 
