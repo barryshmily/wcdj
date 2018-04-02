@@ -1,0 +1,55 @@
+#!/usr/bin/expect  --
+set timeout 5 
+
+if { [llength $argv] < 1} {
+  puts "usage: $argv0 configFile(ip/user/passwd)"
+  exit 1
+}
+
+set configFile [lindex $argv 0]
+set f [open "$configFile"]
+
+# 确保文件有三行
+if {[gets $f host] != -1} {}
+if {[gets $f user] != -1} {}
+if {[gets $f pass] != -1} {}
+close $f
+
+#send_user "enter...\n"
+spawn sftp  $user@$host 
+
+if { "$pass" == "" } {
+	set timeout -1 
+   	interact
+	exit	
+}
+
+# 自动录入密码
+expect {
+        "yes/no" { send "yes\r"; exp_continue}
+        "assword:" {
+        send "$pass\r"
+		#interact
+        }
+		timeout {
+			set timeout -1
+			# 密码输入错误，中断自动化手工输入
+			interact
+		}
+}
+
+
+# 3秒内发现没有登录，跳过这条规则
+set timeout 3 
+expect {
+  "sftp" {
+    send "lcd ..\r"
+    interact
+
+  } timeout {
+		set timeout -1
+		# 密码输入错误，中断自动化手工输入
+		interact
+	}
+}
+

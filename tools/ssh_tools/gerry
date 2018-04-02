@@ -1,0 +1,99 @@
+#!/bin/sh 
+
+cd `dirname $0`
+mhome=`pwd`
+export PATH=`pwd`:$PATH
+tmp_dir="/dev/shm/.`whoami`/host"
+[ -d $tmp_dir ] || mkdir -p $tmp_dir
+
+umask 0077
+chmod -R 700 $tmp_dir
+
+
+ftp=0
+if [ "$1" == "ftp" ];then
+	ftp=1
+
+elif [ "$1" == "root" ];then
+	root=1
+
+
+# 手工指定IP、用户名登录
+elif [ $# -gt 0 ];then
+	config="$tmp_dir/temp.$1"
+	echo "$1" >$config
+	echo "$2" >>$config
+	echo "$3" >>$config
+	jump "$config"  && rm $config
+	exit;
+fi
+
+HOST_LIST="${mhome}/Host_`basename $0`.txt"
+
+if [ ! -f "$HOST_LIST" ];then
+	echo "找不到主机配置文件 $HOST_LIST"
+	exit
+fi
+
+while(true)
+do
+clear
+echo "Host List:"
+echo $LANG|grep UTF-8 >/dev/null
+if [ $? -eq 0 ] ;then
+	cmd_cat="cat $HOST_LIST|iconv -cs -f gbk -t utf-8"
+else
+	cmd_cat="cat $HOST_LIST"
+fi
+eval $cmd_cat|awk -F "|" '{ 
+	if( NF >= 4 )
+		printf("%-2d:\t%-15s\t%s\n",NR,$1,$4 ); 
+
+	else
+		printf("\n");
+
+}' 
+
+echo ""
+echo -n "Please enter Host number(exit|q to quit):"
+
+p=0
+read number
+
+if [ "$number" = "exit" -o "$number" = "q" ] 
+then
+	break
+elif [ "$number" == "p" ];then
+	echo -n "Host number:"
+	p=1	
+	read number
+fi
+
+line=`echo sed -n \'${number}p\' $HOST_LIST|sh`
+
+host=`echo $line|awk -F"|" '{print $1}'`
+user=`echo $line|awk -F"|" '{print $2}'`
+pass=`echo $line|awk -F"|" '{print $3}'`
+
+[ "$root" == "1" ] && pass='' && user='root'
+
+if [ $p -eq 1 ];then
+	echo $pass
+	echo -n "any key to return:"
+	read number
+	#exit
+	continue
+fi
+
+config="$tmp_dir/$host"
+#echo $line|awk -F"|" '{printf("%s\n%s\n%s",$1,$2,$3);}' >"$config"
+echo -e "$host\n$user\n$pass" > "$config"
+# 通过文件传送参数，防止通过ps命令在命令行上能看的用户名和密码
+if [ $ftp -eq 1 ];then
+	jumpsftp "$config" && rm $config
+else
+	jump "$config" && rm $config
+fi
+done
+
+clear

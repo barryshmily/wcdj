@@ -1,0 +1,53 @@
+#!/usr/bin/expect  --
+set timeout 5 
+
+if { [llength $argv] < 1} {
+  puts "usage: $argv0 configFile(ip/user/passwd)"
+  exit 1
+}
+
+set configFile [lindex $argv 0]
+set f [open "$configFile"]
+
+# 确保文件有三行
+if {[gets $f host] != -1} {}
+if {[gets $f user] != -1} {}
+if {[gets $f pass] != -1} {}
+close $f
+
+#send_user "enter...\n"
+#spawn /usr/local/bin/ssh -q $host -p36000 -l $user
+spawn ssh  -q $host -p36000 -l $user
+
+if { "$pass" == "" } {
+	set timeout -1 
+   	interact
+	exit	
+}
+
+# 自动录入密码
+expect {
+		"yes/no" { send "yes\r"; exp_continue}
+ 		"assword:" {
+   		send "$pass\r"
+ 		}
+}
+
+# 3秒内发现没有登录，跳过这条规则
+set timeout 3 
+expect {
+  "login:" {
+    #send "\[ -e ~/.toybox.sh \] && source ~/.toybox.sh ;clear;echo HOST Info;/sbin/ip addr|grep \"scope global\"|awk -F\"/\" '{print \$1}'\r"
+    #send "\[ -e ~/.tbossrc \] || rsync  rsync://10.177.140.97/login_tools/.tbossrc ./ ;\r"
+    #send "\[ -e ~/.vimrc \] || rsync  rsync://10.177.140.97/login_tools/.vimrc ./ ;\r"
+    #send "\[ -e ~/.tbossrc \] && source ~/.tbossrc ;\r"
+    send "clear;echo HOST Info;/sbin/ip addr|grep \"scope global\"|awk -F\"/\" '{print \$1}'\r"
+    interact
+
+  } timeout {
+		set timeout -1
+		# 密码输入错误，中断自动化手工输入
+		interact
+	}
+}
+
