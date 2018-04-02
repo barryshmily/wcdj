@@ -4,6 +4,102 @@
 
 -----------------
 
+## 基础问题
+
+在多线程的程序中，存在一个全局的map结构，其成员是整数。下述哪些场景中必须采用锁机制来确保对map结构操作的安全性？
+
+A: 该map结构在程序初始化过程中构建，程序运行过程只是读取map内容
+
+B: 在程序运行过程中，仅1个线程修改map内容，其他线程只是读取map内容
+
+C: 在程序运行过程中，每个线程负责不同元素的读写操作
+
+D: 在程序运行过程中，存在多个线程修改map内容
+
+正确答案：B,C,D
+
+假设MySQL数据库中建立了对字段A、B、C的联合索引（A，B，C），请问下面哪些查询可以利用到这个联合索引？
+A: select id from table where A = “x” and B = “y” and C = “z”
+
+B: select id from table where A = “x” and B = “y”
+
+C: select id from table where A = “x”
+
+D: select id from table where A = “x” and C = “z”
+
+正确答案：A,B,C
+
+#include <stdio.h>
+
+class Base
+{
+public:
+virtual void foo() { printf("call Base::foo().\n"); }
+void bar() { printf("call Base::Derive().\n"); foo();}
+};
+
+class Derive : public Base
+{
+public:
+void foo() { printf("call Derive::foo().\n"); }
+void bar() { printf("call Derive::Derive().\n"); foo();}
+};
+
+int main()
+{
+Base * ptr = new Derive();
+if(ptr != NULL) ptr->bar();
+
+return 0;
+}
+
+A: call Derive::bar(). 
+call Derive::foo().
+
+B: call Derive::bar(). 
+call Base::foo().
+
+C: call Base::bar(). 
+call Derive::foo().
+
+D: call Base::bar(). 
+call Base::foo().
+
+正确答案：C
+
+关于线程安全，以下说法正确的是（）。
+
+A: 可重入函数都是线程安全的函数
+
+B: 线程安全函数都是可重入的函数
+
+C: 线程不安全函数通过加锁可以改造成线程安全的函数
+
+D: 线程不安全函数通过加锁可以改造成可重入函数
+
+
+正确答案：A,C
+
+```
+[可重入函数和线程安全的区别与联系](https://blog.csdn.net/scenlyf/article/details/52074444)
+
+[异步可重入函数与线程安全函数等价吗？](https://www.zhihu.com/question/21526405)
+
+函数可以是可重入的，也可以是线程安全的，或者两者皆是，或者两者皆非。不可重入函数不能由多个线程使用。
+
+1、线程安全是在多线程情况下引发的，而可重入函数可以在只有一个线程的情况下发生。
+
+2、线程安全不一定是可重入的，而可重入函数则一定是线程安全的。
+
+3、如果一个函数有全局变量，则这个函数既不是线程安全也不是可重入的。
+
+4、如果一个函数当中的数据全身自身栈空间的，则这个函数即使线程安全也是可重入的。
+
+5、如果将对临界资源的访问加锁，则这个函数是线程安全的；但如果重入函数的话加锁还未释放，则会产生死锁，因此不能重入。
+
+6、线程安全函数能够使不同的线程访问同一块地址空间，而可重入函数要求不同的执行流对数据的操作不影响结果，使结果是相同的。
+```
+
 ## Linux常用工具
 
 http://linuxtools-rst.readthedocs.io/zh_CN/latest/base/index.html
@@ -225,8 +321,6 @@ static unsigned long long GetTickMS()
 
 -----------------
 ## 网络部分
-
-
 
 1. 基础知识
 

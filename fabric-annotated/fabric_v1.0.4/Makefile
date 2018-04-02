@@ -190,6 +190,7 @@ linter: buildenv
 	curl -fL $(CHAINTOOL_URL) > $@
 	chmod +x $@
 
+# TODO gerry
 # We (re)build a package within a docker context but persist the $GOPATH/pkg
 # directory so that subsequent builds are faster
 build/docker/bin/%: $(PROJECT_FILES)
@@ -201,6 +202,17 @@ build/docker/bin/%: $(PROJECT_FILES)
 		-v $(abspath build/docker/$(TARGET)/pkg):/opt/gopath/pkg \
 		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
 		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(pkgmap.$(@F))
+	@touch $@
+
+build/docker/bin/orderer2: $(PROJECT_FILES)
+	$(eval TARGET = ${patsubst build/docker/bin/%,%,${@}})
+	@echo "Building $@"
+	@mkdir -p build/docker/bin build/docker/$(TARGET)/pkg
+	@$(DRUN) \
+		-v $(abspath build/docker/bin):/opt/gopath/bin \
+		-v $(abspath build/docker/$(TARGET)/pkg):/opt/gopath/pkg \
+		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
+		go install -ldflags "$(DOCKER_GO_LDFLAGS_EXTERNAL)" $(pkgmap.$(@F))
 	@touch $@
 
 build/bin:

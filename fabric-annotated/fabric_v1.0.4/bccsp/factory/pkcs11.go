@@ -43,6 +43,9 @@ func InitFactories(config *FactoryOpts) error {
 }
 
 func setFactories(config *FactoryOpts) error {
+	
+	logger.Debugf("[gerry] setFactories: %v", config)
+	
 	// Take some precautions on default opts
 	if config == nil {
 		config = GetDefaultOpts()

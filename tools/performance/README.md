@@ -51,7 +51,6 @@ https://github.com/bingjin/CloudTesting/blob/master/test_cbs/README.md
 
 https://linux.die.net/man/1/fio
 
-
 > fio is a tool that will spawn a number of threads or processes doing a particular type of I/O action as specified by the user. The typical use of fio is to write a job file matching the I/O load one wants to simulate.
 
 Refer:
@@ -61,6 +60,10 @@ Refer:
 [Fio压测工具和io队列深度理解和误区](http://blog.yufeng.info/archives/2104)
 
 https://github.com/bingjin/CloudTesting/blob/master/test_cbs/test_procedure.md
+
+[队列深度对磁盘IOPS的影响](http://www.ksyun.com/blog/dui-lie-shen-du-dui-ci-pan-iopsde-ying-xiang/)
+
+[FIO输出字段说明](http://www.ksyun.com/blog/fioshu-chu-zi-duan-shuo-ming/)
 
 ```
 #yum安装

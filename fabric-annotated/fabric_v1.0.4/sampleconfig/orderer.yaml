@@ -102,6 +102,17 @@ General:
             # chosen using: 'LocalMSPDir'/keystore
             FileKeyStore:
                 KeyStore:
+        PKCS11:
+          Library: /usr/lib/libsofthsm2.so
+          Label: fabric
+          Pin: '123456'
+          SensitiveKeys: true
+          SoftwareVerify: true
+          Hash: SHA2
+          Security: 256
+          FileKeyStore:
+            # The directory used for the software file-based keystore
+            KeyStore: msp/keystore
 
 ################################################################################
 #

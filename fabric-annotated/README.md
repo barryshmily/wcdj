@@ -292,6 +292,14 @@ export PATH=$GOROOT/bin:$PATH
 ```
 wget ftp://ftp.icm.edu.pl/vol/rzm6/linux-centos-vault/7.3.1611/extras/x86_64/Packages/container-selinux-2.9-4.el7.noarch.rpm
 rpm -Uvh container-selinux-2.9-4.el7.noarch.rpm
+
+wget https://rpmfind.net/linux/centos/7.4.1708/extras/x86_64/Packages/container-selinux-2.21-2.gitba103ac.el7.noarch.rpm
+rpm -Uvh container-selinux-2.21-2.gitba103ac.el7.noarch.rpm
+
+wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/p/pigz-2.4-2.fc28.x86_64.rpm
+rpm -Uvh pigz-2.4-2.fc28.x86_64.rpm
+
+
 yum install docker-ce-17.12.1.ce-1.el7.centos.x86_64.rpm
 ```
 
@@ -7748,6 +7756,7 @@ https://blockgeeks.com/guides/bitcoin-developer/  (必看)
 
 https://blockgeeks.com/guides
 
+http://bytemaster.github.io/
 
 ### IBM
 
@@ -7788,6 +7797,13 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 [hyperledger/caliper](https://github.com/hyperledger/caliper)
 
+[fabric-orderer-profile](https://github.com/hyperledger/fabric/tree/release-1.1/orderer#profiling)
+
+https://golang.org/pkg/net/http/pprof/
+
+https://blog.golang.org/profiling-go-programs
+
+
 ### 容器云
 
 [腾讯云-容器服务](https://cloud.tencent.com/document/product/457)
@@ -7807,3 +7823,36 @@ https://en.wikipedia.org/wiki/X.509
 
 
 
+### PoW
+
+``` python
+import hashlib
+import json
+from time import time
+from uuid import uuid4
+class Blockchain(object):
+    ...
+    def proof_of_work(self, last_proof):
+        """
+        简单的工作量证明:
+         - 查找一个 p' 使得 hash(pp') 以4个0开头
+         - p 是上一个块的证明,  p' 是当前的证明
+        :param last_proof: <int>
+        :return: <int>
+        """
+        proof = 0
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+        return proof
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        """
+        验证证明: 是否hash(last_proof, proof)以4个0开头?
+        :param last_proof: <int> Previous Proof
+        :param proof: <int> Current Proof
+        :return: <bool> True if correct, False if not.
+        """
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4] == "0000"
+```

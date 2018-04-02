@@ -35,6 +35,8 @@ services:
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+      # nfs 
+      - /mnt/nfs/orderer0:/var/hyperledger/production/orderer
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
     command: orderer
     ports:
@@ -82,7 +84,7 @@ services:
         # CSP test
         #- /data/db0:/var/hyperledger/production
         # NFS test
-        - /mnt/testfs/db0:/var/hyperledger/production
+        - /mnt/nfs/db0:/var/hyperledger/production
         # normal test
         #- /root/gerry/db0:/var/hyperledger/production
         - /bin:/bin
