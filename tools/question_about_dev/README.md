@@ -880,6 +880,22 @@ https://zhuanlan.zhihu.com/p/20642841
 
 https://www.zhihu.com/question/31024021
 
+2. SATA、SAS、SSD三种硬盘存储性能数据
+
+https://wenku.baidu.com/view/1f61305c83d049649a66584f.html
+
+* SATA和SAS机械硬盘随机读写能力较弱，而顺序读写能力基本与SSD保持在同样的数量级，尤其是顺序读写大文件性能更佳
+
+* SSD的强项在于随机IO读写，基本可以媲美内存的访问速度，当然其顺序读写能力也处于比较高的水平
+
+* 小块文件随机读，是固态存储相对传统磁盘优势最大的场景。相对磁盘，固态存储设备不存在寻道时间。因此，其性能要比单块性能最优的传统磁盘高出150倍到250倍
+
+* 受寻道时间这个机械因素影响，传统磁盘在随机读写场景，基本没有优势，由于磁盘读和写两个操作时间大概相同，所以随机读和随机写，单块磁盘的性能基本差不多
+
+* 对持续的大块写入请求，固态存储耗费擦除操作（耗时长）的时间大幅增加，而传统的磁盘却好相反，耗时长的寻道操作大幅减小，一次寻道，多次写入
+
+* 传统磁盘，受寻道机械操作影响，在随机操作场景性能不佳，而在大块，持续写入的场景由于寻道操作相对减少，其表现较好，比较适合性能要求不高，对容量较高的场景。
+
 
 -----------------
 ## 数学
@@ -923,6 +939,8 @@ echo "acpi_pm" > /sys/devices/system/clocksource/clocksource0/current_clocksourc
 cat /proc/cpuinfo | grep "core id"
 具有相同core id的cpu是同一个core的超线程，通过flags显示有ht选项。
 [超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
+
+
 
 
 -----------------

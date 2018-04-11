@@ -7702,8 +7702,10 @@ https://serverfault.com/questions/683605/docker-container-time-timezone-will-not
 
 https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 https://github.com/kubernetes/examples/tree/master/staging/volumes/cephfs/
+
 [腾讯云-数据卷概览](https://cloud.tencent.com/document/product/457/9112)
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+
 https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/persistent-storage.md
 
 ### 前端
@@ -7790,6 +7792,23 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 [Chaincode for Operators](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4noah.html)
 
 [Update](http://hyperledger-fabric.readthedocs.io/en/latest/chaincode4noah.html#upgrade)
+
+
+docker-compose -f docker-compose-simple.yaml up
+
+docker exec -it chaincode bash
+CORE_PEER_ADDRESS=peer:7051 CORE_CHAINCODE_ID_NAME=mycc:0 ./chaincode_example02/chaincode_example02  
+CORE_PEER_ADDRESS=peer:7051 CORE_CHAINCODE_ID_NAME=mycc_2:0 ./fabcar/fabcar  
+
+docker exec -it cli bash
+peer chaincode install -p chaincodedev/chaincode/chaincode_example02 -n mycc -v 0
+peer chaincode instantiate -n mycc -v 0 -c '{"Args":["init","a","100","b","200"]}' -C myc
+peer chaincode query -n mycc -c '{"Args":["query","a"]}' -C myc
+
+peer chaincode install -p chaincodedev/chaincode/fabcar -n mycc_2 -v 0
+peer chaincode instantiate -n mycc_2 -v 0 -c '{"Args":[""]}' -C myc
+peer chaincode query -n mycc_2 -c '{"Args":["queryAllCars","a"]}' -C myc
+
 
 ### 性能调优
 

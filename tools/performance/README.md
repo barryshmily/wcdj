@@ -9,6 +9,79 @@
 
 ## Tools
 
+### perf
+
+
+[perf CPU Sampling](http://www.brendangregg.com/blog/2014-06-22/perf-cpu-sample.html)
+
+[Flame Graphs](http://www.brendangregg.com/perf.html#FlameGraphs)
+
+[FlameGraph](https://github.com/brendangregg/FlameGraph)
+
+[Linux kernel profiling with perf](https://perf.wiki.kernel.org/index.php/Tutorial)
+
+编译选项： -fno-omit-frame-pointer
+
+```
+# sudo perf record -F 99 -a -g -- sleep 20
+# sudo perf report -n --stdio
+```
+
+demo
+https://github.com/brendangregg/FlameGraph/issues/47#issuecomment-76298637
+
+``` c
+#include <unistd.h>
+
+int compute(int start) {
+|   for (int i = 0; i < 10000000; ++i) {
+|   |   start += i;
+|   }
+|   return start;
+}
+
+int main(int argc, char **argv) {
+|   int ret = 0;
+|   for (int i = 0; i != 5; ++i) {
+|   |   sleep(argc == 1 ? 0 : 1);
+|   |   ret += compute(argc);
+|   }
+|   return ret;
+}
+```
+
+方法1：使用FlameGraph查看不到nanosleep的调用
+
+# sudo perf record -F 500 -g --call-graph dwarf -- ./perf  && sudo perf script | /root/FlameGraph/stackcollapse-perf.pl | /root/FlameGraph/flamegraph.pl > perf.svg
+
+方法2：
+
+https://github.com/brendangregg/FlameGraph/issues/47#issuecomment-76298637
+
+方法3：
+
+root@ubuntu-s-1vcpu-3gb-nyc3-01:~/test# strace -c ./perf -Ttt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 23.81    0.000025           5         5           nanosleep
+ 17.14    0.000018           3         7           mmap
+ 15.24    0.000016           4         4           mprotect
+  8.57    0.000009           5         2           open
+  7.62    0.000008           8         1           munmap
+  7.62    0.000008           3         3         3 access
+  3.81    0.000004           2         2           close
+  3.81    0.000004           2         2           fstat
+  3.81    0.000004           0        10           rt_sigprocmask
+  1.90    0.000002           2         1           read
+  1.90    0.000002           0         5           rt_sigaction
+  1.90    0.000002           2         1           execve
+  1.90    0.000002           2         1           arch_prctl
+  0.95    0.000001           1         1           brk
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000105                    45         3 total
+
+
+
 ### mtr
 
 

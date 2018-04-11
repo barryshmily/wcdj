@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: orderer.byfn-solo
+  name: orderer.byfn-solo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: orderer.byfn-solo
+    spec:
+      nodeSelector:
+        node_name: node1
+      containers:
+      - args:
+        - orderer
+        env:
+        - name: ORDERER_GENERAL_GENESISFILE
+          value: /var/hyperledger/orderer/orderer.genesis.block
+        - name: ORDERER_GENERAL_GENESISMETHOD
+          value: file
+        - name: ORDERER_GENERAL_LISTENADDRESS
+          value: 0.0.0.0
+        - name: ORDERER_GENERAL_LOCALMSPDIR
+          value: /var/hyperledger/orderer/msp
+        - name: ORDERER_GENERAL_LOCALMSPID
+          value: OrdererMSP
+        - name: ORDERER_GENERAL_LOGLEVEL
+          value: info
+        image: hyperledger/fabric-orderer:x86_64-1.0.4
+        name: orderer
+        ports:
+        - containerPort: 7050
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/hyperledger/orderer/orderer.genesis.block
+          name: orderer-genesis-block
+        - mountPath: /var/hyperledger/orderer/msp
+          name: orderer-msp
+        - mountPath: /var/hyperledger/production/orderer
+          name: nfs
+        workingDir: /opt/gopath/src/github.com/hyperledger/fabric
+      restartPolicy: Always
+      volumes:
+      - name: orderer-genesis-block
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/channel-artifacts/genesis.block
+      - name: orderer-msp
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/ordererOrganizations/byfn-solo/orderers/orderer.byfn-solo/msp
+      - name: nfs
+        persistentVolumeClaim:
+         claimName: nfs-2
+status: {}

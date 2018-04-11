@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: peer0.org1.byfn-solo
+  name: peer0.org1.byfn-solo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: peer0.org1.byfn-solo
+    spec:
+      nodeSelector:
+        node_name: node1
+      containers:
+      - args:
+        - peer
+        - node
+        - start
+        env:
+        - name: CORE_LOGGING_LEVEL
+          value: info 
+        - name: CORE_PEER_ADDRESS
+          value: peer0.org1.byfn-solo:7051
+        - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+          value: peer0.org1.byfn-solo:7051
+        - name: CORE_PEER_GOSSIP_ORGLEADER
+          value: "false"
+        - name: CORE_PEER_GOSSIP_USELEADERELECTION
+          value: "true"
+        - name: CORE_PEER_ID
+          value: peer0.org1.byfn-solo
+        - name: CORE_PEER_LOCALMSPID
+          value: Org1MSP
+        - name: CORE_PEER_PROFILE_ENABLED
+          value: "true"
+        - name: CORE_PEER_TLS_ENABLED
+          value: "false"
+        - name: CORE_VM_ENDPOINT
+          value: unix:///host/var/run/docker.sock
+        image: hyperledger/fabric-peer:x86_64-1.0.4
+        name: peer0-org1
+        ports:
+        - containerPort: 7051
+        - containerPort: 7053
+        resources: {}
+        volumeMounts:
+        - mountPath: /host/var/run/
+          name: peer0-org1-var
+        - mountPath: /etc/hyperledger/fabric/msp
+          name: peer0-org1-msp
+        - mountPath: /etc/hyperledger/fabric/channel-artifacts
+          name: peer0-org1-configtx
+        - mountPath: /etc/hyperledger/fabric/users/msp
+          name: peer0-org1-users
+        - mountPath: /var/hyperledger/production
+          name: nfs
+        workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+      restartPolicy: Always
+      volumes:
+      - name: peer0-org1-var
+        hostPath:
+          path: /var/run/
+      - name: peer0-org1-configtx
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/channel-artifacts
+      - name: peer0-org1-msp
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/peerOrganizations/org1.byfn-solo/peers/peer0.org1.byfn-solo/msp
+      - name: peer0-org1-users
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/peerOrganizations/org1.byfn-solo/users
+      - name: db
+        hostPath:
+          path: /root/gerryyang
+      - name: nfs
+        persistentVolumeClaim:
+         claimName: nfs
+status: {}

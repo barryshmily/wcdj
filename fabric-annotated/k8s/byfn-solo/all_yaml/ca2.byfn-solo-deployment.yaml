@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ca2.byfn-solo
+  name: ca2.byfn-solo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ca2.byfn-solo
+    spec:
+      containers:
+      - args:
+        - sh
+        - -c
+        - fabric-ca-server start -b admin:adminpw -d
+        env:
+        - name: FABRIC_CA_HOME
+          value: /etc/hyperledger/fabric-ca-server
+        - name: FABRIC_CA_SERVER_CA_CERTFILE
+          value: /etc/hyperledger/fabric-ca-server-config/ca.org2.byfn-solo-cert.pem
+        - name: FABRIC_CA_SERVER_CA_KEYFILE
+          value: /etc/hyperledger/fabric-ca-server-config/54b7be7e722520e2560dd3a4f4cee01e0059eab3418fbdbc2e05ee567d20c542_sk
+        - name: FABRIC_CA_SERVER_CA_NAME
+          value: ca2.byfn-solo
+        image: hyperledger/fabric-ca:x86_64-1.0.4
+        name: ca2
+        ports:
+        - containerPort: 7054
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/hyperledger/fabric-ca-server-config
+          name: ca-byfn-solo-config
+      restartPolicy: Always
+      volumes:
+      - name: ca-byfn-solo-config
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/peerOrganizations/org2.byfn-solo/ca/ 
+status: {}

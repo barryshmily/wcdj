@@ -1,0 +1,68 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: peer1.org1.byfn-solo
+  name: peer1.org1.byfn-solo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: peer1.org1.byfn-solo
+    spec:
+      nodeSelector:
+        node_name: node2
+      containers:
+      - args:
+        - peer
+        - node
+        - start
+        env:
+        - name: CORE_LOGGING_LEVEL
+          value: DEBUG
+        - name: CORE_PEER_ADDRESS
+          value: peer1.org1.byfn-solo:7051
+        - name: CORE_PEER_GOSSIP_BOOTSTRAP
+          value: peer0.org1.byfn-solo:7051
+        - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+          value: peer1.org1.byfn-solo:7051
+        - name: CORE_PEER_GOSSIP_ORGLEADER
+          value: "false"
+        - name: CORE_PEER_GOSSIP_USELEADERELECTION
+          value: "true"
+        - name: CORE_PEER_ID
+          value: peer1.org1.byfn-solo
+        - name: CORE_PEER_LOCALMSPID
+          value: Org1MSP
+        - name: CORE_PEER_PROFILE_ENABLED
+          value: "true"
+        - name: CORE_PEER_TLS_ENABLED
+          value: "false"
+        - name: CORE_VM_ENDPOINT
+          value: unix:///host/var/run/docker.sock
+        image: hyperledger/fabric-peer:x86_64-1.0.4
+        name: peer1-org1
+        ports:
+        - containerPort: 7051
+        - containerPort: 7053
+        resources: {}
+        volumeMounts:
+        - mountPath: /host/var/run/
+          name: peer1-org1-var
+        - mountPath: /etc/hyperledger/fabric/msp
+          name: peer1-org1-msp
+        workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+      restartPolicy: Always
+      volumes:
+      - name: peer1-org1-var
+        hostPath:
+          path: /var/run/
+      - name: peer1-org1-msp
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/peerOrganizations/org1.byfn-solo/peers/peer1.org1.byfn-solo/msp
+status: {}

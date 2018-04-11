@@ -1,0 +1,89 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cli
+  name: cli
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cli
+    spec:
+      nodeSelector:
+        node_name: node1
+      containers:
+      - args:
+        - /bin/bash
+        env:
+        - name: CORE_LOGGING_LEVEL
+          value: DEBUG
+        - name: CORE_PEER_ADDRESS
+          value: peer0.org1.byfn-solo:7051
+        - name: CORE_PEER_ID
+          value: cli
+        - name: CORE_PEER_LOCALMSPID
+          value: Org1MSP
+        - name: CORE_PEER_MSPCONFIGPATH
+          value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.byfn-solo/users/Admin@org1.byfn-solo/msp
+        - name: CORE_PEER_TLS_CERT_FILE
+          value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.byfn-solo/peers/peer0.org1.byfn-solo/tls/server.crt
+        - name: CORE_PEER_TLS_ENABLED
+          value: "false"
+        - name: CORE_PEER_TLS_KEY_FILE
+          value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.byfn-solo/peers/peer0.org1.byfn-solo/tls/server.key
+        - name: CORE_PEER_TLS_ROOTCERT_FILE
+          value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.byfn-solo/peers/peer0.org1.byfn-solo/tls/ca.crt
+        - name: CORE_VM_ENDPOINT
+          value: unix:///host/var/run/docker.sock
+        - name: GOPATH
+          value: /opt/gopath
+        image: hyperledger/fabric-tools:x86_64-1.0.4
+        name: cli
+        resources: {}
+        tty: true
+        volumeMounts:
+        - mountPath: /host/var/run/
+          name: cli-run
+        - mountPath: /opt/gopath/src/github.com/chaincode
+          name: cli-chaincode
+        - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+          name: cli-crypto
+        - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+          name: cli-channel-artifacts
+        - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+          name: cli-scripts
+        - mountPath: /usr/bin/
+          name: cli-bin
+        - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          name: gerry-tools
+        workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+      restartPolicy: Always
+      volumes:
+      - name: cli-run
+        hostPath:
+          path: /var/run/
+      - name: cli-chaincode
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/cli-chaincode
+      - name: cli-crypto
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/crypto-config/
+      - name: cli-channel-artifacts
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/channel-artifacts
+      - name: cli-scripts
+        hostPath:
+          path: /data/blockchain_ns/byfn-solo/scripts/
+      - name: cli-bin
+        hostPath:
+          path: /usr/bin/
+      - name: gerry-tools
+        hostPath:
+          path: /root/gerryyang
+status: {}
