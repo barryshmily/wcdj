@@ -15,7 +15,7 @@ export MSYS_NO_PATHCONV=1
 
 function StartDocker()
 {
-   docker-compose -f docker-compose.yml down
+   #docker-compose -f docker-compose.yml down
    docker-compose -f docker-compose.yml up -d ca0.example.com ca1.example.com orderer.example.com peer0.org1.example.com peer1.org1.example.com peer0.org2.example.com peer1.org2.example.com cli
 }
 

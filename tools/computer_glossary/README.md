@@ -20,4 +20,7 @@ A release candidate (RC), also known as "going silver", is a beta version with p
 NAS（Network Attached Storage：网络附属存储）按字面简单说就是连接在网络上，具备资料存储功能的装置，因此也称为“网络存储器”。它是一种专用数据存储服务器。它以数据为中心，将存储设备与服务器彻底分离，集中管理数据，从而释放带宽、提高性能、降低总拥有成本、保护投资。其成本远远低于使用服务器存储，而效率却远远高于后者。目前国际著名的NAS企业有Netapp、EMC、OUO等。
 
 
+## 区分磁盘类型
 
+cat /sys/block/sda/queue/rotational 
+一般是用这个字段，这个字段表示这个盘是否是可旋转的，如果可旋转(值为1)说明是sata，不可旋转说明是ssd。

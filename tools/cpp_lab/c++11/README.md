@@ -12,3 +12,4 @@ refer
 
 https://legacy.gitbook.com/book/wizardforcel/cpp-11-faq/details
 
+https://wizardforcel.gitbooks.io/cpp-11-faq/content/59.html

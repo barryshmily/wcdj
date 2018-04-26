@@ -896,6 +896,11 @@ https://wenku.baidu.com/view/1f61305c83d049649a66584f.html
 
 * 传统磁盘，受寻道机械操作影响，在随机操作场景性能不佳，而在大块，持续写入的场景由于寻道操作相对减少，其表现较好，比较适合性能要求不高，对容量较高的场景。
 
+3. 一些硬件技术
+
+专用集成电路（英语：Application-specific integrated circuit，缩写：ASIC）
+
+FPGA（Field－Programmable Gate Array），即现场可编程门阵列。它是在PAL、GAL、CPLD等可编程器件的基础上进一步发展的产物。它是作为专用集成电路（ASIC）领域中的一种半定制电路而出现的，既解决了定制电路的不足，又克服了原有可编程器件门电路数有限的缺点。
 
 -----------------
 ## 数学
@@ -940,8 +945,10 @@ cat /proc/cpuinfo | grep "core id"
 具有相同core id的cpu是同一个core的超线程，通过flags显示有ht选项。
 [超线程加快了 Linux 的速度](https://www.ibm.com/developerworks/cn/linux/l-htl/index.html)
 
+5. GCC中-O1 -O2 -O3 优化的原理是什么？
 
-
+-finline-small-functions 
+https://www.zhihu.com/question/27090458
 
 -----------------
 ## 安全相关

@@ -7,6 +7,7 @@
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
 CHANNEL_NAME=mychannel
+SYSTEM_CHANNEL_NAME=systemchannel
 
 #:<< gerry
 # remove previous crypto material and config transactions
@@ -23,7 +24,7 @@ fi
 
 # generate genesis block for orderer
 #configtxgen -profile OneOrgOrdererGenesis -outputBlock ./config/genesis.block
-configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./config/genesis.block
+configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./config/genesis.block -channelID $SYSTEM_CHANNEL_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1

@@ -1591,6 +1591,7 @@ crypto-config
 通过下面`configtxgen`工具可以查看生成`genesis.block`的通道  配置信息：
 
 ``` bash
+export FABRIC_CFG_PATH=../
 configtxgen -profile TwoOrgsOrdererGenesis -inspectBlock ./channel-artifacts/genesis.block > genesis.block.json
 ```
 
@@ -1612,7 +1613,7 @@ curl -X POST --data-binary @./channel-artifacts/genesis.block http://127.0.0.1:7
 
 通过`configtxgen`工具可以查看生成`channel.tx`的配置更新信息：
 ``` bash
-configtxgen -profile TwoOrgsChannel -inspectChannelCreateTx ./channel-artifacts/channel.tx 
+configtxgen -profile TwoOrgsChannel -inspectChannelCreateTx ./channel-artifacts/channel.tx > channel.tx.json
 ```
 
 或者通过`configtxlator`工具查看：
@@ -4510,6 +4511,9 @@ https://github.com/hyperledger/blockchain-explorer
 
 mysql -u<username> -p < db/fabricexplorer.sql
 ./start.sh
+tail -f log.log 
+
+root:fabric@1234
 
 http://45.55.51.66:8080/
 
@@ -4931,6 +4935,11 @@ AND策略：
 
 200, 100    假设100是第一个Action，则commit返回成功
 100, 100
+
+## 10 CA管理
+
+xxx
+
 
 
 ## 关键日志
@@ -7604,6 +7613,14 @@ https://www.hyperledger.org/projects/fabric
 
 https://wiki.hyperledger.org/projects/fabric/roadmap
 
+## Fabric设计思想
+
+https://docs.google.com/document/d/1vNMaM7XhOlu9tB_10dKnlrhy5d7b1u8lSY8a-kVjCO4/edit
+
+https://docs.google.com/document/d/1eRNxxQ0P8yp4Wh__Vi6ddaN_vhN2RQHP-IruHNUwyhc/edit#
+
+https://github.com/hyperledger/fabric/blob/master/proposals/r1/Next-Consensus-Architecture-Proposal.md
+
 ### Demo
 
 [Building Your First Network](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html)
@@ -7725,8 +7742,11 @@ https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-vo
 
 https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/persistent-storage.md
 
-### 前端
+### blockchain-explorer
+
 https://github.com/hyperledger/blockchain-explorer
+
+
 
 ### SDK
 [Nodejs SDK下载路径](https://github.com/hyperledger/fabric-sdk-node)
@@ -7734,7 +7754,14 @@ https://github.com/hyperledger/blockchain-explorer
 
 ### NodeJS
 
+下载：
+https://nodejs.org/en/download/releases/
+https://nodejs.org/dist/
+
 [Installing Node.js via package manage](https://nodejs.org/en/download/package-manager/)
+
+cd ~/install; wget -c https://nodejs.org/dist/v6.9.5/node-v6.9.5.tar.gz; tar -zxvf node-v6.9.5.tar.gz; cd node-v6.9.5; ./configure --prefix=/usr/local/node-v6.9.5; make && make install; cd -; echo 'export PATH=/usr/local/node-v6.9.5/bin:$PATH' >> ~/.bashrc; source ~/.bashrc;
+
 
 ### GoLang
 
@@ -7876,3 +7903,8 @@ class Blockchain(object):
         guess_hash = hashlib.sha256(guess).hexdigest()
         return guess_hash[:4] == "0000"
 ```
+
+### 比赛
+
+file:///C:/Users/gerryyang/Downloads/Dev_Guide_zh.pdf
+https://open.onethingcloud.com/

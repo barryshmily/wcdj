@@ -1,0 +1,465 @@
+Config for channel: systemchannel at sequence 0
+{
+    "Channel": {
+        "Values": {
+            "HashingAlgorithm": {
+                "Version": "0",
+                "ModPolicy": "Admins",
+                "Value": {
+                    "name": "SHA256"
+                }
+            },
+            "OrdererAddresses": {
+                "Version": "0",
+                "ModPolicy": "/Channel/Orderer/Admins",
+                "Value": {
+                    "addresses": [
+                        "orderer.example.com:7050"
+                    ]
+                }
+            },
+            "BlockDataHashingStructure": {
+                "Version": "0",
+                "ModPolicy": "Admins",
+                "Value": {
+                    "width": 4294967295
+                }
+            }
+        },
+        "Policies": {
+            "Admins": {
+                "Version": "0",
+                "ModPolicy": "Admins",
+                "Policy": {
+                    "PolicyType": "3",
+                    "Policy": {
+                        "subPolicy": "Admins",
+                        "rule": "MAJORITY"
+                    }
+                }
+            },
+            "Readers": {
+                "Version": "0",
+                "ModPolicy": "Admins",
+                "Policy": {
+                    "PolicyType": "3",
+                    "Policy": {
+                        "subPolicy": "Readers",
+                        "rule": "ANY"
+                    }
+                }
+            },
+            "Writers": {
+                "Version": "0",
+                "ModPolicy": "Admins",
+                "Policy": {
+                    "PolicyType": "3",
+                    "Policy": {
+                        "subPolicy": "Writers",
+                        "rule": "ANY"
+                    }
+                }
+            }
+        },
+        "Groups": {
+            "Consortiums": {
+                "Values": {},
+                "Policies": {
+                    "Admins": {
+                        "Version": "0",
+                        "ModPolicy": "/Channel/Orderer/Admins",
+                        "Policy": {
+                            "PolicyType": "1",
+                            "Policy": {
+                                "version": 0,
+                                "rule": {
+                                    "nOutOf": {
+                                        "n": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "Groups": {
+                    "SampleConsortium": {
+                        "Values": {
+                            "ChannelCreationPolicy": {
+                                "Version": "0",
+                                "ModPolicy": "/Channel/Orderer/Admins",
+                                "Value": {
+                                    "type": 3,
+                                    "value": "CgZBZG1pbnM="
+                                }
+                            }
+                        },
+                        "Policies": {},
+                        "Groups": {
+                            "Org1MSP": {
+                                "Values": {
+                                    "MSP": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Value": {
+                                            "type": 0,
+                                            "config": "CgdPcmcxTVNQEs8GLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNRekNDQWVxZ0F3SUJBZ0lSQU1xc2MyKytHM2dJRlh3dHV2bHJ6OUV3Q2dZSUtvWkl6ajBFQXdJd2N6RUwKTUFrR0ExVUVCaE1DVlZNeEV6QVJCZ05WQkFnVENrTmhiR2xtYjNKdWFXRXhGakFVQmdOVkJBY1REVk5oYmlCRwpjbUZ1WTJselkyOHhHVEFYQmdOVkJBb1RFRzl5WnpFdVpYaGhiWEJzWlM1amIyMHhIREFhQmdOVkJBTVRFMk5oCkxtOXlaekV1WlhoaGJYQnNaUzVqYjIwd0hoY05NVGd3TkRJd01ESTFOelF5V2hjTk1qZ3dOREUzTURJMU56UXkKV2pCek1Rc3dDUVlEVlFRR0V3SlZVekVUTUJFR0ExVUVDQk1LUTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnhNTgpVMkZ1SUVaeVlXNWphWE5qYnpFWk1CY0dBMVVFQ2hNUWIzSm5NUzVsZUdGdGNHeGxMbU52YlRFY01Cb0dBMVVFCkF4TVRZMkV1YjNKbk1TNWxlR0Z0Y0d4bExtTnZiVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUEKQkQ5NFdaTXllK2V0TFZTSHpjWFhpNmZmZFZrdnpEYkE4bDlzNFBtZUIvV3pMS2xPeWErNVdwbGxqYVc5bi80Zgp5QUh0K1VLb2xaRE43ZDlNdU9xdnlqV2pYekJkTUE0R0ExVWREd0VCL3dRRUF3SUJwakFQQmdOVkhTVUVDREFHCkJnUlZIU1VBTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3S1FZRFZSME9CQ0lFSU1HYTFvbk42OEFBMTNrTU5BQkoKc05lTzhVNUlKUGJ6UHRSS0ZnVjhVdTI3TUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUNXNzM5ck0xMXNUM0ZMMApQWmpkeFQ2ZmtuZnRKK3BuQW9SbUVYWndNbWRnQWlBWmxGaklOSFpuVkk4Y01jWGt3MXY0ZGtiSGRCdW1nRk5sCjZPNEJ1YXl5SHc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCiKSBi0tLS0tQkVHSU4gQ0VSVElGSUNBVEUtLS0tLQpNSUlDR0RDQ0FiK2dBd0lCQWdJUVpzaFZSRTQzdHM2YjNJekQvc2RtMXpBS0JnZ3Foa2pPUFFRREFqQnpNUXN3CkNRWURWUVFHRXdKVlV6RVRNQkVHQTFVRUNCTUtRMkZzYVdadmNtNXBZVEVXTUJRR0ExVUVCeE1OVTJGdUlFWnkKWVc1amFYTmpiekVaTUJjR0ExVUVDaE1RYjNKbk1TNWxlR0Z0Y0d4bExtTnZiVEVjTUJvR0ExVUVBeE1UWTJFdQpiM0puTVM1bGVHRnRjR3hsTG1OdmJUQWVGdzB4T0RBME1qQXdNalUzTkRKYUZ3MHlPREEwTVRjd01qVTNOREphCk1Gc3hDekFKQmdOVkJBWVRBbFZUTVJNd0VRWURWUVFJRXdwRFlXeHBabTl5Ym1saE1SWXdGQVlEVlFRSEV3MVQKWVc0Z1JuSmhibU5wYzJOdk1SOHdIUVlEVlFRRERCWkJaRzFwYmtCdmNtY3hMbVY0WVcxd2JHVXVZMjl0TUZrdwpFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRVFZTkNHKzdENFNPbTRwK3JXQ2JxNUw0a2libVRtYXVCCkg2R3ZSYnp4UmQ2ejVxYy9TWXpHTnIwbGU0bG9mTThmL3czWFhiMFppWGl4dTRXTHpXTDJONk5OTUVzd0RnWUQKVlIwUEFRSC9CQVFEQWdlQU1Bd0dBMVVkRXdFQi93UUNNQUF3S3dZRFZSMGpCQ1F3SW9BZ3dacldpYzNyd0FEWAplUXcwQUVtdzE0N3hUa2drOXZNKzFFb1dCWHhTN2Jzd0NnWUlLb1pJemowRUF3SURSd0F3UkFJZ01qKzVLWGwvCkNFN1JOUGl0OU9obXUvckdQMVYwTWNYTVFkKzJlOFQrNE9vQ0lCZUsxd0NPQytlK005WXNPdnMrUDcyUG5SNnYKVFE4VyswTE10REdLa01pUAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCkIOCgRTSEEyEgZTSEEyNTZK0wYtLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJQ1J6Q0NBZStnQXdJQkFnSVFLZm1PSmR4VkZLTVNXZXIzRzI3NEtEQUtCZ2dxaGtqT1BRUURBakIyTVFzdwpDUVlEVlFRR0V3SlZVekVUTUJFR0ExVUVDQk1LUTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnhNTlUyRnVJRVp5CllXNWphWE5qYnpFWk1CY0dBMVVFQ2hNUWIzSm5NUzVsZUdGdGNHeGxMbU52YlRFZk1CMEdBMVVFQXhNV2RHeHoKWTJFdWIzSm5NUzVsZUdGdGNHeGxMbU52YlRBZUZ3MHhPREEwTWpBd01qVTNOREphRncweU9EQTBNVGN3TWpVMwpOREphTUhZeEN6QUpCZ05WQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFICkV3MVRZVzRnUm5KaGJtTnBjMk52TVJrd0Z3WURWUVFLRXhCdmNtY3hMbVY0WVcxd2JHVXVZMjl0TVI4d0hRWUQKVlFRREV4WjBiSE5qWVM1dmNtY3hMbVY0WVcxd2JHVXVZMjl0TUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowRApBUWNEUWdBRU1laGFmZ09oMWNScEJsOFlFeHdMZVVUU21ydzB4TEJQTVlDSjVxSGljR0VXQlE5UlBBK0dJNjFZCm5hTDhHZHRwVkJXOGhwemtSaktuMGFEdG94WjFTNk5mTUYwd0RnWURWUjBQQVFIL0JBUURBZ0dtTUE4R0ExVWQKSlFRSU1BWUdCRlVkSlFBd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBcEJnTlZIUTRFSWdRZ0VDOC82azBYYzRkSApxRnJnbk5KaCtXSUhlZXUvNDBZSGttNFV3M3RNbS9Zd0NnWUlLb1pJemowRUF3SURSZ0F3UXdJZkV6MjYweEwvClV4VkJXREszbGdIdE94MVFQeU9VWGJyTVFqb3JnV2ZJK3dJZ1I1L3BLTFlFWkxnZ1ZtZVRlZ2swQ3ZtemluT3QKTDlQT1hmK1FIMDg2ZnU0PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+                                        }
+                                    }
+                                },
+                                "Policies": {
+                                    "Admins": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcxTVNQEAE="
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "Readers": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcxTVNQ"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "Writers": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcxTVNQ"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "Groups": {}
+                            },
+                            "Org2MSP": {
+                                "Values": {
+                                    "MSP": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Value": {
+                                            "type": 0,
+                                            "config": "CgdPcmcyTVNQEs8GLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNRekNDQWVxZ0F3SUJBZ0lSQU1CMDZNWUtlaDdLSXdETEdpSzVRMzB3Q2dZSUtvWkl6ajBFQXdJd2N6RUwKTUFrR0ExVUVCaE1DVlZNeEV6QVJCZ05WQkFnVENrTmhiR2xtYjNKdWFXRXhGakFVQmdOVkJBY1REVk5oYmlCRwpjbUZ1WTJselkyOHhHVEFYQmdOVkJBb1RFRzl5WnpJdVpYaGhiWEJzWlM1amIyMHhIREFhQmdOVkJBTVRFMk5oCkxtOXlaekl1WlhoaGJYQnNaUzVqYjIwd0hoY05NVGd3TkRJd01ESTFOelF5V2hjTk1qZ3dOREUzTURJMU56UXkKV2pCek1Rc3dDUVlEVlFRR0V3SlZVekVUTUJFR0ExVUVDQk1LUTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnhNTgpVMkZ1SUVaeVlXNWphWE5qYnpFWk1CY0dBMVVFQ2hNUWIzSm5NaTVsZUdGdGNHeGxMbU52YlRFY01Cb0dBMVVFCkF4TVRZMkV1YjNKbk1pNWxlR0Z0Y0d4bExtTnZiVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUEKQk1ndFFhNHBSL1ZnTWFvRnd4Unp4aEd5bVBDSXkrSlg4cmJjQ2k2akRxMUZYczFiUGtubzdEL3hPTGJJR2ZwMgpKRFRLK3gzWGlqQ3ExdjBua0QrV0xwMmpYekJkTUE0R0ExVWREd0VCL3dRRUF3SUJwakFQQmdOVkhTVUVDREFHCkJnUlZIU1VBTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3S1FZRFZSME9CQ0lFSVBmVVRNY3BkQVdwRG52V3RxcHoKK1BtVk12RDlJUGJjc0ovUDBtNVFOQW1DTUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUhrTXkvY01wSGcrZ2tqVQp2S2k0LzRiWXV5czZ4b29qQTRJU3RrZXl6SmJzQWlBTzJSMjVKZTljUWhQOExRem01alR3OTkrQXYrU1plSGIrCnM1OVlteFRVeUE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCiKSBi0tLS0tQkVHSU4gQ0VSVElGSUNBVEUtLS0tLQpNSUlDR0RDQ0FiK2dBd0lCQWdJUUNBelZWRTUrcW1DK3VhZnNhMGszMGpBS0JnZ3Foa2pPUFFRREFqQnpNUXN3CkNRWURWUVFHRXdKVlV6RVRNQkVHQTFVRUNCTUtRMkZzYVdadmNtNXBZVEVXTUJRR0ExVUVCeE1OVTJGdUlFWnkKWVc1amFYTmpiekVaTUJjR0ExVUVDaE1RYjNKbk1pNWxlR0Z0Y0d4bExtTnZiVEVjTUJvR0ExVUVBeE1UWTJFdQpiM0puTWk1bGVHRnRjR3hsTG1OdmJUQWVGdzB4T0RBME1qQXdNalUzTkRKYUZ3MHlPREEwTVRjd01qVTNOREphCk1Gc3hDekFKQmdOVkJBWVRBbFZUTVJNd0VRWURWUVFJRXdwRFlXeHBabTl5Ym1saE1SWXdGQVlEVlFRSEV3MVQKWVc0Z1JuSmhibU5wYzJOdk1SOHdIUVlEVlFRRERCWkJaRzFwYmtCdmNtY3lMbVY0WVcxd2JHVXVZMjl0TUZrdwpFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRUpMWWNuOUxjK1VESldwQjZacVd6SnB5WlBTK3k5UzBlCjRhZnVIZUJIV3pzS1RmQUZrQkltaGlYTjVlSUdiQUtPaFkxTngwalEyT3BKdGNhalR1ekM1S05OTUVzd0RnWUQKVlIwUEFRSC9CQVFEQWdlQU1Bd0dBMVVkRXdFQi93UUNNQUF3S3dZRFZSMGpCQ1F3SW9BZzk5Uk14eWwwQmFrTwplOWEycW5QNCtaVXk4UDBnOXR5d244L1NibEEwQ1lJd0NnWUlLb1pJemowRUF3SURSd0F3UkFJZ1hSYTVLalR1ClJlL3ZnSW1wWFV1aDBmL3FoTmJ4Y25BbVB2TExpVFgxWlRrQ0lIWVVBTnF1VTNkQXdWUm84clhoY1BkQmxNZ3cKcFdaNzJUYmU2VHZ4Rmx2TQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCkIOCgRTSEEyEgZTSEEyNTZK0wYtLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJQ1NEQ0NBZStnQXdJQkFnSVFldllwNTlsVmtFMzk4ck14OHlrd0NUQUtCZ2dxaGtqT1BRUURBakIyTVFzdwpDUVlEVlFRR0V3SlZVekVUTUJFR0ExVUVDQk1LUTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnhNTlUyRnVJRVp5CllXNWphWE5qYnpFWk1CY0dBMVVFQ2hNUWIzSm5NaTVsZUdGdGNHeGxMbU52YlRFZk1CMEdBMVVFQXhNV2RHeHoKWTJFdWIzSm5NaTVsZUdGdGNHeGxMbU52YlRBZUZ3MHhPREEwTWpBd01qVTNOREphRncweU9EQTBNVGN3TWpVMwpOREphTUhZeEN6QUpCZ05WQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFICkV3MVRZVzRnUm5KaGJtTnBjMk52TVJrd0Z3WURWUVFLRXhCdmNtY3lMbVY0WVcxd2JHVXVZMjl0TVI4d0hRWUQKVlFRREV4WjBiSE5qWVM1dmNtY3lMbVY0WVcxd2JHVXVZMjl0TUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowRApBUWNEUWdBRS95VzlxbURUd2diYkNISVM5eEtpVll1M08wdzBBSUhCYlpCWkVXY2J5eTFJVklTbVd6MGJpWHNaCk96Q3E5KzlDcGNVVXUrNFZWZlJIQ3AwdmJiYmZoNk5mTUYwd0RnWURWUjBQQVFIL0JBUURBZ0dtTUE4R0ExVWQKSlFRSU1BWUdCRlVkSlFBd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBcEJnTlZIUTRFSWdRZzVUdHFFRG9sZ1hmWgpna3hOdGlSRTltZjFKSEIwR3BaM2cyMGpIV0NzbFVrd0NnWUlLb1pJemowRUF3SURSd0F3UkFJZ2RTaUtIODhoCnBuc212MUthTmJHT2lab0VONXhwWjRHaTRUQllhZ0VHdnZjQ0lBRnArRzZwczJwYTF6R3FiMnhKZWQxdmlXOWgKUUNCeTJQc1kxQWY2MlpEagotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+                                        }
+                                    }
+                                },
+                                "Policies": {
+                                    "Writers": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcyTVNQ"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "Admins": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcyTVNQEAE="
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "Readers": {
+                                        "Version": "0",
+                                        "ModPolicy": "Admins",
+                                        "Policy": {
+                                            "PolicyType": "1",
+                                            "Policy": {
+                                                "version": 0,
+                                                "rule": {
+                                                    "nOutOf": {
+                                                        "n": 1,
+                                                        "rules": [
+                                                            {
+                                                                "signedBy": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "identities": [
+                                                    {
+                                                        "principalClassification": "ROLE",
+                                                        "principal": "CgdPcmcyTVNQ"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "Groups": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "Orderer": {
+                "Values": {
+                    "ConsensusType": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Value": {
+                            "type": "solo"
+                        }
+                    },
+                    "BatchSize": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Value": {
+                            "maxMessageCount": 10,
+                            "absoluteMaxBytes": 103809024,
+                            "preferredMaxBytes": 524288
+                        }
+                    },
+                    "BatchTimeout": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Value": {
+                            "timeout": "2s"
+                        }
+                    },
+                    "ChannelRestrictions": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Value": {
+                            "maxCount": "0"
+                        }
+                    }
+                },
+                "Policies": {
+                    "Admins": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Policy": {
+                            "PolicyType": "3",
+                            "Policy": {
+                                "subPolicy": "Admins",
+                                "rule": "MAJORITY"
+                            }
+                        }
+                    },
+                    "BlockValidation": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Policy": {
+                            "PolicyType": "3",
+                            "Policy": {
+                                "subPolicy": "Writers",
+                                "rule": "ANY"
+                            }
+                        }
+                    },
+                    "Readers": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Policy": {
+                            "PolicyType": "3",
+                            "Policy": {
+                                "subPolicy": "Readers",
+                                "rule": "ANY"
+                            }
+                        }
+                    },
+                    "Writers": {
+                        "Version": "0",
+                        "ModPolicy": "Admins",
+                        "Policy": {
+                            "PolicyType": "3",
+                            "Policy": {
+                                "subPolicy": "Writers",
+                                "rule": "ANY"
+                            }
+                        }
+                    }
+                },
+                "Groups": {
+                    "OrdererOrg": {
+                        "Values": {
+                            "MSP": {
+                                "Version": "0",
+                                "ModPolicy": "Admins",
+                                "Value": {
+                                    "type": 0,
+                                    "config": "CgpPcmRlcmVyTVNQErIGLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNMakNDQWRXZ0F3SUJBZ0lRSTdpNmZha0pFazRJNE80WWdrTzJXREFLQmdncWhrak9QUVFEQWpCcE1Rc3cKQ1FZRFZRUUdFd0pWVXpFVE1CRUdBMVVFQ0JNS1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ4TU5VMkZ1SUVaeQpZVzVqYVhOamJ6RVVNQklHQTFVRUNoTUxaWGhoYlhCc1pTNWpiMjB4RnpBVkJnTlZCQU1URG1OaExtVjRZVzF3CmJHVXVZMjl0TUI0WERURTRNRFF5TURBeU5UYzBNbG9YRFRJNE1EUXhOekF5TlRjME1sb3dhVEVMTUFrR0ExVUUKQmhNQ1ZWTXhFekFSQmdOVkJBZ1RDa05oYkdsbWIzSnVhV0V4RmpBVUJnTlZCQWNURFZOaGJpQkdjbUZ1WTJsegpZMjh4RkRBU0JnTlZCQW9UQzJWNFlXMXdiR1V1WTI5dE1SY3dGUVlEVlFRREV3NWpZUzVsZUdGdGNHeGxMbU52CmJUQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJBU3VRRFk0NXdjYmFZWWtJT0NZbTgxUFFSeDAKejNGQm9Sa3FhSlZia2pweWFoTnQ0YlNiNEVIbFMxVkdleUlCZzdPYkllYjN6bzZQNlA5UFJDbVFIZFdqWHpCZApNQTRHQTFVZER3RUIvd1FFQXdJQnBqQVBCZ05WSFNVRUNEQUdCZ1JWSFNVQU1BOEdBMVVkRXdFQi93UUZNQU1CCkFmOHdLUVlEVlIwT0JDSUVJRlQ2dUs1OEo1a29LSFVrYVlmUTJ5QXRiT1RRdDJCMForb3cxaUpPeWRZMk1Bb0cKQ0NxR1NNNDlCQU1DQTBjQU1FUUNJSDlSaUFQZXlLb3AvdERLU0lZOU85b3ZoN1Zsb0R6bkJiN1VleXgrY09EcgpBaUFkWlVhb21oTlBqc0w2dWJ2RjN4aEFBZnhXY3BKdUlVVnByS2EwMk5pMzhRPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQoigQYtLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJQ0N6Q0NBYkdnQXdJQkFnSVJBT2ExYTJoTWNtYlpCbXNFeFJtRFZvWXdDZ1lJS29aSXpqMEVBd0l3YVRFTApNQWtHQTFVRUJoTUNWVk14RXpBUkJnTlZCQWdUQ2tOaGJHbG1iM0p1YVdFeEZqQVVCZ05WQkFjVERWTmhiaUJHCmNtRnVZMmx6WTI4eEZEQVNCZ05WQkFvVEMyVjRZVzF3YkdVdVkyOXRNUmN3RlFZRFZRUURFdzVqWVM1bGVHRnQKY0d4bExtTnZiVEFlRncweE9EQTBNakF3TWpVM05ESmFGdzB5T0RBME1UY3dNalUzTkRKYU1GWXhDekFKQmdOVgpCQVlUQWxWVE1STXdFUVlEVlFRSUV3cERZV3hwWm05eWJtbGhNUll3RkFZRFZRUUhFdzFUWVc0Z1JuSmhibU5wCmMyTnZNUm93R0FZRFZRUUREQkZCWkcxcGJrQmxlR0Z0Y0d4bExtTnZiVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUcKU000OUF3RUhBMElBQkJNY3NOeXh2UVhHTWZwSVNuWDJKb3dkVGhiRC9FbTNJNGJXOXBkbnhpQ0N2ZitWRXRIRQp1b0ZuQlZmSVdacS8vMGx5NnpOL2FHZ0poM29ucFVJb0dNQ2pUVEJMTUE0R0ExVWREd0VCL3dRRUF3SUhnREFNCkJnTlZIUk1CQWY4RUFqQUFNQ3NHQTFVZEl3UWtNQ0tBSUZUNnVLNThKNWtvS0hVa2FZZlEyeUF0Yk9UUXQyQjAKWitvdzFpSk95ZFkyTUFvR0NDcUdTTTQ5QkFNQ0EwZ0FNRVVDSVFDcFVyTElYZDkrOVA2T05UUTErd251aENtNQpheXhDMWJVellQTGdwWVN0RGdJZ1pyMGlkK0tzbTRrOWdKdXJNT0xxZk8yOFZQbGY2YlM1eEtlWnM5cE9VeTQ9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KQg4KBFNIQTISBlNIQTI1Nkq6Bi0tLS0tQkVHSU4gQ0VSVElGSUNBVEUtLS0tLQpNSUlDTlRDQ0FkdWdBd0lCQWdJUUFQaDNVMkxFMithb3dxKzJPNFRkV2pBS0JnZ3Foa2pPUFFRREFqQnNNUXN3CkNRWURWUVFHRXdKVlV6RVRNQkVHQTFVRUNCTUtRMkZzYVdadmNtNXBZVEVXTUJRR0ExVUVCeE1OVTJGdUlFWnkKWVc1amFYTmpiekVVTUJJR0ExVUVDaE1MWlhoaGJYQnNaUzVqYjIweEdqQVlCZ05WQkFNVEVYUnNjMk5oTG1WNApZVzF3YkdVdVkyOXRNQjRYRFRFNE1EUXlNREF5TlRjME1sb1hEVEk0TURReE56QXlOVGMwTWxvd2JERUxNQWtHCkExVUVCaE1DVlZNeEV6QVJCZ05WQkFnVENrTmhiR2xtYjNKdWFXRXhGakFVQmdOVkJBY1REVk5oYmlCR2NtRnUKWTJselkyOHhGREFTQmdOVkJBb1RDMlY0WVcxd2JHVXVZMjl0TVJvd0dBWURWUVFERXhGMGJITmpZUzVsZUdGdApjR3hsTG1OdmJUQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJGcGhkcDFUblNSemZrZnowRkhCCnRSSldEYzdaa3dxTzRpMnhoSXhRT1Y2S3dwTGpsZWtLbHJpdXhxNnRHeHQ0akQ1ZlpDYU5ZN0Joam1aaGVqemgKaGp1alh6QmRNQTRHQTFVZER3RUIvd1FFQXdJQnBqQVBCZ05WSFNVRUNEQUdCZ1JWSFNVQU1BOEdBMVVkRXdFQgovd1FGTUFNQkFmOHdLUVlEVlIwT0JDSUVJQXFyM2JrbFlpNFk3cVk3bkM0UWhHZlFFOWxscVBkZ3gzVWFwNGNSCjYxb21NQW9HQ0NxR1NNNDlCQU1DQTBnQU1FVUNJUUNHRjNMYTRQZDlGUk5ZUDRSa2JJVmlDcWFySVlXQ2lEeEEKOUxib01VNXhrZ0lnZFA4eUptdUY0T1E4SFZUbVo5a2lpYTYwaFlKWkRsQzZ1V3FHL0M3Y29FOD0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+                                }
+                            }
+                        },
+                        "Policies": {
+                            "Readers": {
+                                "Version": "0",
+                                "ModPolicy": "Admins",
+                                "Policy": {
+                                    "PolicyType": "1",
+                                    "Policy": {
+                                        "version": 0,
+                                        "rule": {
+                                            "nOutOf": {
+                                                "n": 1,
+                                                "rules": [
+                                                    {
+                                                        "signedBy": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "identities": [
+                                            {
+                                                "principalClassification": "ROLE",
+                                                "principal": "CgpPcmRlcmVyTVNQ"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "Writers": {
+                                "Version": "0",
+                                "ModPolicy": "Admins",
+                                "Policy": {
+                                    "PolicyType": "1",
+                                    "Policy": {
+                                        "version": 0,
+                                        "rule": {
+                                            "nOutOf": {
+                                                "n": 1,
+                                                "rules": [
+                                                    {
+                                                        "signedBy": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "identities": [
+                                            {
+                                                "principalClassification": "ROLE",
+                                                "principal": "CgpPcmRlcmVyTVNQ"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "Admins": {
+                                "Version": "0",
+                                "ModPolicy": "Admins",
+                                "Policy": {
+                                    "PolicyType": "1",
+                                    "Policy": {
+                                        "version": 0,
+                                        "rule": {
+                                            "nOutOf": {
+                                                "n": 1,
+                                                "rules": [
+                                                    {
+                                                        "signedBy": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "identities": [
+                                            {
+                                                "principalClassification": "ROLE",
+                                                "principal": "CgpPcmRlcmVyTVNQEAE="
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "Groups": {}
+                    }
+                }
+            }
+        }
+    }
+}
