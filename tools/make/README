@@ -48,11 +48,14 @@ $^ 表示规则的所有依赖文件列表，使用空格分隔。
 
 一些技巧
 
-(1) 更新所有文件时间，从而可以编译所有文件
+1. 更新所有文件时间，从而可以编译所有文件
+```
 ./configure
 find . | xargs touch
 make
-
+```
+2. Linux Makefile 生成 *.d 依赖文件及 gcc -M -MF -MP 等相关选项说明
+https://blog.csdn.net/QQ1452008/article/details/50855810
 
 
 参考

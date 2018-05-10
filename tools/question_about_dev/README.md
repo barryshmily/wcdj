@@ -195,6 +195,17 @@ http://www.cplusplus.com/reference/new/operator%20new[]/
 [New (std::nothrow) vs. New within a try/catch block](https://stackoverflow.com/questions/7277637/new-stdnothrow-vs-new-within-a-try-catch-block)
 [C++ new operator and error checking [duplicate]](https://stackoverflow.com/questions/18628918/c-new-operator-and-error-checking)
 
+14. PImpl(Pointer to IMPLementation)
+
+此技巧用于构造拥有稳定 ABI 的 C++ 库接口，及减少编译时依赖。
+
+解释
+因为类的私有数据成员参与其对象表示，影响大小和布局，而且因为类的私有成员函数参与重载决议（这在成员访问检查前发生），故任何对实现细节的更改要求该类的所有用户重编译。pImpl 打破此编译依赖；更改实现不导致重编译。后续结果是，若库于其 ABI 使用 pImpl ，则库的新版本可以更改实现，并且与旧版本保持 ABI 兼容。
+
+http://zh.cppreference.com/w/cpp/language/pimpl
+http://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html
+https://cpppatterns.com/patterns/pimpl.html
+
 ### C
 
 1. 无符号和有符号是否可以比较
@@ -224,6 +235,12 @@ gcc –E  macro.test.c
 ```
 
 https://gcc.gnu.org/onlinedocs/cpp/Macros.html
+
+### Java
+
+https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value
+http://www.javadude.com/articles/passbyvalue.htm
+
 
 ### GCC
 
@@ -949,6 +966,14 @@ cat /proc/cpuinfo | grep "core id"
 
 -finline-small-functions 
 https://www.zhihu.com/question/27090458
+
+6. DPDK
+
+https://zh.wikipedia.org/wiki/DPDK
+
+在X86结构中，处理数据包的传统方式是CPU中断方式，即网卡驱动接收到数据包后通过中断通知CPU处理，然后由CPU拷贝数据并交给协议栈。在数据量大时，这种方式会产生大量CPU中断，导致CPU无法运行其他程序。而DPDK则采用轮询方式实现数据包处理过程：DPDK重载了网卡驱动，该驱动在收到数据包后不中断通知CPU，而是将数据包通过零拷贝技术存入内存，这时应用层程序就可以通过DPDK提供的接口，直接从内存读取数据包。这种处理方式节省了CPU中断时间、内存拷贝时间，并向应用层提供了简单易行且高效的数据包处理方式，使得网络应用的开发更加方便。但同时，由于需要重载网卡驱动，因此该开发包目前只能用在部分采用Intel网络处理芯片的网卡中。
+
+
 
 -----------------
 ## 安全相关
